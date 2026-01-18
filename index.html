@@ -14,7 +14,6 @@
             --muted: #94a3b8;
         }
 
-        /* Strict No-Scroll Framework */
         html, body {
             height: 100%;
             margin: 0;
@@ -29,18 +28,17 @@
             display: flex;
             flex-direction: column;
             width: 100%;
-            max-width: 420px;
-            height: 100dvh; /* Dynamic viewport height for mobile */
+            max-width: 400px;
+            height: 100dvh;
             margin: 0 auto;
-            padding: 8px;
+            padding: 6px;
             box-sizing: border-box;
         }
 
-        .header { flex: 0 0 auto; text-align: center; padding: 2px 0; }
-        .brand { font-size: 22px; font-weight: 900; color: var(--primary); margin: 0; }
+        .header { flex: 0 0 auto; text-align: center; padding: 0; }
+        .brand { font-size: 20px; font-weight: 900; color: var(--primary); margin: 0; }
         .brand span { color: white; }
 
-        /* Elastic Game Area */
         #game-area {
             flex: 1 1 auto;
             display: flex;
@@ -48,9 +46,10 @@
             justify-content: center;
             background: #000;
             border: 2px solid var(--surface);
-            border-radius: 12px;
+            border-radius: 10px;
             position: relative;
             overflow: hidden;
+            min-height: 100px;
         }
 
         canvas {
@@ -63,48 +62,47 @@
         #info-card {
             flex: 0 0 auto;
             background: var(--surface);
-            border-radius: 10px;
-            padding: 6px 10px;
-            margin: 6px 0;
-            min-height: 48px;
+            border-radius: 8px;
+            padding: 4px 8px;
+            margin: 4px 0;
+            min-height: 40px;
             text-align: center;
             border: 1px solid #1e293b;
         }
 
-        .name-tag { color: var(--primary); font-weight: 800; font-size: 14px; margin: 0; text-transform: uppercase; }
-        .fact-tag { color: var(--muted); font-size: 10px; margin: 2px 0 0 0; line-height: 1.2; }
+        .name-tag { color: var(--primary); font-weight: 800; font-size: 13px; margin: 0; text-transform: uppercase; }
+        .fact-tag { color: var(--muted); font-size: 9px; margin: 1px 0 0 0; line-height: 1.1; }
 
         #action-btn {
             flex: 0 0 auto;
             background: linear-gradient(135deg, var(--primary), var(--secondary));
             color: white;
             border: none;
-            padding: 10px;
-            border-radius: 8px;
+            padding: 8px;
+            border-radius: 6px;
             font-weight: 800;
-            font-size: 15px;
-            margin-bottom: 8px;
+            font-size: 14px;
+            margin-bottom: 6px;
             cursor: pointer;
         }
 
-        /* Compact Controller to fit Down Arrow */
         .dpad {
             flex: 0 0 auto;
             display: grid;
             grid-template-areas: ". up ." "left . right" ". down .";
-            gap: 6px;
+            gap: 4px;
             justify-content: center;
-            padding-bottom: 4px;
+            padding-bottom: 2px;
         }
 
         .btn {
-            width: 52px;
-            height: 52px;
+            width: 48px;
+            height: 48px;
             background: var(--surface);
             border: 1px solid #334155;
             color: var(--primary);
-            border-radius: 10px;
-            font-size: 20px;
+            border-radius: 8px;
+            font-size: 18px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -148,10 +146,16 @@
     const factLabel = document.getElementById('el-fact');
 
     const elements = [
-        {s: "H", n: "Hydrogen", c: "#f87171", f: "Most abundant element in the universe."},
-        {s: "He", n: "Helium", c: "#c084fc", f: "Used in balloons and cooling."},
-        {s: "Li", n: "Lithium", c: "#fbbf24", f: "Powers modern batteries for EVs."},
-        {s: "O", n: "Oxygen", c: "#f87171", f: "Essential for life and combustion."}
+        {an: 1, s: "H", n: "Hydrogen", c: "#f87171", f: "Most abundant element in the universe."},
+        {an: 2, s: "He", n: "Helium", c: "#c084fc", f: "Inert gas used in balloons and cooling."},
+        {an: 3, s: "Li", n: "Lithium", c: "#fbbf24", f: "Lightest metal, used in EV batteries."},
+        {an: 4, s: "Be", n: "Beryllium", c: "#fbbf24", f: "Strong, lightweight metal for aerospace."},
+        {an: 5, s: "B", n: "Boron", c: "#4ade80", f: "Used in glass and as a plant nutrient."},
+        {an: 6, s: "C", n: "Carbon", c: "#f87171", f: "The essential building block of life."},
+        {an: 7, s: "N", n: "Nitrogen", c: "#f87171", f: "Makes up 78% of the Earth's atmosphere."},
+        {an: 8, s: "O", n: "Oxygen", c: "#f87171", f: "Essential for respiration and combustion."},
+        {an: 9, s: "F", n: "Fluorine", c: "#4ade80", f: "The most reactive chemical element."},
+        {an: 10, s: "Ne", n: "Neon", c: "#c084fc", f: "Noble gas used in bright signs."}
     ];
 
     let snake = [{x: 200, y: 200}], dir = 'right', nextDir = 'right';
@@ -196,9 +200,9 @@
 
         snake.unshift(h);
         if (h.x === food.x && h.y === food.y) {
-            nameLabel.innerText = elements[idx].n.toUpperCase();
+            nameLabel.innerText = elements[idx].n.toUpperCase() + " (" + elements[idx].an + ")";
             factLabel.innerText = elements[idx].f;
-            speak(elements[idx].n + ". " + elements[idx].f);
+            speak(elements[idx].n + ", atomic number " + elements[idx].an + ". " + elements[idx].f);
             tailSym.unshift(elements[idx].s);
             tailCol.unshift(elements[idx].c);
             idx = (idx + 1) % elements.length;
@@ -237,4 +241,4 @@
     render();
 </script>
 </body>
-</html>
+</html
