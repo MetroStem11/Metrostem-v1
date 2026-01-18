@@ -14,7 +14,6 @@
             --muted: #94a3b8;
         }
 
-        /* Strict No-Scroll Framework */
         html, body {
             height: 100%;
             margin: 0;
@@ -40,7 +39,6 @@
         .brand { font-size: 20px; font-weight: 900; color: var(--primary); margin: 0; }
         .brand span { color: white; }
 
-        /* Elastic Game Area */
         #game-area {
             flex: 1 1 auto;
             display: flex;
@@ -70,6 +68,12 @@
             min-height: 42px;
             text-align: center;
             border: 1px solid #1e293b;
+            transition: all 0.3s ease;
+        }
+
+        .learning-active {
+            border-color: var(--primary) !important;
+            box-shadow: 0 0 10px rgba(56, 189, 248, 0.3);
         }
 
         .name-tag { color: var(--primary); font-weight: 800; font-size: 13px; margin: 0; text-transform: uppercase; }
@@ -88,7 +92,6 @@
             cursor: pointer;
         }
 
-        /* Compact Controller */
         .dpad {
             flex: 0 0 auto;
             display: grid;
@@ -128,7 +131,7 @@
 
     <div id="info-card">
         <div id="el-name" class="name-tag">READY PILOT</div>
-        <div id="el-fact" class="fact-tag">Collect all 54 main-group elements.</div>
+        <div id="el-fact" class="fact-tag">Collect elements to build your atomic chain.</div>
     </div>
 
     <button id="action-btn" onclick="toggleGame()">START MISSION</button>
@@ -147,8 +150,8 @@
     const actionBtn = document.getElementById('action-btn');
     const nameLabel = document.getElementById('el-name');
     const factLabel = document.getElementById('el-fact');
+    const infoCard = document.getElementById('info-card');
 
-    /* FULL 54 MAIN GROUP ELEMENTS DATASET */
     const elements = [
         {an: 1, s: "H", n: "Hydrogen", c: "#f87171", f: "Most abundant element in the universe."},
         {an: 2, s: "He", n: "Helium", c: "#c084fc", f: "Inert gas used in balloons and cooling."},
@@ -204,12 +207,12 @@
 
     let snake = [{x: 200, y: 200}], dir = 'right', nextDir = 'right';
     let food = {x: 100, y: 100}, idx = 0, tailSym = [], tailCol = [];
-    let running = false, gameLoop = null;
+    let running = false, gameLoop = null, learningMode = false;
 
     function speak(t) {
         window.speechSynthesis.cancel();
         const u = new SpeechSynthesisUtterance(t);
-        u.lang = 'en-US'; u.rate = 1.1;
+        u.lang = 'en-US'; u.rate = 1.0;
         window.speechSynthesis.speak(u);
     }
 
@@ -233,6 +236,8 @@
     }
 
     function update() {
+        if (learningMode) return; // Freeze game during the pause
+
         dir = nextDir;
         let h = {...snake[0]};
         if (dir === 'up') h.y -= 20; if (dir === 'down') h.y += 20;
@@ -244,15 +249,29 @@
 
         snake.unshift(h);
         if (h.x === food.x && h.y === food.y) {
-            nameLabel.innerText = elements[idx].n.toUpperCase() + " (" + elements[idx].an + ")";
-            factLabel.innerText = elements[idx].f;
-            speak(elements[idx].n + ", atomic number " + elements[idx].an + ". " + elements[idx].f);
-            tailSym.unshift(elements[idx].s);
-            tailCol.unshift(elements[idx].c);
-            idx = (idx + 1) % elements.length;
-            food = { x: Math.floor(Math.random()*19)*20, y: Math.floor(Math.random()*19)*20 };
+            triggerLearningPause();
         } else { snake.pop(); }
         render();
+    }
+
+    function triggerLearningPause() {
+        learningMode = true;
+        infoCard.classList.add('learning-active');
+        
+        nameLabel.innerText = elements[idx].n.toUpperCase() + " (" + elements[idx].an + ")";
+        factLabel.innerText = elements[idx].f;
+        speak(elements[idx].n + ", atomic number " + elements[idx].an + ". " + elements[idx].f);
+        
+        tailSym.unshift(elements[idx].s);
+        tailCol.unshift(elements[idx].c);
+        idx = (idx + 1) % elements.length;
+        food = { x: Math.floor(Math.random()*19)*20, y: Math.floor(Math.random()*19)*20 };
+
+        // 3-second pause for the audio and reading
+        setTimeout(() => {
+            learningMode = false;
+            infoCard.classList.remove('learning-active');
+        }, 3000);
     }
 
     function setDir(d) {
@@ -278,7 +297,7 @@
                 dir = 'right'; nextDir = 'right';
             }
             running = true; actionBtn.innerText = "ABORT";
-            gameLoop = setInterval(update, 200);
+            gameLoop = setInterval(update, 350); // SLOWED SPEED: 350ms (was 200ms)
             speak("Systems Online. Find " + elements[idx].n);
         }
     }
