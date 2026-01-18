@@ -49,32 +49,22 @@
             border-radius: 10px;
             position: relative;
             overflow: hidden;
-            min-height: 100px;
         }
 
-        canvas {
-            max-width: 100%;
-            max-height: 100%;
-            aspect-ratio: 1/1;
-            display: block;
-        }
+        canvas { max-width: 100%; max-height: 100%; aspect-ratio: 1/1; display: block; }
 
         #info-card {
             flex: 0 0 auto;
             background: var(--surface);
             border-radius: 8px;
             padding: 4px 8px;
-            margin: 4px 0;
+            margin: 6px 0;
             min-height: 42px;
             text-align: center;
             border: 1px solid #1e293b;
-            transition: all 0.3s ease;
         }
 
-        .learning-active {
-            border-color: var(--primary) !important;
-            box-shadow: 0 0 10px rgba(56, 189, 248, 0.3);
-        }
+        .learning-active { border-color: var(--primary) !important; box-shadow: 0 0 10px rgba(56, 189, 248, 0.4); }
 
         .name-tag { color: var(--primary); font-weight: 800; font-size: 13px; margin: 0; text-transform: uppercase; }
         .fact-tag { color: var(--muted); font-size: 9px; margin: 1px 0 0 0; line-height: 1.1; }
@@ -88,31 +78,56 @@
             border-radius: 6px;
             font-weight: 800;
             font-size: 14px;
-            margin-bottom: 6px;
+            margin-bottom: 8px;
             cursor: pointer;
         }
 
-        .dpad {
+        /* Combined Control Area */
+        .controls-row {
             flex: 0 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            padding-bottom: 4px;
+        }
+
+        .dpad {
             display: grid;
             grid-template-areas: ". up ." "left . right" ". down .";
-            gap: 4px;
-            justify-content: center;
-            padding-bottom: 2px;
+            gap: 6px;
         }
 
         .btn {
-            width: 48px;
-            height: 48px;
+            width: 50px;
+            height: 50px;
             background: var(--surface);
             border: 1px solid #334155;
             color: var(--primary);
-            border-radius: 8px;
-            font-size: 18px;
+            border-radius: 10px;
+            font-size: 20px;
             display: flex;
             align-items: center;
             justify-content: center;
             touch-action: manipulation;
+        }
+
+        /* The Vertical Speed Slider */
+        .slider-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .speed-label { font-size: 9px; color: var(--muted); font-weight: bold; text-transform: uppercase; }
+
+        input[type=range].vertical {
+            writing-mode: bt-lr; /* IE */
+            -webkit-appearance: slider-vertical; /* Webkit */
+            width: 12px;
+            height: 100px;
+            padding: 0 5px;
         }
 
         .btn:active { background: var(--primary); color: white; transform: scale(0.95); }
@@ -131,16 +146,23 @@
 
     <div id="info-card">
         <div id="el-name" class="name-tag">READY PILOT</div>
-        <div id="el-fact" class="fact-tag">Collect elements to build your atomic chain.</div>
+        <div id="el-fact" class="fact-tag">Adjust speed using the slider on the right.</div>
     </div>
 
     <button id="action-btn" onclick="toggleGame()">START MISSION</button>
 
-    <div class="dpad">
-        <button class="btn" style="grid-area: up" ontouchstart="setDir('up')">▲</button>
-        <button class="btn" style="grid-area: left" ontouchstart="setDir('left')">◀</button>
-        <button class="btn" style="grid-area: right" ontouchstart="setDir('right')">▶</button>
-        <button class="btn" style="grid-area: down" ontouchstart="setDir('down')">▼</button>
+    <div class="controls-row">
+        <div class="dpad">
+            <button class="btn" style="grid-area: up" ontouchstart="setDir('up')">▲</button>
+            <button class="btn" style="grid-area: left" ontouchstart="setDir('left')">◀</button>
+            <button class="btn" style="grid-area: right" ontouchstart="setDir('right')">▶</button>
+            <button class="btn" style="grid-area: down" ontouchstart="setDir('down')">▼</button>
+        </div>
+
+        <div class="slider-box">
+            <span class="speed-label">Speed</span>
+            <input type="range" min="100" max="600" value="350" class="vertical" id="speedSlider" oninput="updateInterval()">
+        </div>
     </div>
 </div>
 
@@ -151,58 +173,59 @@
     const nameLabel = document.getElementById('el-name');
     const factLabel = document.getElementById('el-fact');
     const infoCard = document.getElementById('info-card');
+    const speedSlider = document.getElementById('speedSlider');
 
     const elements = [
         {an: 1, s: "H", n: "Hydrogen", c: "#f87171", f: "Most abundant element in the universe."},
         {an: 2, s: "He", n: "Helium", c: "#c084fc", f: "Inert gas used in balloons and cooling."},
         {an: 3, s: "Li", n: "Lithium", c: "#fbbf24", f: "Lightest metal, used in EV batteries."},
-        {an: 4, s: "Be", n: "Beryllium", c: "#94a3b8", f: "Strong, lightweight metal for aerospace."},
+        {an: 4, s: "Be", n: "Beryllium", c: "#94a3b8", f: "Strong metal for aerospace."},
         {an: 5, s: "B", n: "Boron", c: "#4ade80", f: "Used in glass and as a plant nutrient."},
-        {an: 6, s: "C", n: "Carbon", c: "#f87171", f: "The essential building block of life."},
-        {an: 7, s: "N", n: "Nitrogen", c: "#f87171", f: "Makes up 78% of the Earth's atmosphere."},
-        {an: 8, s: "O", n: "Oxygen", c: "#f87171", f: "Essential for respiration and combustion."},
-        {an: 9, s: "F", n: "Fluorine", c: "#4ade80", f: "The most reactive chemical element."},
+        {an: 6, s: "C", n: "Carbon", c: "#f87171", f: "The foundation of all life."},
+        {an: 7, s: "N", n: "Nitrogen", c: "#f87171", f: "Makes up 78% of the atmosphere."},
+        {an: 8, s: "O", n: "Oxygen", c: "#f87171", f: "Essential for life and fire."},
+        {an: 9, s: "F", n: "Fluorine", c: "#4ade80", f: "Most reactive chemical element."},
         {an: 10, s: "Ne", n: "Neon", c: "#c084fc", f: "Noble gas used in bright signs."},
-        {an: 11, s: "Na", n: "Sodium", c: "#fbbf24", f: "Highly reactive metal found in table salt."},
-        {an: 12, s: "Mg", n: "Magnesium", c: "#fbbf24", f: "Used in lightweight alloys and flares."},
-        {an: 13, s: "Al", n: "Aluminum", c: "#94a3b8", f: "Used in cans, foil, and airplane parts."},
-        {an: 14, s: "Si", n: "Silicon", c: "#4ade80", f: "Key component in computer chips and glass."},
-        {an: 15, s: "P", n: "Phosphorus", c: "#f87171", f: "Essential for DNA and bone formation."},
-        {an: 16, s: "S", n: "Sulfur", c: "#f87171", f: "Used in gunpowder, matches, and rubber."},
-        {an: 17, s: "Cl", n: "Chlorine", c: "#4ade80", f: "Used to purify water and in bleach."},
-        {an: 18, s: "Ar", n: "Argon", c: "#c084fc", f: "Inert gas used in light bulbs and welding."},
-        {an: 19, s: "K", n: "Potassium", c: "#fbbf24", f: "Vital for nerve function and fertilizers."},
-        {an: 20, s: "Ca", n: "Calcium", c: "#fbbf24", f: "Essential for strong bones and teeth."},
-        {an: 31, s: "Ga", n: "Gallium", c: "#94a3b8", f: "Melts in your hand; used in electronics."},
-        {an: 32, s: "Ge", n: "Germanium", c: "#4ade80", f: "Semiconductor used in fiber optics."},
-        {an: 33, s: "As", n: "Arsenic", c: "#4ade80", f: "Toxic metalloid used in semiconductors."},
-        {an: 34, s: "Se", n: "Selenium", c: "#f87171", f: "Used in glass-making and solar cells."},
-        {an: 35, s: "Br", n: "Bromine", c: "#4ade80", f: "The only liquid nonmetal at room temp."},
+        {an: 11, s: "Na", n: "Sodium", c: "#fbbf24", f: "Reactive metal found in salt."},
+        {an: 12, s: "Mg", n: "Magnesium", c: "#fbbf24", f: "Used in alloys and flares."},
+        {an: 13, s: "Al", n: "Aluminum", c: "#94a3b8", f: "Used in airplane parts."},
+        {an: 14, s: "Si", n: "Silicon", c: "#4ade80", f: "Key component in computer chips."},
+        {an: 15, s: "P", n: "Phosphorus", c: "#f87171", f: "Essential for DNA and bones."},
+        {an: 16, s: "S", n: "Sulfur", c: "#f87171", f: "Used in gunpowder and matches."},
+        {an: 17, s: "Cl", n: "Chlorine", c: "#4ade80", f: "Used to purify water and bleach."},
+        {an: 18, s: "Ar", n: "Argon", c: "#c084fc", f: "Used in light bulbs and welding."},
+        {an: 19, s: "K", n: "Potassium", c: "#fbbf24", f: "Vital for nerve function."},
+        {an: 20, s: "Ca", n: "Calcium", c: "#fbbf24", f: "Essential for strong bones."},
+        {an: 31, s: "Ga", n: "Gallium", c: "#94a3b8", f: "Melts in your hand."},
+        {an: 32, s: "Ge", n: "Germanium", c: "#4ade80", f: "Used in fiber optics."},
+        {an: 33, s: "As", n: "Arsenic", c: "#4ade80", f: "Toxic metalloid for semiconductors."},
+        {an: 34, s: "Se", n: "Selenium", c: "#f87171", f: "Used in solar cells."},
+        {an: 35, s: "Br", n: "Bromine", c: "#4ade80", f: "Only liquid nonmetal at room temp."},
         {an: 36, s: "Kr", n: "Krypton", c: "#c084fc", f: "Noble gas used in flash bulbs."},
-        {an: 37, s: "Rb", n: "Rubidium", c: "#fbbf24", f: "Used in atomic clocks and laser cooling."},
-        {an: 38, s: "Sr", n: "Strontium", c: "#fbbf24", f: "Gives fireworks their deep red color."},
-        {an: 49, s: "In", n: "Indium", c: "#94a3b8", f: "Used in touchscreens and LCD displays."},
-        {an: 50, s: "Sn", n: "Tin", c: "#94a3b8", f: "Used for plating steel cans for food."},
-        {an: 51, s: "Sb", n: "Antimony", c: "#4ade80", f: "Used in flame retardants and batteries."},
+        {an: 37, s: "Rb", n: "Rubidium", c: "#fbbf24", f: "Used in atomic clocks."},
+        {an: 38, s: "Sr", n: "Strontium", c: "#fbbf24", f: "Gives fireworks their red color."},
+        {an: 49, s: "In", n: "Indium", c: "#94a3b8", f: "Used in touchscreens."},
+        {an: 50, s: "Sn", n: "Tin", c: "#94a3b8", f: "Used for plating steel cans."},
+        {an: 51, s: "Sb", n: "Antimony", c: "#4ade80", f: "Used in flame retardants."},
         {an: 52, s: "Te", n: "Tellurium", c: "#4ade80", f: "Used in alloys and solar panels."},
-        {an: 53, s: "I", n: "Iodine", c: "#4ade80", f: "Essential for thyroid health and antiseptics."},
-        {an: 54, s: "Xe", n: "Xenon", c: "#c084fc", f: "Noble gas used in specialized lamps."},
-        {an: 55, s: "Cs", n: "Cesium", c: "#fbbf24", f: "Most reactive metal; used in atomic clocks."},
-        {an: 56, s: "Ba", n: "Barium", c: "#fbbf24", f: "Used in drilling fluids and X-ray imaging."},
-        {an: 81, s: "Tl", n: "Thallium", c: "#94a3b8", f: "Used in low-temp thermometers."},
-        {an: 82, s: "Pb", n: "Lead", c: "#94a3b8", f: "Dense metal used in shields and batteries."},
-        {an: 83, s: "Bi", n: "Bismuth", c: "#94a3b8", f: "Brittle metal used in medicine and alloys."},
+        {an: 53, s: "I", n: "Iodine", c: "#4ade80", f: "Essential for thyroid health."},
+        {an: 54, s: "Xe", n: "Xenon", c: "#c084fc", f: "Used in specialized lamps."},
+        {an: 55, s: "Cs", n: "Cesium", c: "#fbbf24", f: "Used in atomic clocks."},
+        {an: 56, s: "Ba", n: "Barium", c: "#fbbf24", f: "Used in X-ray imaging."},
+        {an: 81, s: "Tl", n: "Thallium", c: "#94a3b8", f: "Used in thermometers."},
+        {an: 82, s: "Pb", n: "Lead", c: "#94a3b8", f: "Used in shields and batteries."},
+        {an: 83, s: "Bi", n: "Bismuth", c: "#94a3b8", f: "Used in medicine and alloys."},
         {an: 84, s: "Po", n: "Polonium", c: "#4ade80", f: "Highly radioactive metalloid."},
-        {an: 85, s: "At", n: "Astatine", c: "#4ade80", f: "Rarest naturally occurring element on Earth."},
-        {an: 86, s: "Rn", n: "Radon", c: "#c084fc", f: "Radioactive noble gas from soil decay."},
-        {an: 87, s: "Fr", n: "Francium", c: "#fbbf24", f: "Highly unstable radioactive alkali metal."},
-        {an: 88, s: "Ra", n: "Radium", c: "#fbbf24", f: "Used for glow-in-the-dark paints."},
+        {an: 85, s: "At", n: "Astatine", c: "#4ade80", f: "Rarest element on Earth."},
+        {an: 86, s: "Rn", n: "Radon", c: "#c084fc", f: "Radioactive gas from soil."},
+        {an: 87, s: "Fr", n: "Francium", c: "#fbbf24", f: "Highly unstable radioactive metal."},
+        {an: 88, s: "Ra", n: "Radium", c: "#fbbf24", f: "Used for glow paints."},
         {an: 113, s: "Nh", n: "Nihonium", c: "#94a3b8", f: "Synthetic element named after Japan."},
-        {an: 114, s: "Fl", n: "Flerovium", c: "#94a3b8", f: "Superheavy synthetic radioactive element."},
-        {an: 115, s: "Mc", n: "Moscovium", c: "#94a3b8", f: "Synthetic element named after Moscow."},
-        {an: 116, s: "Lv", n: "Livermorium", c: "#94a3b8", f: "Synthetic element named after California."},
-        {an: 117, s: "Ts", n: "Tennessine", c: "#4ade80", f: "Synthetic halogen named after Tennessee."},
-        {an: 118, s: "Og", n: "Oganesson", c: "#c084fc", f: "The heaviest element on the periodic table."}
+        {an: 114, s: "Fl", n: "Flerovium", c: "#94a3b8", f: "Superheavy synthetic element."},
+        {an: 115, s: "Mc", n: "Moscovium", c: "#94a3b8", f: "Named after Moscow."},
+        {an: 116, s: "Lv", n: "Livermorium", c: "#94a3b8", f: "Named after California."},
+        {an: 117, s: "Ts", n: "Tennessine", c: "#4ade80", f: "Named after Tennessee."},
+        {an: 118, s: "Og", n: "Oganesson", c: "#c084fc", f: "Heaviest element on the table."}
     ];
 
     let snake = [{x: 200, y: 200}], dir = 'right', nextDir = 'right';
@@ -236,8 +259,7 @@
     }
 
     function update() {
-        if (learningMode) return; // Freeze game during the pause
-
+        if (learningMode) return;
         dir = nextDir;
         let h = {...snake[0]};
         if (dir === 'up') h.y -= 20; if (dir === 'down') h.y += 20;
@@ -267,11 +289,10 @@
         idx = (idx + 1) % elements.length;
         food = { x: Math.floor(Math.random()*19)*20, y: Math.floor(Math.random()*19)*20 };
 
-        // 3-second pause for the audio and reading
         setTimeout(() => {
             learningMode = false;
             infoCard.classList.remove('learning-active');
-        }, 3000);
+        }, 500); // 0.5 Second Pause
     }
 
     function setDir(d) {
@@ -287,6 +308,14 @@
         actionBtn.innerText = "RESTART MISSION";
     }
 
+    function updateInterval() {
+        if (running) {
+            clearInterval(gameLoop);
+            // Higher slider value = slower speed (inverse relationship)
+            gameLoop = setInterval(update, 700 - speedSlider.value);
+        }
+    }
+
     function toggleGame() {
         if (running) {
             clearInterval(gameLoop); running = false;
@@ -297,8 +326,8 @@
                 dir = 'right'; nextDir = 'right';
             }
             running = true; actionBtn.innerText = "ABORT";
-            gameLoop = setInterval(update, 350); // SLOWED SPEED: 350ms (was 200ms)
-            speak("Systems Online. Find " + elements[idx].n);
+            updateInterval();
+            speak("Systems Online.");
         }
     }
     render();
