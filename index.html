@@ -14,36 +14,35 @@
             --muted: #94a3b8;
         }
 
-        /* 100% Screen Height Framework */
+        /* Strict No-Scroll Framework */
         html, body {
             height: 100%;
             margin: 0;
+            padding: 0;
             overflow: hidden;
             background-color: var(--bg);
             color: var(--text);
             font-family: 'Segoe UI', system-ui, sans-serif;
-            display: flex;
-            flex-direction: column;
         }
 
         #app-wrapper {
             display: flex;
             flex-direction: column;
             width: 100%;
-            max-width: 450px;
-            height: 100%;
+            max-width: 420px;
+            height: 100dvh; /* Dynamic viewport height for mobile */
             margin: 0 auto;
-            padding: 10px;
+            padding: 8px;
             box-sizing: border-box;
         }
 
-        .header { flex: 0 0 auto; text-align: center; padding: 5px 0; }
-        .brand { font-size: 26px; font-weight: 900; color: var(--primary); margin: 0; letter-spacing: -1px; }
+        .header { flex: 0 0 auto; text-align: center; padding: 2px 0; }
+        .brand { font-size: 22px; font-weight: 900; color: var(--primary); margin: 0; }
         .brand span { color: white; }
 
-        /* The Elastic Game Board */
+        /* Elastic Game Area */
         #game-area {
-            flex: 1 1 auto; /* Expands to fill middle space */
+            flex: 1 1 auto;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -51,7 +50,7 @@
             border: 2px solid var(--surface);
             border-radius: 12px;
             position: relative;
-            box-shadow: 0 0 20px rgba(56, 189, 248, 0.1);
+            overflow: hidden;
         }
 
         canvas {
@@ -64,53 +63,52 @@
         #info-card {
             flex: 0 0 auto;
             background: var(--surface);
-            border-radius: 12px;
-            padding: 8px 12px;
-            margin: 10px 0;
-            min-height: 55px;
+            border-radius: 10px;
+            padding: 6px 10px;
+            margin: 6px 0;
+            min-height: 48px;
             text-align: center;
             border: 1px solid #1e293b;
         }
 
-        .name-tag { color: var(--primary); font-weight: 800; font-size: 15px; margin: 0; text-transform: uppercase; }
-        .fact-tag { color: var(--muted); font-size: 11px; margin: 2px 0 0 0; line-height: 1.3; }
+        .name-tag { color: var(--primary); font-weight: 800; font-size: 14px; margin: 0; text-transform: uppercase; }
+        .fact-tag { color: var(--muted); font-size: 10px; margin: 2px 0 0 0; line-height: 1.2; }
 
         #action-btn {
             flex: 0 0 auto;
             background: linear-gradient(135deg, var(--primary), var(--secondary));
             color: white;
             border: none;
-            padding: 12px;
-            border-radius: 10px;
+            padding: 10px;
+            border-radius: 8px;
             font-weight: 800;
-            font-size: 16px;
-            margin-bottom: 10px;
+            font-size: 15px;
+            margin-bottom: 8px;
             cursor: pointer;
         }
 
-        /* Compact Mobile Controller */
+        /* Compact Controller to fit Down Arrow */
         .dpad {
             flex: 0 0 auto;
             display: grid;
             grid-template-areas: ". up ." "left . right" ". down .";
-            gap: 8px;
+            gap: 6px;
             justify-content: center;
-            padding-bottom: 5px;
+            padding-bottom: 4px;
         }
 
         .btn {
-            width: 58px;
-            height: 58px;
+            width: 52px;
+            height: 52px;
             background: var(--surface);
             border: 1px solid #334155;
             color: var(--primary);
-            border-radius: 12px;
-            font-size: 22px;
+            border-radius: 10px;
+            font-size: 20px;
             display: flex;
             align-items: center;
             justify-content: center;
             touch-action: manipulation;
-            -webkit-tap-highlight-color: transparent;
         }
 
         .btn:active { background: var(--primary); color: white; transform: scale(0.95); }
@@ -151,13 +149,9 @@
 
     const elements = [
         {s: "H", n: "Hydrogen", c: "#f87171", f: "Most abundant element in the universe."},
-        {s: "He", n: "Helium", c: "#c084fc", f: "Used in balloons and high-tech cooling."},
+        {s: "He", n: "Helium", c: "#c084fc", f: "Used in balloons and cooling."},
         {s: "Li", n: "Lithium", c: "#fbbf24", f: "Powers modern batteries for EVs."},
-        {s: "Be", n: "Beryllium", c: "#fbbf24", f: "Used in space telescopes and mirrors."},
-        {s: "B", n: "Boron", c: "#4ade80", f: "Found in fiberglass and rocket fuel ignite."},
-        {s: "C", n: "Carbon", c: "#f87171", f: "The foundation of all known life."},
-        {s: "N", n: "Nitrogen", c: "#f87171", f: "Makes up 78% of the Earth's atmosphere."},
-        {s: "O", n: "Oxygen", c: "#f87171", f: "Essential for life and fire combustion."}
+        {s: "O", n: "Oxygen", c: "#f87171", f: "Essential for life and combustion."}
     ];
 
     let snake = [{x: 200, y: 200}], dir = 'right', nextDir = 'right';
@@ -175,13 +169,11 @@
         ctx.fillStyle = "#000";
         ctx.fillRect(0, 0, 400, 400);
 
-        // Render Food/Target
         ctx.fillStyle = elements[idx].c;
         ctx.fillRect(food.x, food.y, 20, 20);
         ctx.fillStyle = "#000"; ctx.font = "bold 13px Arial"; ctx.textAlign = "center";
         ctx.fillText(elements[idx].s, food.x + 10, food.y + 15);
 
-        // Render Snake with Symbols
         snake.forEach((p, i) => {
             ctx.fillStyle = (i === 0) ? "#fff" : (tailCol[i-1] || "#334155");
             ctx.fillRect(p.x, p.y, 19, 19);
