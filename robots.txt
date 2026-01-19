@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+
+# Direct the bots to your sitemap
+Sitemap: https://metrostem.com/sitemap.xml
+
