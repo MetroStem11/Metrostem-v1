@@ -1,16 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-Y6E0V9LJLR"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-Y6E0V9LJLR');
-    </script>
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+   
+
+<!-- Google tag (gtag.js) --> <script async src="https://www.googletagmanager.com/gtag/js?id=G-Y6E0V9LJLR"></script> <script> window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments);} gtag('js', new Date()); gtag('config', 'G-Y6E0V9LJLR'); </script>
     <title>MetroSTEM | Periodic Table Snake</title>
     <style>
         :root {
@@ -22,6 +17,7 @@
             --muted: #94a3b8;
         }
 
+        /* Allow the body to scroll for the footer */
         html, body {
             margin: 0;
             padding: 0;
@@ -32,22 +28,24 @@
             overflow-y: auto;
         }
 
+        /* GAME VIEW: Strictly 100% of the visible screen */
         #game-view {
             display: flex;
             flex-direction: column;
             width: 100%;
             max-width: 420px;
-            height: 100dvh;
+            height: 100dvh; /* Dynamic Viewport Height */
             margin: 0 auto;
             padding: 4px 10px;
             box-sizing: border-box;
-            overflow: hidden;
+            overflow: hidden; /* No scrolling allowed inside the game view */
         }
 
         .header { flex: 0 0 auto; text-align: center; padding: 2px 0; }
         .brand { font-size: 20px; font-weight: 900; color: var(--primary); margin: 0; }
         .brand span { color: white; }
 
+        /* The canvas area will now shrink to fit whatever space is left */
         #game-area {
             flex: 1 1 auto; 
             display: flex;
@@ -58,7 +56,7 @@
             border-radius: 10px;
             position: relative;
             overflow: hidden;
-            min-height: 0;
+            min-height: 0; /* Critical: Allows flex item to shrink */
         }
 
         canvas {
@@ -101,7 +99,7 @@
             align-items: center;
             justify-content: center;
             gap: 15px;
-            padding-bottom: 10px;
+            padding-bottom: 10px; /* Space at the very bottom of the screen */
         }
 
         .dpad { display: grid; grid-template-areas: ". up ." "left . right" ". down ."; gap: 6px; }
@@ -123,6 +121,7 @@
         .speed-label { font-size: 9px; color: var(--muted); font-weight: bold; }
         input[type=range].vertical { -webkit-appearance: slider-vertical; width: 10px; height: 90px; }
 
+        /* FOOTER: Pushed below the 100vh game view */
         footer {
             width: 100%;
             max-width: 420px;
@@ -132,8 +131,8 @@
             border-top: 1px solid #1e293b;
             background-color: var(--bg);
         }
-        .footer-links a { color: var(--primary); text-decoration: none; font-size: 13px; margin: 0 10px; font-weight: 500; }
-        .footer-copy { color: #64748b; font-size: 11px; margin-top: 10px; }
+        .footer-links a { color: var(--primary); text-decoration: none; font-size: 12px; margin: 0 10px; }
+        .footer-copy { color: #64748b; font-size: 10px; margin-top: 10px; }
     </style>
 </head>
 <body>
@@ -169,19 +168,20 @@
         </div>
     </div>
 
-    <footer>
-        <div class="footer-links">
-            <a href="about.html">About</a>
-            <a href="guide.html">Study Guide</a>
-            <a href="contact.html">Contact Us</a>
-            <a href="privacy.html">Privacy</a>
-            <a href="terms.html">Terms</a>
+        <footer style="margin-top: 40px; padding: 20px 0; border-top: 1px solid #1e293b; background-color: #020617; text-align: center; flex: 0 0 auto;">
+        <div style="margin-bottom: 12px;">
+            <a href="about.html" style="color: #38bdf8; text-decoration: none; font-size: 13px; margin: 0 10px; font-weight: 500;">About</a>
+            <a href="guide.html" style="color: #38bdf8; text-decoration: none; font-size: 13px; margin: 0 10px; font-weight: 500;">Study Guide</a>
+            <a href="contact.html" style="color: #38bdf8; text-decoration: none; font-size: 13px; margin: 0 10px; font-weight: 500;">Contact Us</a>
+            <a href="privacy.html" style="color: #38bdf8; text-decoration: none; font-size: 13px; margin: 0 10px; font-weight: 500;">Privacy</a>
+            <a href="terms.html" style="color: #38bdf8; text-decoration: none; font-size: 13px; margin: 0 10px; font-weight: 500;">Terms</a>
         </div>
-        <p class="footer-copy">© 2026 MetroSTEM. Dedicated to Science Education.</p>
+        <p style="color: #64748b; font-size: 11px; margin: 5px 0 0 0;">© 2026 MetroSTEM. Dedicated to Science Education.</p>
         <p style="color: #475569; font-size: 10px; margin: 2px 0 0 0;">Contact: metrostemgame@gmail.com</p>
     </footer>
 
 <script>
+    // [The Game Logic remains identical to ensure consistency]
     const canvas = document.getElementById('gameCanvas');
     const ctx = canvas.getContext('2d');
     const actionBtn = document.getElementById('action-btn');
@@ -210,7 +210,47 @@
         {an: 17, s: "Cl", n: "Chlorine", c: "#4ade80", f: "Used to purify water and bleach."},
         {an: 18, s: "Ar", n: "Argon", c: "#c084fc", f: "Inert gas used in light bulbs."},
         {an: 19, s: "K", n: "Potassium", c: "#fbbf24", f: "Vital for nerve function."},
-        {an: 20, s: "Ca", n: "Calcium", c: "#fbbf24", f: "Essential for strong bones."}
+        {an: 20, s: "Ca", n: "Calcium", c: "#fbbf24", f: "Essential for strong bones."},
+        {an: 21, s: "Sc", n: "Scandium", c: "#94a3b8", f: "Used in aerospace and sports gear."},
+        {an: 22, s: "Ti", n: "Titanium", c: "#94a3b8", f: "Strong as steel but 45% lighter."},
+        {an: 24, s: "Cr", n: "Chromium", c: "#94a3b8", f: "Makes steel stainless and shiny."},
+        {an: 25, s: "Mn", n: "Manganese", c: "#94a3b8", f: "Essential for glass and steel."},
+        {an: 26, s: "Fe", n: "Iron", c: "#94a3b8", f: "The most used metal on Earth."},
+        {an: 27, s: "Co", n: "Cobalt", c: "#94a3b8", f: "Used in magnets and blue pigments."},
+        {an: 28, s: "Ni", n: "Nickel", c: "#94a3b8", f: "Used in coins and batteries."},
+        {an: 29, s: "Cu", n: "Copper", c: "#94a3b8", f: "Excellent conductor of electricity."},
+        {an: 30, s: "Zn", n: "Zinc", c: "#94a3b8", f: "Prevents rust; used in sunscreen."},
+        {an: 79, s: "Au", n: "Gold", c: "#fbbf24", f: "Noble metal used in jewelry."},
+        {an: 31, s: "Ga", n: "Gallium", c: "#94a3b8", f: "Melts in your hand."},
+        {an: 32, s: "Ge", n: "Germanium", c: "#4ade80", f: "Used in fiber optics."},
+        {an: 33, s: "As", n: "Arsenic", c: "#4ade80", f: "Toxic metalloid for semiconductors."},
+        {an: 34, s: "Se", n: "Selenium", c: "#f87171", f: "Used in solar cells."},
+        {an: 35, s: "Br", n: "Bromine", c: "#4ade80", f: "Only liquid nonmetal at room temp."},
+        {an: 36, s: "Kr", n: "Krypton", c: "#c084fc", f: "Noble gas used in flash bulbs."},
+        {an: 37, s: "Rb", n: "Rubidium", c: "#fbbf24", f: "Used in atomic clocks."},
+        {an: 38, s: "Sr", n: "Strontium", c: "#fbbf24", f: "Gives fireworks their red color."},
+        {an: 49, s: "In", n: "Indium", c: "#94a3b8", f: "Used in touchscreens."},
+        {an: 50, s: "Sn", n: "Tin", c: "#94a3b8", f: "Used to plate steel food cans."},
+        {an: 51, s: "Sb", n: "Antimony", c: "#4ade80", f: "Used in flame retardants."},
+        {an: 52, s: "Te", n: "Tellurium", c: "#4ade80", f: "Used in alloys and solar panels."},
+        {an: 53, s: "I", n: "Iodine", c: "#4ade80", f: "Essential for thyroid health."},
+        {an: 54, s: "Xe", n: "Xenon", c: "#c084fc", f: "Used in specialized lamps."},
+        {an: 55, s: "Cs", n: "Cesium", c: "#fbbf24", f: "Most reactive metal."},
+        {an: 56, s: "Ba", n: "Barium", c: "#fbbf24", f: "Used in X-ray imaging."},
+        {an: 81, s: "Tl", n: "Thallium", c: "#94a3b8", f: "Used in thermometers."},
+        {an: 82, s: "Pb", n: "Lead", c: "#94a3b8", f: "Dense metal used in shields."},
+        {an: 83, s: "Bi", n: "Bismuth", c: "#94a3b8", f: "Used in medicine and alloys."},
+        {an: 84, s: "Po", n: "Polonium", c: "#4ade80", f: "Highly radioactive metalloid."},
+        {an: 85, s: "At", n: "Astatine", c: "#4ade80", f: "Rarest naturally occurring element."},
+        {an: 86, s: "Rn", n: "Radon", c: "#c084fc", f: "Radioactive gas from soil decay."},
+        {an: 87, s: "Fr", n: "Francium", c: "#fbbf24", f: "Highly unstable radioactive metal."},
+        {an: 88, s: "Ra", n: "Radium", c: "#fbbf24", f: "Used for glow-in-the-dark paints."},
+        {an: 113, s: "Nh", n: "Nihonium", c: "#94a3b8", f: "Synthetic element named after Japan."},
+        {an: 114, s: "Fl", n: "Flerovium", c: "#94a3b8", f: "Superheavy radioactive element."},
+        {an: 115, s: "Mc", n: "Moscovium", c: "#94a3b8", f: "Named after Moscow."},
+        {an: 116, s: "Lv", n: "Livermorium", c: "#94a3b8", f: "Named after California."},
+        {an: 117, s: "Ts", n: "Tennessine", c: "#4ade80", f: "Synthetic halogen."},
+        {an: 118, s: "Og", n: "Oganesson", c: "#c084fc", f: "Heaviest element on the table."}
     ];
 
     let snake = [{x: 200, y: 200}], dir = 'right', nextDir = 'right';
@@ -220,35 +260,44 @@
     function speak(t) {
         window.speechSynthesis.cancel();
         const u = new SpeechSynthesisUtterance(t);
-        u.lang = 'en-US'; 
-        u.rate = 1.0; 
-        u.volume = 1.0; // Programmatic volume set to max
+        u.lang = 'en-US'; u.rate = 1.0;
         window.speechSynthesis.speak(u);
     }
 
-    function render() {
+        function render() {
+        // Clear Canvas
         ctx.fillStyle = "#000";
         ctx.fillRect(0, 0, 400, 400);
+
+        // Draw Element (Food)
         ctx.fillStyle = elements[idx].c;
         ctx.fillRect(food.x, food.y, 20, 20);
         ctx.fillStyle = "#000"; ctx.font = "bold 13px Arial"; ctx.textAlign = "center";
         ctx.fillText(elements[idx].s, food.x + 10, food.y + 15);
-        
+
+        // Draw Train & Atomic Chain
         snake.forEach((p, i) => {
             if (i === 0) {
-                // METRO TRAIN HEAD
-                ctx.fillStyle = "#cbd5e1"; ctx.fillRect(p.x, p.y, 19, 19);
-                ctx.fillStyle = "#0f172a"; // Windshield
+                // --- DRAW METRO TRAIN HEAD ---
+                ctx.fillStyle = "#cbd5e1"; // Metallic Silver Body
+                ctx.fillRect(p.x, p.y, 19, 19);
+                
+                // Draw Windshield (Dark Glass) based on direction
+                ctx.fillStyle = "#0f172a"; 
                 if (dir === 'right') ctx.fillRect(p.x + 12, p.y + 2, 5, 15);
                 else if (dir === 'left') ctx.fillRect(p.x + 2, p.y + 2, 5, 15);
                 else if (dir === 'up') ctx.fillRect(p.x + 2, p.y + 2, 15, 5);
                 else if (dir === 'down') ctx.fillRect(p.x + 2, p.y + 12, 15, 5);
-                ctx.fillStyle = "#fef08a"; // Headlights
-                if (dir === 'right') { ctx.fillRect(p.x+15, p.y+3, 3, 3); ctx.fillRect(p.x+15, p.y+13, 3, 3); }
-                else if (dir === 'left') { ctx.fillRect(p.x+1, p.y+3, 3, 3); ctx.fillRect(p.x+1, p.y+13, 3, 3); }
-                else if (dir === 'up') { ctx.fillRect(p.x+3, p.y+1, 3, 3); ctx.fillRect(p.x+13, p.y+1, 3, 3); }
-                else if (dir === 'down') { ctx.fillRect(p.x+3, p.y+15, 3, 3); ctx.fillRect(p.x+13, p.y+15, 3, 3); }
+
+                // Draw Headlights (Bright Yellow)
+                ctx.fillStyle = "#fef08a";
+                if (dir === 'right') { ctx.fillRect(p.x + 15, p.y + 3, 3, 3); ctx.fillRect(p.x + 15, p.y + 13, 3, 3); }
+                else if (dir === 'left') { ctx.fillRect(p.x + 1, p.y + 3, 3, 3); ctx.fillRect(p.x + 1, p.y + 13, 3, 3); }
+                else if (dir === 'up') { ctx.fillRect(p.x + 3, p.y + 1, 3, 3); ctx.fillRect(p.x + 13, p.y + 1, 3, 3); }
+                else if (dir === 'down') { ctx.fillRect(p.x + 3, p.y + 15, 3, 3); ctx.fillRect(p.x + 13, p.y + 15, 3, 3); }
+                
             } else {
+                // --- DRAW ATOMIC TAIL (Same as before) ---
                 ctx.fillStyle = tailCol[i-1] || "#334155";
                 ctx.fillRect(p.x, p.y, 19, 19);
                 if (tailSym[i-1]) {
@@ -258,6 +307,7 @@
             }
         });
     }
+
 
     function update() {
         if (learningMode) return;
@@ -276,16 +326,19 @@
     }
 
     function triggerLearningPause() {
-        gtag('event', 'element_collected', { 'element': elements[idx].n, 'score': snake.length });
         learningMode = true;
+        infoCard.classList.add('learning-active');
         nameLabel.innerText = elements[idx].n.toUpperCase() + " (" + elements[idx].an + ")";
         factLabel.innerText = elements[idx].f;
-        speak(elements[idx].n + ", " + elements[idx].f);
+        speak(elements[idx].n + ", atomic number " + elements[idx].an + ". " + elements[idx].f);
         tailSym.unshift(elements[idx].s);
         tailCol.unshift(elements[idx].c);
         idx = (idx + 1) % elements.length;
         food = { x: Math.floor(Math.random()*19)*20, y: Math.floor(Math.random()*19)*20 };
-        setTimeout(() => { learningMode = false; }, 500);
+        setTimeout(() => {
+            learningMode = false;
+            infoCard.classList.remove('learning-active');
+        }, 500);
     }
 
     function setDir(d) {
@@ -296,7 +349,6 @@
     }
 
     function gameOver() {
-        gtag('event', 'game_over', { 'final_score': snake.length - 1 });
         clearInterval(gameLoop); running = false;
         speak("Mission Over");
         actionBtn.innerText = "RESTART MISSION";
@@ -318,7 +370,6 @@
                 snake = [{x: 200, y: 200}]; idx = 0; tailSym = []; tailCol = [];
                 dir = 'right'; nextDir = 'right';
             }
-            gtag('event', 'mission_start');
             running = true; actionBtn.innerText = "ABORT";
             updateInterval();
             speak("Systems Online.");
