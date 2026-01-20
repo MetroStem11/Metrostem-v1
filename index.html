@@ -261,23 +261,50 @@
         window.speechSynthesis.speak(u);
     }
 
-    function render() {
+        function render() {
+        // Clear Canvas
         ctx.fillStyle = "#000";
         ctx.fillRect(0, 0, 400, 400);
+
+        // Draw Element (Food)
         ctx.fillStyle = elements[idx].c;
         ctx.fillRect(food.x, food.y, 20, 20);
         ctx.fillStyle = "#000"; ctx.font = "bold 13px Arial"; ctx.textAlign = "center";
         ctx.fillText(elements[idx].s, food.x + 10, food.y + 15);
+
+        // Draw Train & Atomic Chain
         snake.forEach((p, i) => {
-            ctx.fillStyle = (i === 0) ? "#fff" : (tailCol[i-1] || "#334155");
-            ctx.fillRect(p.x, p.y, 19, 19);
-            if (i > 0 && tailSym[i-1]) {
-                ctx.fillStyle = "rgba(0,0,0,0.6)"; ctx.font = "bold 9px Arial";
-                ctx.fillText(tailSym[i-1], p.x + 10, p.y + 14);
+            if (i === 0) {
+                // --- DRAW METRO TRAIN HEAD ---
+                ctx.fillStyle = "#cbd5e1"; // Metallic Silver Body
+                ctx.fillRect(p.x, p.y, 19, 19);
+                
+                // Draw Windshield (Dark Glass) based on direction
+                ctx.fillStyle = "#0f172a"; 
+                if (dir === 'right') ctx.fillRect(p.x + 12, p.y + 2, 5, 15);
+                else if (dir === 'left') ctx.fillRect(p.x + 2, p.y + 2, 5, 15);
+                else if (dir === 'up') ctx.fillRect(p.x + 2, p.y + 2, 15, 5);
+                else if (dir === 'down') ctx.fillRect(p.x + 2, p.y + 12, 15, 5);
+
+                // Draw Headlights (Bright Yellow)
+                ctx.fillStyle = "#fef08a";
+                if (dir === 'right') { ctx.fillRect(p.x + 15, p.y + 3, 3, 3); ctx.fillRect(p.x + 15, p.y + 13, 3, 3); }
+                else if (dir === 'left') { ctx.fillRect(p.x + 1, p.y + 3, 3, 3); ctx.fillRect(p.x + 1, p.y + 13, 3, 3); }
+                else if (dir === 'up') { ctx.fillRect(p.x + 3, p.y + 1, 3, 3); ctx.fillRect(p.x + 13, p.y + 1, 3, 3); }
+                else if (dir === 'down') { ctx.fillRect(p.x + 3, p.y + 15, 3, 3); ctx.fillRect(p.x + 13, p.y + 15, 3, 3); }
+                
+            } else {
+                // --- DRAW ATOMIC TAIL (Same as before) ---
+                ctx.fillStyle = tailCol[i-1] || "#334155";
+                ctx.fillRect(p.x, p.y, 19, 19);
+                if (tailSym[i-1]) {
+                    ctx.fillStyle = "rgba(0,0,0,0.6)"; ctx.font = "bold 9px Arial";
+                    ctx.fillText(tailSym[i-1], p.x + 10, p.y + 14);
+                }
             }
         });
-    }
-
+        }
+    
     function update() {
         if (learningMode) return;
         dir = nextDir;
