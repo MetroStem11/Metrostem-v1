@@ -1,384 +1,215 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-Y6E0V9LJLR"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-Y6E0V9LJLR');
+    </script>
+    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-Y6E0V9LJLR"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-Y6E0V9LJLR');
-</script>
-    <title>MetroSTEM | Periodic Table Snake</title>
+    <title>MetroSTEM | Periodic Table Mission</title>
     <style>
-        :root {
-            --primary: #38bdf8;
-            --secondary: #2563eb;
-            --bg: #020617;
-            --surface: #0f172a;
-            --text: #f8fafc;
-            --muted: #94a3b8;
-        }
+        :root { --primary: #38bdf8; --bg: #020617; --surface: #0f172a; --text: #f8fafc; }
+        * { box-sizing: border-box; touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
+        body { background: var(--bg); color: var(--text); font-family: system-ui, -apple-system, sans-serif; margin: 0; display: flex; flex-direction: column; align-items: center; min-height: 100vh; overflow-x: hidden; }
+        
+        #app-wrapper { width: 100%; max-width: 400px; display: flex; flex-direction: column; align-items: center; padding: 10px; flex-grow: 1; }
+        
+        header { width: 100%; display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; padding: 0 5px; }
+        .logo { font-size: 22px; font-weight: 800; color: var(--primary); letter-spacing: -0.5px; }
+        .score-box { background: var(--surface); padding: 5px 15px; border-radius: 20px; border: 1px solid #1e293b; font-weight: 600; font-family: monospace; }
+        
+        canvas { background: #000; border-radius: 12px; border: 2px solid #1e293b; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.5); width: 100%; max-width: 380px; aspect-ratio: 1/1; }
+        
+        #controls-row { width: 100%; margin-top: 20px; display: flex; justify-content: space-between; align-items: center; padding: 0 10px; }
+        
+        .dpad { display: grid; grid-template-columns: repeat(3, 45px); grid-template-rows: repeat(2, 45px); gap: 8px; }
+        .btn { background: var(--surface); border: 1px solid #334155; border-radius: 10px; color: white; font-size: 18px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 0 #1e293b; transition: transform 0.1s; }
+        .btn:active { transform: translateY(3px); box-shadow: 0 1px 0 #1e293b; }
+        .up { grid-column: 2; } .left { grid-column: 1; } .down { grid-column: 2; } .right { grid-column: 3; }
+        
+        .action-area { display: flex; flex-direction: column; align-items: center; gap: 15px; flex-grow: 1; }
+        #start-btn { background: var(--primary); color: #000; border: none; padding: 12px 25px; border-radius: 12px; font-weight: 800; font-size: 16px; width: 120px; cursor: pointer; }
+        .speed-control { width: 100px; }
+        
+        #fact-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(2,6,23,0.9); display: none; align-items: center; justify-content: center; z-index: 100; padding: 20px; text-align: center; }
+        .fact-card { background: var(--surface); border: 2px solid var(--primary); border-radius: 20px; padding: 30px; max-width: 320px; width: 100%; }
+        .fact-sym { font-size: 48px; font-weight: 900; color: var(--primary); margin-bottom: 5px; }
+        .fact-name { font-size: 20px; font-weight: 600; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 2px; }
+        .fact-text { font-size: 15px; color: #94a3b8; line-height: 1.5; }
 
-        /* Allow the body to scroll for the footer */
-        html, body {
-            margin: 0;
-            padding: 0;
-            background-color: var(--bg);
-            color: var(--text);
-            font-family: 'Segoe UI', system-ui, sans-serif;
-            overflow-x: hidden;
-            overflow-y: auto;
-        }
-
-        /* GAME VIEW: Strictly 100% of the visible screen */
-        #game-view {
-            display: flex;
-            flex-direction: column;
-            width: 100%;
-            max-width: 420px;
-            height: 100dvh; /* Dynamic Viewport Height */
-            margin: 0 auto;
-            padding: 4px 10px;
-            box-sizing: border-box;
-            overflow: hidden; /* No scrolling allowed inside the game view */
-        }
-
-        .header { flex: 0 0 auto; text-align: center; padding: 2px 0; }
-        .brand { font-size: 20px; font-weight: 900; color: var(--primary); margin: 0; }
-        .brand span { color: white; }
-
-        /* The canvas area will now shrink to fit whatever space is left */
-        #game-area {
-            flex: 1 1 auto; 
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: #000;
-            border: 2px solid var(--surface);
-            border-radius: 10px;
-            position: relative;
-            overflow: hidden;
-            min-height: 0; /* Critical: Allows flex item to shrink */
-        }
-
-        canvas {
-            max-width: 100%;
-            max-height: 100%;
-            aspect-ratio: 1/1;
-            display: block;
-        }
-
-        #info-card {
-            flex: 0 0 auto;
-            background: var(--surface);
-            border-radius: 8px;
-            padding: 4px;
-            margin: 6px 0;
-            min-height: 40px;
-            text-align: center;
-            border: 1px solid #1e293b;
-        }
-
-        .name-tag { color: var(--primary); font-weight: 800; font-size: 14px; margin: 0; text-transform: uppercase; }
-        .fact-tag { color: var(--muted); font-size: 10px; margin: 2px 0 0 0; line-height: 1.1; }
-
-        #action-btn {
-            flex: 0 0 auto;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: white;
-            border: none;
-            padding: 10px;
-            border-radius: 8px;
-            font-weight: 800;
-            font-size: 14px;
-            margin-bottom: 8px;
-            cursor: pointer;
-        }
-
-        .controls-row {
-            flex: 0 0 auto;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 15px;
-            padding-bottom: 10px; /* Space at the very bottom of the screen */
-        }
-
-        .dpad { display: grid; grid-template-areas: ". up ." "left . right" ". down ."; gap: 6px; }
-        .btn {
-            width: 50px;
-            height: 50px;
-            background: var(--surface);
-            border: 1px solid #334155;
-            color: var(--primary);
-            border-radius: 10px;
-            font-size: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            touch-action: manipulation;
-        }
-
-        .slider-box { display: flex; flex-direction: column; align-items: center; gap: 4px; }
-        .speed-label { font-size: 9px; color: var(--muted); font-weight: bold; }
-        input[type=range].vertical { -webkit-appearance: slider-vertical; width: 10px; height: 90px; }
-
-        /* FOOTER: Pushed below the 100vh game view */
-        footer {
-            width: 100%;
-            max-width: 420px;
-            margin: 0 auto;
-            text-align: center;
-            padding: 30px 0;
-            border-top: 1px solid #1e293b;
-            background-color: var(--bg);
-        }
-        .footer-links a { color: var(--primary); text-decoration: none; font-size: 12px; margin: 0 10px; }
-        .footer-copy { color: #64748b; font-size: 10px; margin-top: 10px; }
+        footer { margin-top: 40px; padding: 20px 0; border-top: 1px solid #1e293b; background-color: #020617; text-align: center; width: 100%; }
+        .footer-links a { color: var(--primary); text-decoration: none; font-size: 13px; margin: 0 10px; font-weight: 500; }
+        .footer-copy { color: #64748b; font-size: 11px; margin: 8px 0 0 0; }
+        .footer-contact { color: #475569; font-size: 10px; margin: 2px 0 0 0; }
     </style>
 </head>
 <body>
 
-    <div id="game-view">
-        <div class="header">
-            <h1 class="brand">METRO<span>STEM</span></h1>
+<div id="app-wrapper">
+    <header>
+        <div class="logo">METROSTEM</div>
+        <div class="score-box">CHAIN: <span id="score">0</span></div>
+    </header>
+
+    <canvas id="gameCanvas" width="400" height="400"></canvas>
+
+    <div id="controls-row">
+        <div class="dpad">
+            <button class="btn up" onclick="changeDir('up')">▲</button>
+            <button class="btn left" onclick="changeDir('left')">◀</button>
+            <button class="btn down" onclick="changeDir('down')">▼</button>
+            <button class="btn right" onclick="changeDir('right')">▶</button>
         </div>
 
-        <div id="game-area">
-            <canvas id="gameCanvas" width="400" height="400"></canvas>
-        </div>
-
-        <div id="info-card">
-            <div id="el-name" class="name-tag">READY PILOT</div>
-            <div id="el-fact" class="fact-tag">Master 60 elements. Scroll down for legal.</div>
-        </div>
-
-        <button id="action-btn" onclick="toggleGame()">START MISSION</button>
-
-        <div class="controls-row">
-            <div class="dpad">
-                <button class="btn" style="grid-area: up" ontouchstart="setDir('up')">▲</button>
-                <button class="btn" style="grid-area: left" ontouchstart="setDir('left')">◀</button>
-                <button class="btn" style="grid-area: right" ontouchstart="setDir('right')">▶</button>
-                <button class="btn" style="grid-area: down" ontouchstart="setDir('down')">▼</button>
-            </div>
-
-            <div class="slider-box">
-                <span class="speed-label">Speed</span>
-                <input type="range" min="100" max="600" value="350" class="vertical" id="speedSlider" oninput="updateInterval()">
-            </div>
+        <div class="action-area">
+            <button id="start-btn" onclick="toggleGame()">MISSION</button>
+            <input type="range" class="speed-control" id="speed" min="50" max="200" value="120" dir="rtl">
         </div>
     </div>
 
-        <footer style="margin-top: 40px; padding: 20px 0; border-top: 1px solid #1e293b; background-color: #020617; text-align: center; flex: 0 0 auto;">
-        <div style="margin-bottom: 12px;">
-            <a href="about.html" style="color: #38bdf8; text-decoration: none; font-size: 13px; margin: 0 10px; font-weight: 500;">About</a>
-            <a href="guide.html" style="color: #38bdf8; text-decoration: none; font-size: 13px; margin: 0 10px; font-weight: 500;">Study Guide</a>
-            <a href="contact.html" style="color: #38bdf8; text-decoration: none; font-size: 13px; margin: 0 10px; font-weight: 500;">Contact Us</a>
-            <a href="privacy.html" style="color: #38bdf8; text-decoration: none; font-size: 13px; margin: 0 10px; font-weight: 500;">Privacy</a>
-            <a href="terms.html" style="color: #38bdf8; text-decoration: none; font-size: 13px; margin: 0 10px; font-weight: 500;">Terms</a>
+    <footer>
+        <div class="footer-links">
+            <a href="about.html">About</a>
+            <a href="guide.html">Study Guide</a>
+            <a href="contact.html">Contact Us</a>
+            <a href="privacy.html">Privacy</a>
+            <a href="terms.html">Terms</a>
         </div>
-        <p style="color: #64748b; font-size: 11px; margin: 5px 0 0 0;">© 2026 MetroSTEM. Dedicated to Science Education.</p>
-        <p style="color: #475569; font-size: 10px; margin: 2px 0 0 0;">Contact: metrostemgame@gmail.com</p>
+        <p class="footer-copy">© 2026 MetroSTEM. Built for Future Scientists.</p>
+        <p class="footer-contact">Contact: metrostemgame@gmail.com</p>
     </footer>
+</div>
+
+<div id="fact-overlay">
+    <div class="fact-card">
+        <div class="fact-sym" id="f-sym">H</div>
+        <div class="fact-name" id="f-name">Hydrogen</div>
+        <p class="fact-text" id="f-text">The most abundant chemical substance in the Universe.</p>
+    </div>
+</div>
 
 <script>
-    // [The Game Logic remains identical to ensure consistency]
-    const canvas = document.getElementById('gameCanvas');
-    const ctx = canvas.getContext('2d');
-    const actionBtn = document.getElementById('action-btn');
-    const nameLabel = document.getElementById('el-name');
-    const factLabel = document.getElementById('el-fact');
-    const infoCard = document.getElementById('info-card');
-    const speedSlider = document.getElementById('speedSlider');
-
+    const canvas = document.getElementById("gameCanvas");
+    const ctx = canvas.getContext("2d");
     const elements = [
-        {an: 1, s: "H", n: "Hydrogen", c: "#f87171", f: "Most abundant element in the universe."},
-        {an: 2, s: "He", n: "Helium", c: "#c084fc", f: "Inert gas used in balloons."},
-        {an: 3, s: "Li", n: "Lithium", c: "#fbbf24", f: "Lightest metal, used in EV batteries."},
-        {an: 4, s: "Be", n: "Beryllium", c: "#94a3b8", f: "Strong metal for aerospace."},
-        {an: 5, s: "B", n: "Boron", c: "#4ade80", f: "Used in glass and plant nutrients."},
-        {an: 6, s: "C", n: "Carbon", c: "#f87171", f: "The foundation of all known life."},
-        {an: 7, s: "N", n: "Nitrogen", c: "#f87171", f: "Makes up 78% of the atmosphere."},
-        {an: 8, s: "O", n: "Oxygen", c: "#f87171", f: "Essential for life and combustion."},
-        {an: 9, s: "F", n: "Fluorine", c: "#4ade80", f: "Most reactive chemical element."},
-        {an: 10, s: "Ne", n: "Neon", c: "#c084fc", f: "Noble gas used in bright signs."},
-        {an: 11, s: "Na", n: "Sodium", c: "#fbbf24", f: "Reactive metal found in salt."},
-        {an: 12, s: "Mg", n: "Magnesium", c: "#fbbf24", f: "Used in alloys and flares."},
-        {an: 13, s: "Al", n: "Aluminum", c: "#94a3b8", f: "Used in cans and airplane parts."},
-        {an: 14, s: "Si", n: "Silicon", c: "#4ade80", f: "Key in computer chips and glass."},
-        {an: 15, s: "P", n: "Phosphorus", c: "#f87171", f: "Essential for DNA and bones."},
-        {an: 16, s: "S", n: "Sulfur", c: "#f87171", f: "Used in gunpowder and rubber."},
-        {an: 17, s: "Cl", n: "Chlorine", c: "#4ade80", f: "Used to purify water and bleach."},
-        {an: 18, s: "Ar", n: "Argon", c: "#c084fc", f: "Inert gas used in light bulbs."},
-        {an: 19, s: "K", n: "Potassium", c: "#fbbf24", f: "Vital for nerve function."},
-        {an: 20, s: "Ca", n: "Calcium", c: "#fbbf24", f: "Essential for strong bones."},
-        {an: 21, s: "Sc", n: "Scandium", c: "#94a3b8", f: "Used in aerospace and sports gear."},
-        {an: 22, s: "Ti", n: "Titanium", c: "#94a3b8", f: "Strong as steel but 45% lighter."},
-        {an: 24, s: "Cr", n: "Chromium", c: "#94a3b8", f: "Makes steel stainless and shiny."},
-        {an: 25, s: "Mn", n: "Manganese", c: "#94a3b8", f: "Essential for glass and steel."},
-        {an: 26, s: "Fe", n: "Iron", c: "#94a3b8", f: "The most used metal on Earth."},
-        {an: 27, s: "Co", n: "Cobalt", c: "#94a3b8", f: "Used in magnets and blue pigments."},
-        {an: 28, s: "Ni", n: "Nickel", c: "#94a3b8", f: "Used in coins and batteries."},
-        {an: 29, s: "Cu", n: "Copper", c: "#94a3b8", f: "Excellent conductor of electricity."},
-        {an: 30, s: "Zn", n: "Zinc", c: "#94a3b8", f: "Prevents rust; used in sunscreen."},
-        {an: 79, s: "Au", n: "Gold", c: "#fbbf24", f: "Noble metal used in jewelry."},
-        {an: 31, s: "Ga", n: "Gallium", c: "#94a3b8", f: "Melts in your hand."},
-        {an: 32, s: "Ge", n: "Germanium", c: "#4ade80", f: "Used in fiber optics."},
-        {an: 33, s: "As", n: "Arsenic", c: "#4ade80", f: "Toxic metalloid for semiconductors."},
-        {an: 34, s: "Se", n: "Selenium", c: "#f87171", f: "Used in solar cells."},
-        {an: 35, s: "Br", n: "Bromine", c: "#4ade80", f: "Only liquid nonmetal at room temp."},
-        {an: 36, s: "Kr", n: "Krypton", c: "#c084fc", f: "Noble gas used in flash bulbs."},
-        {an: 37, s: "Rb", n: "Rubidium", c: "#fbbf24", f: "Used in atomic clocks."},
-        {an: 38, s: "Sr", n: "Strontium", c: "#fbbf24", f: "Gives fireworks their red color."},
-        {an: 49, s: "In", n: "Indium", c: "#94a3b8", f: "Used in touchscreens."},
-        {an: 50, s: "Sn", n: "Tin", c: "#94a3b8", f: "Used to plate steel food cans."},
-        {an: 51, s: "Sb", n: "Antimony", c: "#4ade80", f: "Used in flame retardants."},
-        {an: 52, s: "Te", n: "Tellurium", c: "#4ade80", f: "Used in alloys and solar panels."},
-        {an: 53, s: "I", n: "Iodine", c: "#4ade80", f: "Essential for thyroid health."},
-        {an: 54, s: "Xe", n: "Xenon", c: "#c084fc", f: "Used in specialized lamps."},
-        {an: 55, s: "Cs", n: "Cesium", c: "#fbbf24", f: "Most reactive metal."},
-        {an: 56, s: "Ba", n: "Barium", c: "#fbbf24", f: "Used in X-ray imaging."},
-        {an: 81, s: "Tl", n: "Thallium", c: "#94a3b8", f: "Used in thermometers."},
-        {an: 82, s: "Pb", n: "Lead", c: "#94a3b8", f: "Dense metal used in shields."},
-        {an: 83, s: "Bi", n: "Bismuth", c: "#94a3b8", f: "Used in medicine and alloys."},
-        {an: 84, s: "Po", n: "Polonium", c: "#4ade80", f: "Highly radioactive metalloid."},
-        {an: 85, s: "At", n: "Astatine", c: "#4ade80", f: "Rarest naturally occurring element."},
-        {an: 86, s: "Rn", n: "Radon", c: "#c084fc", f: "Radioactive gas from soil decay."},
-        {an: 87, s: "Fr", n: "Francium", c: "#fbbf24", f: "Highly unstable radioactive metal."},
-        {an: 88, s: "Ra", n: "Radium", c: "#fbbf24", f: "Used for glow-in-the-dark paints."},
-        {an: 113, s: "Nh", n: "Nihonium", c: "#94a3b8", f: "Synthetic element named after Japan."},
-        {an: 114, s: "Fl", n: "Flerovium", c: "#94a3b8", f: "Superheavy radioactive element."},
-        {an: 115, s: "Mc", n: "Moscovium", c: "#94a3b8", f: "Named after Moscow."},
-        {an: 116, s: "Lv", n: "Livermorium", c: "#94a3b8", f: "Named after California."},
-        {an: 117, s: "Ts", n: "Tennessine", c: "#4ade80", f: "Synthetic halogen."},
-        {an: 118, s: "Og", n: "Oganesson", c: "#c084fc", f: "Heaviest element on the table."}
+        {s:"H", n:"Hydrogen", c:"#38bdf8", f:"Most abundant element in the universe."},
+        {s:"He", n:"Helium", c:"#fbbf24", f:"The second lightest and second most abundant element."},
+        {s:"Li", n:"Lithium", c:"#f87171", f:"The lightest metal and the lightest solid element."},
+        {s:"Be", n:"Beryllium", c:"#a3e635", f:"Commonly found in gemstones like emeralds."},
+        {s:"B", n:"Boron", c:"#818cf8", f:"Crucial for the cell walls of all plants."},
+        {s:"C", n:"Carbon", c:"#94a3b8", f:"The basis of all known life on Earth."},
+        {s:"N", n:"Nitrogen", c:"#60a5fa", f:"Makes up about 78% of Earth's atmosphere."},
+        {s:"O", n:"Oxygen", c:"#f472b6", f:"Highly reactive nonmetal and oxidizing agent."}
     ];
 
-    let snake = [{x: 200, y: 200}], dir = 'right', nextDir = 'right';
-    let food = {x: 100, y: 100}, idx = 0, tailSym = [], tailCol = [];
-    let running = false, gameLoop = null, learningMode = false;
+    let snake = [{x: 200, y: 200}], food = {x: 100, y: 100}, dir = "right", idx = 0, running = false, tailCol = [], tailSym = [];
 
-    function speak(t) {
-        window.speechSynthesis.cancel();
-        const u = new SpeechSynthesisUtterance(t);
-        u.lang = 'en-US'; u.rate = 1.0;
-        window.speechSynthesis.speak(u);
+    function spawnFood() {
+        food.x = Math.floor(Math.random() * 20) * 20;
+        food.y = Math.floor(Math.random() * 20) * 20;
     }
 
-        function render() {
-        // Clear Canvas
-        ctx.fillStyle = "#000";
-        ctx.fillRect(0, 0, 400, 400);
+    function toggleGame() {
+        if (!running) {
+            running = true;
+            document.getElementById("start-btn").innerText = "ABORT";
+            // GA Event: Game Started
+            gtag('event', 'game_start', { 'event_category': 'Engagement', 'event_label': 'Metro Mission' });
+            gameLoop();
+        } else {
+            location.reload();
+        }
+    }
 
+    function changeDir(d) {
+        if (d === "up" && dir !== "down") dir = "up";
+        if (d === "down" && dir !== "up") dir = "down";
+        if (d === "left" && dir !== "right") dir = "left";
+        if (d === "right" && dir !== "left") dir = "right";
+    }
+
+    function gameLoop() {
+        if (!running) return;
+        
+        let head = { ...snake[0] };
+        if (dir === "up") head.y -= 20;
+        if (dir === "down") head.y += 20;
+        if (dir === "left") head.x -= 20;
+        if (dir === "right") head.x += 20;
+
+        if (head.x < 0 || head.x >= 400 || head.y < 0 || head.y >= 400 || snake.some(s => s.x === head.x && s.y === head.y)) {
+            // GA Event: Game Over
+            gtag('event', 'game_over', { 'final_score': snake.length - 1, 'last_element': elements[idx].n });
+            alert("Mission Failed! Final Atomic Chain: " + (snake.length - 1));
+            location.reload();
+            return;
+        }
+
+        snake.unshift(head);
+
+        if (head.x === food.x && head.y === food.y) {
+            // GA Event: Element Collected
+            gtag('event', 'element_collected', { 'element_name': elements[idx].n, 'score': snake.length });
+            
+            tailCol.push(elements[idx].c);
+            tailSym.push(elements[idx].s);
+            showFact(elements[idx]);
+            idx = (idx + 1) % elements.length;
+            spawnFood();
+            document.getElementById("score").innerText = snake.length - 1;
+        } else {
+            snake.pop();
+        }
+
+        render();
+        setTimeout(gameLoop, 250 - document.getElementById("speed").value);
+    }
+
+    function showFact(el) {
+        running = false;
+        document.getElementById("f-sym").innerText = el.s;
+        document.getElementById("f-name").innerText = el.n;
+        document.getElementById("f-text").innerText = el.f;
+        document.getElementById("fact-overlay").style.display = "flex";
+        setTimeout(() => {
+            document.getElementById("fact-overlay").style.display = "none";
+            running = true;
+            gameLoop();
+        }, 1200);
+    }
+
+    function render() {
+        ctx.fillStyle = "#000"; ctx.fillRect(0, 0, 400, 400);
+        
         // Draw Element (Food)
-        ctx.fillStyle = elements[idx].c;
-        ctx.fillRect(food.x, food.y, 20, 20);
+        ctx.fillStyle = elements[idx].c; ctx.fillRect(food.x, food.y, 20, 20);
         ctx.fillStyle = "#000"; ctx.font = "bold 13px Arial"; ctx.textAlign = "center";
         ctx.fillText(elements[idx].s, food.x + 10, food.y + 15);
 
-        // Draw Train & Atomic Chain
         snake.forEach((p, i) => {
             if (i === 0) {
-                // --- DRAW METRO TRAIN HEAD ---
-                ctx.fillStyle = "#cbd5e1"; // Metallic Silver Body
-                ctx.fillRect(p.x, p.y, 19, 19);
-                
-                // Draw Windshield (Dark Glass) based on direction
-                ctx.fillStyle = "#0f172a"; 
+                // METRO TRAIN HEAD
+                ctx.fillStyle = "#cbd5e1"; ctx.fillRect(p.x, p.y, 19, 19);
+                ctx.fillStyle = "#0f172a"; // Windshield
                 if (dir === 'right') ctx.fillRect(p.x + 12, p.y + 2, 5, 15);
                 else if (dir === 'left') ctx.fillRect(p.x + 2, p.y + 2, 5, 15);
                 else if (dir === 'up') ctx.fillRect(p.x + 2, p.y + 2, 15, 5);
                 else if (dir === 'down') ctx.fillRect(p.x + 2, p.y + 12, 15, 5);
-
-                // Draw Headlights (Bright Yellow)
-                ctx.fillStyle = "#fef08a";
-                if (dir === 'right') { ctx.fillRect(p.x + 15, p.y + 3, 3, 3); ctx.fillRect(p.x + 15, p.y + 13, 3, 3); }
-                else if (dir === 'left') { ctx.fillRect(p.x + 1, p.y + 3, 3, 3); ctx.fillRect(p.x + 1, p.y + 13, 3, 3); }
-                else if (dir === 'up') { ctx.fillRect(p.x + 3, p.y + 1, 3, 3); ctx.fillRect(p.x + 13, p.y + 1, 3, 3); }
-                else if (dir === 'down') { ctx.fillRect(p.x + 3, p.y + 15, 3, 3); ctx.fillRect(p.x + 13, p.y + 15, 3, 3); }
-                
+                ctx.fillStyle = "#fef08a"; // Lights
+                if (dir === 'right') { ctx.fillRect(p.x+15, p.y+3, 3, 3); ctx.fillRect(p.x+15, p.y+13, 3, 3); }
+                else if (dir === 'left') { ctx.fillRect(p.x+1, p.y+3, 3, 3); ctx.fillRect(p.x+1, p.y+13, 3, 3); }
             } else {
-                // --- DRAW ATOMIC TAIL (Same as before) ---
                 ctx.fillStyle = tailCol[i-1] || "#334155";
                 ctx.fillRect(p.x, p.y, 19, 19);
-                if (tailSym[i-1]) {
-                    ctx.fillStyle = "rgba(0,0,0,0.6)"; ctx.font = "bold 9px Arial";
-                    ctx.fillText(tailSym[i-1], p.x + 10, p.y + 14);
-                }
+                ctx.fillStyle = "rgba(0,0,0,0.5)"; ctx.font = "bold 9px Arial";
+                ctx.fillText(tailSym[i-1] || "", p.x + 10, p.y + 14);
             }
         });
-        }
-    
-    function update() {
-        if (learningMode) return;
-        dir = nextDir;
-        let h = {...snake[0]};
-        if (dir === 'up') h.y -= 20; if (dir === 'down') h.y += 20;
-        if (dir === 'left') h.x -= 20; if (dir === 'right') h.x += 20;
-        if (h.x < 0 || h.x >= 400 || h.y < 0 || h.y >= 400 || snake.some(p => p.x === h.x && p.y === h.y)) {
-            gameOver(); return;
-        }
-        snake.unshift(h);
-        if (h.x === food.x && h.y === food.y) {
-            triggerLearningPause();
-        } else { snake.pop(); }
-        render();
-    }
-
-    function triggerLearningPause() {
-        learningMode = true;
-        infoCard.classList.add('learning-active');
-        nameLabel.innerText = elements[idx].n.toUpperCase() + " (" + elements[idx].an + ")";
-        factLabel.innerText = elements[idx].f;
-        speak(elements[idx].n + ", atomic number " + elements[idx].an + ". " + elements[idx].f);
-        tailSym.unshift(elements[idx].s);
-        tailCol.unshift(elements[idx].c);
-        idx = (idx + 1) % elements.length;
-        food = { x: Math.floor(Math.random()*19)*20, y: Math.floor(Math.random()*19)*20 };
-        setTimeout(() => {
-            learningMode = false;
-            infoCard.classList.remove('learning-active');
-        }, 500);
-    }
-
-    function setDir(d) {
-        if (d === 'up' && dir !== 'down') nextDir = 'up';
-        if (d === 'down' && dir !== 'up') nextDir = 'down';
-        if (d === 'left' && dir !== 'right') nextDir = 'left';
-        if (d === 'right' && dir !== 'left') nextDir = 'right';
-    }
-
-    function gameOver() {
-        clearInterval(gameLoop); running = false;
-        speak("Mission Over");
-        actionBtn.innerText = "RESTART MISSION";
-    }
-
-    function updateInterval() {
-        if (running) {
-            clearInterval(gameLoop);
-            gameLoop = setInterval(update, 700 - speedSlider.value);
-        }
-    }
-
-    function toggleGame() {
-        if (running) {
-            clearInterval(gameLoop); running = false;
-            actionBtn.innerText = "RESUME MISSION";
-        } else {
-            if (actionBtn.innerText.includes("RESTART")) {
-                snake = [{x: 200, y: 200}]; idx = 0; tailSym = []; tailCol = [];
-                dir = 'right'; nextDir = 'right';
-            }
-            running = true; actionBtn.innerText = "ABORT";
-            updateInterval();
-            speak("Systems Online.");
-        }
     }
     render();
 </script>
