@@ -361,7 +361,7 @@
         }
     }
 
-    function toggleGame() {
+        function toggleGame() {
         if (running) {
             clearInterval(gameLoop); running = false;
             actionBtn.innerText = "RESUME MISSION";
@@ -370,11 +370,19 @@
                 snake = [{x: 200, y: 200}]; idx = 0; tailSym = []; tailCol = [];
                 dir = 'right'; nextDir = 'right';
             }
+
+            // --- ADDED: Track the start of a mission ---
+            gtag('event', 'mission_start', {
+                'event_category': 'Engagement',
+                'event_label': 'Start or Resume'
+            });
+
             running = true; actionBtn.innerText = "ABORT";
             updateInterval();
             speak("Systems Online.");
         }
     }
+
     render();
 </script>
 </body>
