@@ -348,11 +348,18 @@
         if (d === 'right' && dir !== 'left') nextDir = 'right';
     }
 
-    function gameOver() {
+        function gameOver() {
+        // --- ADDED: Track game over events ---
+        gtag('event', 'game_over', {
+            'final_score': snake.length - 1,
+            'last_element': elements[idx].n
+        });
+
         clearInterval(gameLoop); running = false;
         speak("Mission Over");
         actionBtn.innerText = "RESTART MISSION";
     }
+
 
     function updateInterval() {
         if (running) {
