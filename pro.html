@@ -3,254 +3,133 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LOCO OTRO | Kinetic 3D Spread</title>
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Playfair+Display:ital,wght@1,900&family=Montserrat:wght@300;800&display=swap" rel="stylesheet">
+    <title>LOCO OTRO | The Membership Fan</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Montserrat:wght@300;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --dark: #0d0d0d;
+            --bg: #f2ebe3;
             --accent: #a62626;
-            --cream: #f2ebe3;
+            --card-w: 240px;
+            --card-h: 360px;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-
         body {
-            background-color: var(--dark);
-            color: var(--cream);
-            font-family: 'Montserrat', sans-serif;
+            background-color: var(--bg);
+            margin: 0;
             height: 100vh;
             overflow: hidden;
             display: flex;
             justify-content: center;
-            align-items: center;
-            perspective: 2000px;
+            align-items: flex-end; /* Anchor to bottom */
+            font-family: 'Montserrat', sans-serif;
+            perspective: 1500px;
         }
 
-        /* --- Ambient Mouse Glow --- */
-        #glow {
-            position: fixed;
-            width: 600px;
-            height: 600px;
-            background: radial-gradient(circle, rgba(166, 38, 38, 0.15) 0%, transparent 70%);
-            pointer-events: none;
-            transform: translate(-50%, -50%);
-            z-index: 0;
-        }
-
-        /* --- The 3D Stage --- */
-        .stage {
+        /* --- THE FAN STAGE --- */
+        .fan-stage {
             position: relative;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            width: var(--card-w);
+            height: 600px; /* Space for the fan to open */
             transform-style: preserve-3d;
+            margin-bottom: -100px; /* Overlap bottom edge */
         }
 
-        /* --- THE VECTOR HAND --- */
-        .hand-vector {
+        .card {
             position: absolute;
-            bottom: -100px;
-            left: -500px;
-            width: 450px;
-            z-index: 1000;
-            filter: drop-shadow(0 20px 50px rgba(0,0,0,0.5));
-            animation: dealSwipe 3.5s cubic-bezier(0.23, 1, 0.32, 1) forwards;
-        }
-
-        @keyframes dealSwipe {
-            0% { left: -500px; transform: rotate(20deg); }
-            40% { left: 30%; transform: rotate(0deg); }
-            100% { left: 150%; transform: rotate(-20deg); }
-        }
-
-        /* --- 3D FLIP CARDS --- */
-        .card-container {
-            position: absolute;
-            width: 260px;
-            height: 380px;
-            opacity: 0;
-            transform: translateY(300px) scale(0.5);
-            transition: all 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            perspective: 1000px;
-        }
-
-        .card-container.active {
-            opacity: 1;
-        }
-
-        .card-inner {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            transform-style: preserve-3d;
-            transition: transform 0.6s;
-        }
-
-        .card-container:hover .card-inner {
-            transform: rotateY(180deg);
-        }
-
-        .card-front, .card-back {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            backface-visibility: hidden;
+            bottom: 0;
+            width: var(--card-w);
+            height: var(--card-h);
+            background: #fff;
+            border: 3px solid var(--accent);
             border-radius: 20px;
-            padding: 30px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transform-origin: center 1000px; /* Pivot point far below the card */
+            transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s;
+            cursor: pointer;
             display: flex;
             flex-direction: column;
-            justify-content: center;
-            align-items: center;
             text-align: center;
-            border: 2px solid var(--accent);
         }
 
-        .card-front {
-            background: var(--cream);
-            color: var(--dark);
+        /* Initial Stacked State */
+        .card { transform: rotate(0deg); opacity: 0; }
+
+        /* Spread Animation Class */
+        .fan-open .card { opacity: 1; }
+
+        /* Individual Rotations */
+        .fan-open .card:nth-child(1) { transform: rotate(-30deg); }
+        .fan-open .card:nth-child(2) { transform: rotate(-15deg); }
+        .fan-open .card:nth-child(3) { transform: rotate(0deg); }
+        .fan-open .card:nth-child(4) { transform: rotate(15deg); }
+        .fan-open .card:nth-child(5) { transform: rotate(30deg); }
+
+        /* --- Hover Interaction --- */
+        .card:hover {
+            z-index: 100;
+            /* Pull the card "up" and straighten it */
+            transform: rotate(0deg) translateY(-350px) scale(1.1) !important;
+            box-shadow: 0 40px 80px rgba(166, 38, 38, 0.2);
+            background-color: #fffbf6;
         }
 
-        .card-back {
-            background: var(--accent);
-            color: var(--cream);
-            transform: rotateY(180deg);
-        }
+        .card-icon { font-size: 3rem; margin-bottom: 20px; }
+        .card-title { font-family: 'Dancing Script', cursive; color: var(--accent); font-size: 1.8rem; margin-bottom: 10px; }
+        .card-desc { font-size: 0.8rem; line-height: 1.5; color: #444; }
 
-        .card-icon { font-size: 3.5rem; margin-bottom: 20px; }
-        .card-title { font-family: 'Dancing Script', cursive; font-size: 2rem; color: var(--accent); margin-bottom: 10px; }
-        .card-back .card-title { color: white; }
-        .card-desc { font-size: 0.8rem; line-height: 1.5; font-weight: 300; }
-
-        /* Individual Spread Positions */
-        .c1.active { transform: translate(-420px, -30px) rotateZ(-12deg) scale(1); }
-        .c2.active { transform: translate(-140px, 20px) rotateZ(-4deg) scale(1); }
-        .c3.active { transform: translate(140px, 20px) rotateZ(4deg) scale(1); }
-        .c4.active { transform: translate(420px, -30px) rotateZ(12deg) scale(1); }
-
-        .btn-join {
-            margin-top: 20px;
-            padding: 10px 25px;
-            border: 2px solid white;
-            color: white;
-            text-decoration: none;
-            border-radius: 50px;
-            font-size: 0.7rem;
+        .logo {
+            position: fixed;
+            top: 40px;
+            font-size: 2.5rem;
             font-weight: 800;
-            transition: 0.3s;
+            color: var(--accent);
+            letter-spacing: 5px;
         }
-
-        .btn-join:hover { background: white; color: var(--accent); }
-
     </style>
 </head>
 <body>
 
-    <div id="glow"></div>
+    <div class="logo">LOCO OTRO</div>
 
-    <div class="stage">
-        <div class="hand-vector">
-            <svg viewBox="0 0 500 300" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M0 100 L150 50 L250 250 L50 280 Z" fill="#a62626"/>
-                <path d="M150 50 C 250 10, 350 30, 420 100 L400 220 C 350 280, 200 270, 150 200 Z" fill="#E8C3A9"/>
-                <rect x="250" y="80" width="120" height="40" rx="20" fill="#E8C3A9" transform="rotate(-15 250 80)"/>
-            </svg>
+    <div class="fan-stage" id="fanStage">
+        <div class="card">
+            <span class="card-icon">🗝️</span>
+            <h3 class="card-title">Loco Access</h3>
+            <p class="card-desc">Priority access to events and exclusive member rates on all purchases.</p>
         </div>
 
-        <div class="card-container c1" id="c1">
-            <div class="card-inner">
-                <div class="card-front">
-                    <span class="card-icon">🗝️</span>
-                    <h3 class="card-title">Loco Access</h3>
-                    <p class="card-desc">Priority entry to the crazy other side. Exclusive member rates on all events.</p>
-                </div>
-                <div class="card-back">
-                    <h3 class="card-title">Unlock Now</h3>
-                    <p>Enter the inner circle today.</p>
-                    <a href="#" class="btn-join">JOIN CLUB</a>
-                </div>
-            </div>
+        <div class="card">
+            <span class="card-icon">🍷</span>
+            <h3 class="card-title">Founder's Table</h3>
+            <p class="card-desc">Intimate gatherings with Chef Sid. Direct access to the founder over curated drinks.</p>
         </div>
 
-        <div class="card-container c2" id="c2">
-            <div class="card-inner">
-                <div class="card-front">
-                    <span class="card-icon">🍷</span>
-                    <h3 class="card-title">Founder's Table</h3>
-                    <p class="card-desc">Dine with Chef Sid. An intimate session of curated treats and direct access.</p>
-                </div>
-                <div class="card-back">
-                    <h3 class="card-title">Reserve Spot</h3>
-                    <p>Limited seats for the table.</p>
-                    <a href="#" class="btn-join">JOIN CLUB</a>
-                </div>
-            </div>
+        <div class="card">
+            <span class="card-icon">🎂</span>
+            <h3 class="card-title">Celebrations</h3>
+            <p class="card-desc">Special birthday setups with a complimentary bottle of sparkling wine.</p>
         </div>
 
-        <div class="card-container c3" id="c3">
-            <div class="card-inner">
-                <div class="card-front">
-                    <span class="card-icon">🍸</span>
-                    <h3 class="card-title">Bar Quickie</h3>
-                    <p class="card-desc">Master the art of the perfect pour. Hands-on sessions with our mixologists.</p>
-                </div>
-                <div class="card-back">
-                    <h3 class="card-title">Mix It Up</h3>
-                    <p>Learn the secrets of the bar.</p>
-                    <a href="#" class="btn-join">JOIN CLUB</a>
-                </div>
-            </div>
+        <div class="card">
+            <span class="card-icon">🍸</span>
+            <h3 class="card-title">Bar Quickie</h3>
+            <p class="card-desc">Hands-on mixology with experts to craft your favorite signature drinks.</p>
         </div>
 
-        <div class="card-container c4" id="c4">
-            <div class="card-inner">
-                <div class="card-front">
-                    <span class="card-icon">👨‍🍳</span>
-                    <h3 class="card-title">Kitchen Quickie</h3>
-                    <p class="card-desc">Go behind the scenes and learn the fire behind our signature tapas.</p>
-                </div>
-                <div class="card-back">
-                    <h3 class="card-title">Start Cooking</h3>
-                    <p>The kitchen is your stage.</p>
-                    <a href="#" class="btn-join">JOIN CLUB</a>
-                </div>
-            </div>
+        <div class="card">
+            <span class="card-icon">👨‍🍳</span>
+            <h3 class="card-title">Kitchen Quickie</h3>
+            <p class="card-desc">Learn the fire and secrets behind our signature tapas dishes.</p>
         </div>
     </div>
 
     <script>
-        const glow = document.getElementById('glow');
-        const cards = document.querySelectorAll('.card-container');
-
-        // Mouse Glow Tracking
-        document.addEventListener('mousemove', (e) => {
-            glow.style.left = e.clientX + 'px';
-            glow.style.top = e.clientY + 'px';
-        });
-
-        // Sequential "Release" of cards
-        setTimeout(() => cards[0].classList.add('active'), 1000);
-        setTimeout(() => cards[1].classList.add('active'), 1400);
-        setTimeout(() => cards[2].classList.add('active'), 1800);
-        setTimeout(() => cards[3].classList.add('active'), 2200);
-
-        // Individual Card Parallax Tilt
-        cards.forEach(card => {
-            card.addEventListener('mousemove', (e) => {
-                const rect = card.getBoundingClientRect();
-                const x = (e.clientX - rect.left) / rect.width - 0.5;
-                const y = (e.clientY - rect.top) / rect.height - 0.5;
-                
-                const inner = card.querySelector('.card-inner');
-                // Tilt card toward mouse while keeping it active
-                inner.style.transform = `rotateY(${x * 20}deg) rotateX(${y * -20}deg)`;
-            });
-
-            card.addEventListener('mouseleave', () => {
-                const inner = card.querySelector('.card-inner');
-                inner.style.transform = `rotateY(0deg) rotateX(0deg)`;
-            });
+        // Trigger the fan opening after a short delay
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('fanStage').classList.add('fan-open');
+            }, 500);
         });
     </script>
 </body>
