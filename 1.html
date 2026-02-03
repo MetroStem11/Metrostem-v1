@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loco Otro | Authentic Surrealist Deal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Montserrat:wght@300;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #f2ebe3;
+            --accent: #a62626;
+            --card-w: 220px;
+            --card-h: 320px;
+        }
+
+        body {
+            background-color: var(--bg);
+            margin: 0;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Montserrat', sans-serif;
+            perspective: 1500px;
+            /* Vintage paper texture overlay */
+            background-image: url('https://www.transparenttextures.com/patterns/p6.png');
+        }
+
+        /* --- THE STAGE --- */
+        .stage {
+            position: relative;
+            width: 100%;
+            height: 700px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            padding-bottom: 50px;
+        }
+
+        /* --- THE SURREALIST HAND --- */
+        /* This represents the realistic "cut-out" hand structure from the original art */
+        .hand-wrapper {
+            position: absolute;
+            bottom: -50px;
+            left: 50%;
+            width: 250px;
+            height: 350px;
+            z-index: 100;
+            transform: translateX(-50%) translateY(400px);
+            transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+            pointer-events: none;
+        }
+
+        .hand-image {
+            width: 100%;
+            height: 100%;
+            /* Using a realistic hand silhouette with a vintage cuff */
+            background: url('https://www.svgrepo.com/show/421631/hand-pointing-finger.svg') no-repeat center bottom;
+            background-size: contain;
+            filter: sepia(0.5) contrast(1.2) drop-shadow(0 10px 20px rgba(0,0,0,0.2));
+        }
+
+        /* --- THE CARDS --- */
+        .card {
+            position: absolute;
+            bottom: 100px;
+            width: var(--card-w);
+            height: var(--card-h);
+            background: #fff;
+            border: 2px solid var(--accent);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            transform-origin: center 800px; /* Pivot point for the fan */
+            opacity: 0;
+            transform: scale(0.5) translateY(200px) rotate(0deg);
+            transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.4s;
+            text-align: center;
+        }
+
+        /* Revealed States in a Fan */
+        .c1.revealed { opacity: 1; transform: rotate(-25deg) scale(1) translateY(0); }
+        .c2.revealed { opacity: 1; transform: rotate(-8deg) scale(1) translateY(0); }
+        .c3.revealed { opacity: 1; transform: rotate(8deg) scale(1) translateY(0); }
+        .c4.revealed { opacity: 1; transform: rotate(25deg) scale(1) translateY(0); }
+
+        /* Card Content Styling */
+        .card-icon { font-size: 2.8rem; display: block; margin-bottom: 15px; filter: grayscale(0.2); }
+        .card-title { font-family: 'Dancing Script', cursive; color: var(--accent); font-size: 1.7rem; margin-bottom: 10px; }
+        .card-desc { font-size: 0.75rem; line-height: 1.5; color: #444; }
+
+        /* Interaction: Pick up the card */
+        .card.revealed:hover {
+            z-index: 200;
+            transform: rotate(0deg) translateY(-350px) scale(1.1) !important;
+            box-shadow: 0 40px 80px rgba(166, 38, 38, 0.2);
+            background: #fffbf6;
+            cursor: pointer;
+        }
+
+        .btn-reveal {
+            position: fixed;
+            top: 30px;
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 4px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            cursor: pointer;
+            z-index: 500;
+        }
+    </style>
+</head>
+<body>
+
+    <button class="btn-reveal" onclick="dealSequence()">REVEAL DEALS</button>
+
+    <div class="stage">
+        <div class="hand-wrapper" id="hand">
+            <div class="hand-image"></div>
+        </div>
+
+        <div class="card c1" id="c1">
+            <span class="card-icon">🗝️</span>
+            <h3 class="card-title">Loco Access</h3>
+            <p class="card-desc">Through the keyhole, priority access to events and exclusive member rates on all purchases.</p>
+        </div>
+
+        <div class="card c2" id="c2">
+            <span class="card-icon">🍷</span>
+            <h3 class="card-title">Founder's Table</h3>
+            <p class="card-desc">An intimate dining session with Chef Sid. Direct access to curated spirits and stories.</p>
+        </div>
+
+        <div class="card c3" id="c3">
+            <span class="card-icon">🍸</span>
+            <h3 class="card-title">Bar Quickie</h3>
+            <p class="card-desc">Master the craft. Hands-on mixology sessions with our experts to make your favorite drink.</p>
+        </div>
+
+        <div class="card c4" id="c4">
+            <span class="card-icon">👨‍🍳</span>
+            <h3 class="card-title">Kitchen Quickie</h3>
+            <p class="card-desc">Step behind the line and learn the fire behind our signature tapas dishes.</p>
+        </div>
+    </div>
+
+    <script>
+        const hand = document.getElementById('hand');
+        const cards = ['c1', 'c2', 'c3', 'c4'];
+
+        function dealSequence() {
+            // Initial hand entrance
+            hand.style.transform = 'translateX(-50%) translateY(0)';
+
+            cards.forEach((id, index) => {
+                setTimeout(() => {
+                    const card = document.getElementById(id);
+                    
+                    // Move hand to the deal position
+                    const offset = (index - 1.5) * 120;
+                    hand.style.transform = `translateX(calc(-50% + ${offset}px)) translateY(0) rotate(${offset/10}deg)`;
+                    
+                    // Release card
+                    card.classList.add('revealed');
+
+                    // If it's the last card, retract the hand
+                    if(index === cards.length - 1) {
+                        setTimeout(() => {
+                            hand.style.transform = 'translateX(-50%) translateY(400px)';
+                        }, 800);
+                    }
+                }, index * 900); // Time between cards
+            });
+        }
+
+        // Optional: Auto-start
+        window.onload = () => setTimeout(dealSequence, 1000);
+    </script>
+</body>
+</html>
