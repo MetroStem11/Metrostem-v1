@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loco Otro | Membership 2025 Recap</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --red: #a62626;
+            --cream: #f2ebe3;
+            --black: #000;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: var(--red);
+            font-family: 'Montserrat', sans-serif;
+            color: white;
+            overflow-x: hidden;
+        }
+
+        /* --- THE 360 VIDEO CONTAINER --- */
+        .video-viewport {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100vh;
+            z-index: -1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: var(--red);
+        }
+
+        /* Static Placeholder for the 360 Video */
+        .video-360-placeholder {
+            width: 80%;
+            height: 70%;
+            background: url('https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?auto=format&fit=crop&q=80&w=1200') center;
+            background-size: cover;
+            border-radius: 50%; /* Circular 360 feel */
+            border: 10px solid rgba(255,255,255,0.1);
+            filter: sepia(0.5) brightness(0.7) hue-rotate(-30deg); /* Reddish tint */
+        }
+
+        .recap-text {
+            position: absolute;
+            font-size: 8vw;
+            font-weight: 900;
+            opacity: 0.2;
+            text-transform: uppercase;
+        }
+
+        /* --- SCROLL SECTIONS --- */
+        section {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            padding: 20px;
+            text-align: center;
+        }
+
+        /* --- OVERLAY ELEMENTS --- */
+        .icon-overlay {
+            width: 200px;
+            height: 200px;
+            margin-bottom: 20px;
+            opacity: 0;
+            transform: translateY(50px) scale(0.8);
+            transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .label {
+            background: #00ff00; /* Green highlight from storyboard */
+            color: black;
+            padding: 5px 15px;
+            font-size: 1rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.6s ease 0.2s;
+        }
+
+        /* Active State when in view */
+        .in-view .icon-overlay { opacity: 1; transform: translateY(0) scale(1); }
+        .in-view .label { opacity: 1; transform: translateY(0); }
+
+        /* --- FOOTER --- */
+        footer {
+            background: white;
+            padding: 40px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .footer-item {
+            color: black;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            padding: 10px;
+            transition: transform 0.2s;
+        }
+
+        /* Micro-motion on click/hover */
+        .footer-item:active { transform: scale(0.9) rotate(-5deg); }
+        .footer-item:hover { transform: translateY(-5px); color: var(--red); }
+
+        .social-icons {
+            display: flex;
+            gap: 15px;
+            margin-left: 30px;
+        }
+
+        .social-circle {
+            width: 35px;
+            height: 35px;
+            background: black;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .social-circle:active { transform: scale(1.3); background: var(--red); }
+
+    </style>
+</head>
+<body>
+
+    <div class="video-viewport">
+        <div class="recap-text" style="left: 10%;">2025</div>
+        <div class="video-360-placeholder"></div>
+        <div class="recap-text" style="right: 10%;">RECAP</div>
+    </div>
+
+    <section id="kitchen">
+        <div class="icon-overlay">
+            <svg viewBox="0 0 200 200" fill="#E8C3A9">
+                <path d="M50 150 C 30 130, 40 80, 70 60 L80 10 C 90 -5, 120 -5, 130 10 L140 60 C 160 80, 165 130, 150 160 Z" />
+                <rect x="70" y="80" width="60" height="20" fill="white" rx="10"/>
+            </svg>
+        </div>
+        <span class="label">Quickie in the Kitchen</span>
+    </section>
+
+    <section id="discount">
+        <div class="icon-overlay">
+            <svg viewBox="0 0 200 200">
+                <path d="M100 20 L110 80 L170 80 L120 120 L140 180 L100 140 L60 180 L80 120 L30 80 L90 80 Z" fill="black" />
+                <path d="M100 10 L100 70 M90 10 L90 70 M110 10 L110 70" stroke="white" stroke-width="4"/>
+            </svg>
+        </div>
+        <span class="label">200% OFF EVERY TIME YOU DINE WITH US</span>
+    </section>
+
+    <section id="celebration">
+        <div class="icon-overlay">
+            <svg viewBox="0 0 200 200" fill="white">
+                <circle cx="70" cy="100" r="15"/>
+                <circle cx="130" cy="100" r="15"/>
+                <path d="M50 150 L150 150 L140 120 L60 120 Z" />
+            </svg>
+        </div>
+        <span class="label">Special Celebration</span>
+    </section>
+
+    <footer>
+        <a href="#" class="footer-item">Instagram</a>
+        <a href="#" class="footer-item">Phone</a>
+        <a href="#" class="footer-item">Email</a>
+        <a href="#" class="footer-item">Buy Membership</a>
+        <a href="#" class="footer-item">Location</a>
+
+        <div class="social-icons">
+            <div class="social-circle">in</div>
+            <div class="social-circle">ig</div>
+            <div class="social-circle">wa</div>
+        </div>
+    </footer>
+
+    <script>
+        // Intersection Observer to trigger overlays on scroll
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('in-view');
+                } else {
+                    entry.target.classList.remove('in-view');
+                }
+            });
+        }, { threshold: 0.6 });
+
+        document.querySelectorAll('section').forEach(section => {
+            observer.observe(section);
+        });
+
+        // Simple parallax effect for the 360 video background
+        window.addEventListener('scroll', () => {
+            const video = document.querySelector('.video-360-placeholder');
+            const scrolled = window.pageYOffset;
+            video.style.transform = `rotate(${scrolled * 0.05}deg) scale(${1 + scrolled * 0.0001})`;
+        });
+    </script>
+</body>
+</html>
+
