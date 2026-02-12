@@ -1,19 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LOCO OTRO | Immersive 360 Recap</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;900&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <style>
+        :root {
+            --red: #a62626;
+            --green: #00ff00; /* Storyboard highlight */
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: var(--red);
+            font-family: 'Montserrat', sans-serif;
+            overflow-x: hidden;
+            color: white;
+        }
+
+        /* --- STICKY 360 BACKGROUND --- */
+        .video-viewport {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100vh;
+            z-index: -1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: radial-gradient(circle, #c42e2e 0%, #a62626 100%);
+        }
+
+        /* The Oval Mask Viewport */
+        .oval-mask {
+            width: 85vw;
+            height: 80vh;
+            border-radius: 50%; /* Anatomical Oval */
+            overflow: hidden;
+            border: 5px solid rgba(0,0,0,0.4);
+            position: relative;
+            background: #000;
+        }
+
+        #canvas-360 {
+            width: 100%;
+            height: 100%;
+            filter: sepia(0.4) brightness(0.6) contrast(1.1); /* Loco Aesthetic */
+        }
+
+        .bg-text {
+            position: absolute;
+            font-size: 10vw;
+            font-weight: 900;
+            opacity: 0.1;
+            letter-spacing: -5px;
+        }
+
+        /* --- SCROLL SECTIONS --- */
+        section {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 40px;
+        }
+
+        .overlay-graphic {
+            width: 350px;
+            height: 350px;
+            opacity: 0;
+            transform: scale(0.8) translateY(100px);
+            transition: all 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .in-view .overlay-graphic { 
+            opacity: 1; 
+            transform: scale(1) translateY(0); 
+        }
+
+        .green-highlight {
+            background: var(--green);
+            color: black;
+            font-weight: 900;
+            padding: 10px 25px;
+            text-transform: uppercase;
+            font-size: 1.2rem;
+            margin-top: 30px;
+            box-shadow: 10px 10px 0px rgba(0,0,0,0.2);
+            opacity: 0;
+            transition: 0.4s ease 0.3s;
+        }
+
+        .in-view .green-highlight { opacity: 1; }
+
+        /* --- FOOTER --- */
+        footer {
+            background: white;
+            padding: 60px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 30px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .footer-nav {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+        }
+
         .footer-link {
             text-decoration: none;
             color: black;
             font-weight: 700;
             font-size: 0.8rem;
             text-transform: uppercase;
-            padding: 8px 15px;
+            padding: 10px 20px;
             border: 2px solid transparent;
             transition: all 0.2s;
         }
 
-        .footer-link:hover { border-color: black; transform: translateY(-3px); }
+        .footer-link:hover { border-color: black; transform: translateY(-5px); }
 
-        .social-row { display: flex; gap: 20px; }
-        .circle-btn {
-            width: 45px; height: 45px;
+        .social-row { display: flex; gap: 25px; }
+        .social-circle {
+            width: 50px; height: 50px;
             background: black;
             color: white;
             border-radius: 50%;
@@ -24,50 +141,51 @@
             cursor: pointer;
             transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
-        .circle-btn:hover { transform: scale(1.4) rotate(10deg); background: var(--red); }
+        .social-circle:active { transform: scale(1.5) rotate(15deg); background: var(--red); }
 
     </style>
 </head>
 <body>
 
     <div class="video-viewport">
-        <div class="floating-text" style="top: 10%; left: 5%;">2025</div>
-        <div class="video-360-placeholder" id="bg-video"></div>
-        <div class="floating-text" style="bottom: 10%; right: 5%;">RECAP</div>
+        <div class="bg-text" style="top: 10%; left: 5%;">2025</div>
+        <div class="oval-mask" id="canvas-container"></div>
+        <div class="bg-text" style="bottom: 10%; right: 5%;">RECAP</div>
     </div>
 
     <section>
-        <div class="overlay-container">
-            <svg viewBox="0 0 300 200" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M40 150 C 30 140, 30 100, 45 80 C 50 60, 65 40, 80 45 C 90 50, 95 70, 95 90 L85 140 Z" fill="#E8C3A9" stroke="#5a2e2e"/>
-                <path d="M260 150 C 270 140, 270 100, 255 80 C 250 60, 235 40, 220 45 C 210 50, 205 70, 205 90 L215 140 Z" fill="#E8C3A9" stroke="#5a2e2e"/>
-                <path d="M95 90 C 110 80, 130 90, 120 110" stroke="#5a2e2e" stroke-width="2"/>
-                <path d="M205 90 C 190 80, 170 90, 180 110" stroke="#5a2e2e" stroke-width="2"/>
-                <rect x="135" y="95" width="30" height="8" fill="white" rx="4"/>
+        <div class="overlay-graphic">
+            <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+                <path d="M220 200 L210 150 C 205 100, 230 40, 250 50 C 265 60, 260 90, 260 110 L270 200 Z" fill="#E8C3A9" stroke="#333"/>
+                <path d="M200 130 C 180 80, 200 40, 220 50 L230 130 Z" fill="#E8C3A9" stroke="#333"/>
+                <rect x="205" y="60" width="10" height="15" rx="3" fill="white" opacity="0.8"/> <path d="M100 200 L110 130 C 130 80, 150 130, 140 200 Z" fill="#E8C3A9" stroke="#333"/>
+                <rect x="150" y="110" width="40" height="10" fill="white" rx="5"/>
             </svg>
         </div>
-        <div class="green-label">Quickie in the Kitchen</div>
+        <div class="green-highlight">Quickie in the Kitchen</div>
     </section>
 
     <section>
-        <div class="overlay-container">
+        <div class="overlay-graphic">
             <svg viewBox="0 0 200 200">
-                <path d="M100 20 L115 70 L170 75 L125 110 L145 170 L100 135 L55 170 L75 110 L30 75 L85 70 Z" fill="black" />
-                <path d="M100 0 L100 90 M90 0 L90 85 M110 0 L110 85" stroke="white" stroke-width="5" stroke-linecap="round"/>
+                <path d="M100 10 L115 70 L175 75 L130 115 L150 175 L100 140 L50 175 L70 115 L25 75 L85 70 Z" fill="black" />
+                <path d="M90 20 L90 80 M100 20 L100 85 M110 20 L110 80" stroke="white" stroke-width="4"/>
+                <rect x="85" y="80" width="30" height="100" fill="white" rx="5"/>
             </svg>
         </div>
-        <div class="green-label">200% Off Every Time You Dine</div>
+        <div class="green-highlight">200% Off Every Time You Dine</div>
     </section>
 
     <section>
-        <div class="overlay-container">
+        <div class="overlay-graphic">
             <svg viewBox="0 0 200 200" fill="white">
-                <circle cx="60" cy="80" r="18"/>
-                <circle cx="140" cy="80" r="18"/>
+                <circle cx="60" cy="80" r="15"/>
+                <circle cx="100" cy="70" r="15"/>
+                <circle cx="140" cy="80" r="15"/>
                 <path d="M40 160 L160 160 L150 110 L50 110 Z" />
             </svg>
         </div>
-        <div class="green-label">Special Celebration</div>
+        <div class="green-highlight">Special Celebration</div>
     </section>
 
     <footer>
@@ -79,15 +197,55 @@
             <a href="#" class="footer-link">Location</a>
         </div>
         <div class="social-row">
-            <div class="circle-btn">ig</div>
-            <div class="circle-btn">in</div>
-            <div class="circle-btn">wa</div>
-            <div class="circle-btn">📍</div>
+            <div class="social-circle">in</div>
+            <div class="social-circle">ig</div>
+            <div class="social-circle">wa</div>
+            <div class="social-circle">📍</div>
         </div>
     </footer>
 
     <script>
-        // Use Intersection Observer for scroll triggers
+        let scene, camera, renderer, sphere;
+
+        // Initialize 360 Scene
+        function init360() {
+            const container = document.getElementById('canvas-container');
+            scene = new THREE.Scene();
+            camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 1, 1000);
+            
+            // Video Texture Setup
+            const video = document.createElement('video');
+            // Public sample 360 video link (direct file required for WebGL)
+            video.src = 'https://threejs.org/examples/textures/pants.webm'; 
+            video.crossOrigin = 'anonymous';
+            video.loop = true;
+            video.muted = true;
+            video.play();
+
+            const texture = new THREE.VideoTexture(video);
+            const geometry = new THREE.SphereGeometry(500, 60, 40);
+            geometry.scale(-1, 1, 1); // Flip to view from inside
+
+            const material = new THREE.MeshBasicMaterial({ map: texture });
+            sphere = new THREE.Mesh(geometry, material);
+            scene.add(sphere);
+
+            renderer = new THREE.WebGLRenderer({ antialias: true });
+            renderer.setSize(container.clientWidth, container.clientHeight);
+            container.appendChild(renderer.domElement);
+
+            animate();
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+            // Linked Rotation Logic
+            const scrollVal = window.pageYOffset / (document.body.scrollHeight - window.innerHeight);
+            sphere.rotation.y = scrollVal * Math.PI * 2; 
+            renderer.render(scene, camera);
+        }
+
+        // Scroll Observers
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
@@ -100,12 +258,13 @@
 
         document.querySelectorAll('section').forEach(sec => observer.observe(sec));
 
-        // Parallax depth for the background "360 video"
-        window.addEventListener('scroll', () => {
-            const scrollVal = window.pageYOffset;
-            const video = document.getElementById('bg-video');
-            video.style.transform = `rotate(${scrollVal * 0.03}deg) scale(${1 + scrollVal * 0.0001})`;
-        });
+        window.onload = init360;
+        window.onresize = () => {
+            const container = document.getElementById('canvas-container');
+            camera.aspect = container.clientWidth / container.clientHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(container.clientWidth, container.clientHeight);
+        };
     </script>
 </body>
 </html>
