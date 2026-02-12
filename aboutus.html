@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Loco Otro | About Us - Morning to Night</title>
+    <title>Loco Otro | About Us - Final Responsive Boutique</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700;800&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -13,6 +13,7 @@
             --text-dark: #1a1a1a;
         }
 
+        /* --- GLOBAL RESET --- */
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
@@ -31,7 +32,7 @@
             padding-right: 50px; /* Space for mobile sidebar */
         }
 
-        /* --- LOCONESS SIDEBAR --- */
+        /* --- INTERACTIVE LOCONESS SIDEBAR --- */
         .loconess-sidebar {
             position: fixed;
             top: 0;
@@ -74,7 +75,7 @@
             margin: 15px 0;
         }
 
-        /* --- YELLOW LABELS --- */
+        /* --- UI LABELS --- */
         .yellow-label {
             display: inline-block;
             background: var(--yellow);
@@ -86,9 +87,9 @@
             margin-bottom: 20px;
         }
 
-        /* --- SECTIONS --- */
+        /* --- MOBILE LAYOUT (Default) --- */
         section {
-            padding: 40px 20px;
+            padding: 60px 20px; /* Reduced padding for mobile */
             display: flex;
             flex-direction: column;
             gap: 30px;
@@ -99,14 +100,13 @@
             font-family: 'Playfair Display', serif;
             font-size: 1.8rem;
             line-height: 1.3;
-            max-width: 90%;
+            max-width: 95%;
         }
 
         .image-box {
             width: 100%;
             height: 350px;
             overflow: hidden;
-            border-radius: 2px;
         }
 
         .image-box img {
@@ -132,7 +132,7 @@
             font-size: 0.8rem;
         }
 
-        /* --- DESKTOP QUERIES (768px+) --- */
+        /* --- DESKTOP REFINEMENTS (768px+) --- */
         @media (min-width: 768px) {
             .page-wrapper { padding-right: 80px; }
             .loconess-sidebar { width: 80px; padding: 60px 0; }
@@ -140,17 +140,17 @@
             
             section {
                 flex-direction: row;
-                height: 85vh;
-                padding: 60px 80px;
+                /* Dynamic padding replaces fixed height to remove extra space */
+                padding: 100px 80px; 
                 align-items: center;
                 gap: 80px;
             }
 
-            .intro-section { height: auto; padding: 120px 80px; }
+            .intro-section { padding: 120px 80px; }
             .intro-text { font-size: 3rem; max-width: 800px; }
 
             .content-row.reverse { flex-direction: row-reverse; }
-            .image-box { flex: 1.4; height: 550px; }
+            .image-box { flex: 1.2; height: 500px; } /* Tighter aspect ratio for desktop */
             .text-box { flex: 1; }
         }
     </style>
@@ -172,13 +172,13 @@
             <div class="text-box">
                 <span class="yellow-label">About Us</span>
                 <h1 class="intro-text">coffee and pastries by morning. snacks and cocktails as the day flows.</h1>
-                <a href="#" style="color: #888; font-size: 0.7rem; text-decoration: underline;">make a reservation</a>
+                <a href="#" style="color: #888; font-size: 0.75rem; text-decoration: underline;">make a reservation</a>
             </div>
         </section>
 
         <section class="content-row">
             <div class="image-box">
-                <img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=1000" alt="Coffee and Pastries">
+                <img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=1000" alt="Specialty Coffee">
             </div>
             <div class="text-box">
                 <span class="yellow-label">Breakfast</span>
@@ -190,7 +190,7 @@
 
         <section class="content-row reverse">
             <div class="image-box">
-                <img src="https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?w=1000" alt="Wine and Food">
+                <img src="https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?w=1000" alt="Wine Selection">
             </div>
             <div class="text-box">
                 <span class="yellow-label">Food Menu</span>
@@ -222,7 +222,7 @@
             const scrollPos = window.scrollY;
             const progress = (scrollPos / totalHeight) * 100;
             
-            // Constrain marker within the track
+            // Marker stays within track
             marker.style.top = Math.min(Math.max(progress, 0), 100) + '%';
         });
     </script>
