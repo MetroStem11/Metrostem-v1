@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Loco Otro | Responsive About Us</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
+    <title>Loco Otro | About Us - Morning to Night</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700;800&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --ui-bg: #f9f9f7; /* */
-            --yellow: #f4d03f; /* */
+            --ui-bg: #f9f9f7; /* Signature boutique cream */
+            --yellow: #f4d03f; /* Highlight label yellow */
             --accent-red: #a62626;
-            --text-main: #1a1a1a;
+            --text-dark: #1a1a1a;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -18,38 +18,38 @@
         body {
             background-color: #fff;
             font-family: 'Montserrat', sans-serif;
-            color: var(--text-main);
+            color: var(--text-dark);
             overflow-x: hidden;
         }
 
-        /* --- UI WRAPPER --- */
+        /* --- PAGE WRAPPER --- */
         .page-wrapper {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
             position: relative;
             background: var(--ui-bg);
-            padding-right: 60px; /* Reduced for sidebar space */
+            padding-right: 50px; /* Space for mobile sidebar */
         }
 
-        /* --- MOBILE RESPONSIVE SIDEBAR --- */
+        /* --- LOCONESS SIDEBAR --- */
         .loconess-sidebar {
-            position: fixed; /* Changed to fixed for better mobile visibility */
+            position: fixed;
             top: 0;
             right: 0;
             bottom: 0;
-            width: 50px; /* Thinner for mobile */
+            width: 50px;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: space-between;
-            padding: 20px 0;
+            padding: 30px 0;
             border-left: 1px solid #eee;
             background: var(--ui-bg);
             z-index: 100;
         }
 
         .sidebar-track {
-            height: 50%;
+            height: 40%;
             width: 1px;
             background: #ddd;
             position: relative;
@@ -62,7 +62,7 @@
             background: var(--yellow);
             border-radius: 50%;
             left: -5px;
-            transition: top 0.2s ease-out;
+            transition: top 0.1s linear;
         }
 
         .loconess-text {
@@ -71,7 +71,7 @@
             font-size: 0.5rem;
             letter-spacing: 2px;
             color: #999;
-            margin: 10px 0;
+            margin: 15px 0;
         }
 
         /* --- YELLOW LABELS --- */
@@ -79,38 +79,34 @@
             display: inline-block;
             background: var(--yellow);
             color: #000;
-            padding: 4px 12px;
-            font-weight: 700;
+            padding: 5px 12px;
+            font-weight: 800;
             font-size: 0.7rem;
             text-transform: uppercase;
-            margin-bottom: 15px;
-        }
-
-        /* --- SECTIONS --- */
-        .intro-section {
-            padding: 60px 20px;
-        }
-
-        .intro-text {
-            font-size: 1.8rem;
-            font-family: 'Playfair Display', serif;
-            line-height: 1.2;
             margin-bottom: 20px;
         }
 
-        /* --- CONTENT ROWS (STACKING LOGIC) --- */
-        .content-row {
+        /* --- SECTIONS --- */
+        section {
+            padding: 40px 20px;
             display: flex;
-            flex-direction: column; /* Stack by default for mobile */
-            padding: 20px;
+            flex-direction: column;
             gap: 30px;
+        }
+
+        .intro-section { padding: 80px 20px; }
+        .intro-text {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            line-height: 1.3;
+            max-width: 90%;
         }
 
         .image-box {
             width: 100%;
-            height: 300px; /* Fixed height for mobile visibility */
+            height: 350px;
             overflow: hidden;
-            border-radius: 4px;
+            border-radius: 2px;
         }
 
         .image-box img {
@@ -119,64 +115,43 @@
             object-fit: cover;
         }
 
-        .text-box {
-            padding: 10px 0;
-        }
-
+        .text-box { padding: 10px 0; }
         .section-desc {
             font-size: 0.95rem;
             font-weight: 300;
             color: #444;
             margin-bottom: 20px;
+            line-height: 1.6;
         }
 
         .pdf-link {
             font-weight: 700;
             text-decoration: none;
             color: #000;
-            border-bottom: 2px solid var(--yellow);
+            border-bottom: 3px solid var(--yellow);
             font-size: 0.8rem;
         }
 
-        /* --- DESKTOP REFINEMENTS (Screen Width > 768px) --- */
+        /* --- DESKTOP QUERIES (768px+) --- */
         @media (min-width: 768px) {
-            .page-wrapper {
-                padding-right: 80px;
-            }
-
-            .loconess-sidebar {
-                width: 80px;
-                padding: 60px 0;
-            }
-
-            .intro-section {
-                padding: 120px 80px;
-            }
-
-            .intro-text {
-                font-size: 2.8rem;
-                max-width: 850px;
-            }
-
-            .content-row {
+            .page-wrapper { padding-right: 80px; }
+            .loconess-sidebar { width: 80px; padding: 60px 0; }
+            .loconess-text { font-size: 0.6rem; }
+            
+            section {
                 flex-direction: row;
-                height: 80vh;
-                padding: 80px;
+                height: 85vh;
+                padding: 60px 80px;
+                align-items: center;
                 gap: 80px;
             }
 
-            .content-row.reverse {
-                flex-direction: row-reverse;
-            }
+            .intro-section { height: auto; padding: 120px 80px; }
+            .intro-text { font-size: 3rem; max-width: 800px; }
 
-            .image-box {
-                flex: 1.5;
-                height: 500px;
-            }
-
-            .text-box {
-                flex: 1;
-            }
+            .content-row.reverse { flex-direction: row-reverse; }
+            .image-box { flex: 1.4; height: 550px; }
+            .text-box { flex: 1; }
         }
     </style>
 </head>
@@ -185,23 +160,25 @@
     <div class="page-wrapper">
         
         <aside class="loconess-sidebar">
-            <span style="font-size: 1rem;">☼</span>
+            <span style="font-size: 1.2rem;">☼</span>
             <div class="sidebar-track">
                 <div class="sidebar-marker" id="marker" style="top: 0%;"></div>
             </div>
             <div class="loconess-text">Increase of Loconess</div>
-            <span style="font-size: 1rem;">☾</span>
+            <span style="font-size: 1.2rem;">☾</span>
         </aside>
 
         <section class="intro-section">
-            <span class="yellow-label">About Us</span>
-            <h1 class="intro-text">coffee and pastries by morning. snacks and cocktails as the day flows.</h1>
-            <a href="#" style="font-size: 0.7rem; color: #666;">make a reservation</a>
+            <div class="text-box">
+                <span class="yellow-label">About Us</span>
+                <h1 class="intro-text">coffee and pastries by morning. snacks and cocktails as the day flows.</h1>
+                <a href="#" style="color: #888; font-size: 0.7rem; text-decoration: underline;">make a reservation</a>
+            </div>
         </section>
 
         <section class="content-row">
             <div class="image-box">
-                <img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=800" alt="Specialty Coffee">
+                <img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=1000" alt="Coffee and Pastries">
             </div>
             <div class="text-box">
                 <span class="yellow-label">Breakfast</span>
@@ -213,7 +190,7 @@
 
         <section class="content-row reverse">
             <div class="image-box">
-                <img src="https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?w=800" alt="Wine Selection">
+                <img src="https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?w=1000" alt="Wine and Food">
             </div>
             <div class="text-box">
                 <span class="yellow-label">Food Menu</span>
@@ -223,14 +200,29 @@
             </div>
         </section>
 
+        <section class="content-row">
+            <div class="image-box">
+                <img src="https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?w=1000" alt="Craft Cocktails">
+            </div>
+            <div class="text-box">
+                <span class="yellow-label">Cocktails</span>
+                <p style="font-weight: 700; margin-bottom: 5px;">DRINKS served all day</p>
+                <p class="section-desc">As evening settles in, the bar finds a new rhythm. Cocktails are bold yet balanced, made with care and a deep respect for every ingredient.</p>
+                <a href="#" class="pdf-link">Link to the pdf of the menu</a>
+            </div>
+        </section>
+
     </div>
 
     <script>
-        // Smooth scroll logic for the Loconess marker
+        // Track Scroll for Loconess Meter
         window.addEventListener('scroll', () => {
             const marker = document.getElementById('marker');
             const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
-            const progress = (window.scrollY / totalHeight) * 100;
+            const scrollPos = window.scrollY;
+            const progress = (scrollPos / totalHeight) * 100;
+            
+            // Constrain marker within the track
             marker.style.top = Math.min(Math.max(progress, 0), 100) + '%';
         });
     </script>
