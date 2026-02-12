@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Loco Otro | About Us</title>
+    <title>Loco Otro | Responsive About Us</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --ui-bg: #f9f9f7; /* The clean cream UI background */
-            --yellow: #f4d03f; /* The specific label yellow */
+            --ui-bg: #f9f9f7; /* */
+            --yellow: #f4d03f; /* */
             --accent-red: #a62626;
             --text-main: #1a1a1a;
         }
@@ -16,19 +16,62 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            background-color: #fff; /* Neutral outer background */
+            background-color: #fff;
             font-family: 'Montserrat', sans-serif;
             color: var(--text-main);
-            line-height: 1.6;
+            overflow-x: hidden;
         }
 
-        /* --- UI CONTAINER --- */
+        /* --- UI WRAPPER --- */
         .page-wrapper {
             max-width: 1200px;
             margin: 0 auto;
             position: relative;
             background: var(--ui-bg);
-            padding-right: 80px; /* Space for the Loconess Sidebar */
+            padding-right: 60px; /* Reduced for sidebar space */
+        }
+
+        /* --- MOBILE RESPONSIVE SIDEBAR --- */
+        .loconess-sidebar {
+            position: fixed; /* Changed to fixed for better mobile visibility */
+            top: 0;
+            right: 0;
+            bottom: 0;
+            width: 50px; /* Thinner for mobile */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px 0;
+            border-left: 1px solid #eee;
+            background: var(--ui-bg);
+            z-index: 100;
+        }
+
+        .sidebar-track {
+            height: 50%;
+            width: 1px;
+            background: #ddd;
+            position: relative;
+        }
+
+        .sidebar-marker {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: var(--yellow);
+            border-radius: 50%;
+            left: -5px;
+            transition: top 0.2s ease-out;
+        }
+
+        .loconess-text {
+            writing-mode: vertical-rl;
+            text-transform: uppercase;
+            font-size: 0.5rem;
+            letter-spacing: 2px;
+            color: #999;
+            margin: 10px 0;
         }
 
         /* --- YELLOW LABELS --- */
@@ -38,50 +81,36 @@
             color: #000;
             padding: 4px 12px;
             font-weight: 700;
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
 
-        /* --- SECTION 1: INTRO --- */
+        /* --- SECTIONS --- */
         .intro-section {
-            padding: 100px 80px;
-            border-bottom: 1px solid #eee;
+            padding: 60px 20px;
         }
 
         .intro-text {
-            font-size: 2.2rem;
+            font-size: 1.8rem;
             font-family: 'Playfair Display', serif;
-            font-weight: 400;
-            max-width: 800px;
+            line-height: 1.2;
+            margin-bottom: 20px;
         }
 
-        .reservation-link {
-            display: inline-block;
-            margin-top: 20px;
-            font-size: 0.7rem;
-            text-transform: lowercase;
-            color: #666;
-            text-decoration: underline;
-        }
-
-        /* --- SPLIT CONTENT SECTIONS --- */
+        /* --- CONTENT ROWS (STACKING LOGIC) --- */
         .content-row {
             display: flex;
-            align-items: center;
-            min-height: 80vh;
-            padding: 40px;
-            gap: 60px;
+            flex-direction: column; /* Stack by default for mobile */
+            padding: 20px;
+            gap: 30px;
         }
 
-        .content-row.reverse { flex-direction: row-reverse; }
-
         .image-box {
-            flex: 1.2;
-            height: 500px;
+            width: 100%;
+            height: 300px; /* Fixed height for mobile visibility */
             overflow: hidden;
-            position: relative;
+            border-radius: 4px;
         }
 
         .image-box img {
@@ -91,70 +120,64 @@
         }
 
         .text-box {
-            flex: 1;
-            padding: 20px;
+            padding: 10px 0;
         }
 
         .section-desc {
-            font-size: 1rem;
-            color: #555;
-            margin-bottom: 30px;
+            font-size: 0.95rem;
             font-weight: 300;
+            color: #444;
+            margin-bottom: 20px;
         }
 
         .pdf-link {
-            color: #000;
             font-weight: 700;
             text-decoration: none;
-            border-bottom: 3px solid var(--yellow);
-            padding-bottom: 2px;
+            color: #000;
+            border-bottom: 2px solid var(--yellow);
             font-size: 0.8rem;
         }
 
-        /* --- LOCONESS SIDEBAR --- */
-        .loconess-sidebar {
-            position: absolute;
-            top: 100px;
-            right: 0;
-            bottom: 100px;
-            width: 80px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: space-between;
-            padding: 40px 0;
-            border-left: 1px solid #ddd;
+        /* --- DESKTOP REFINEMENTS (Screen Width > 768px) --- */
+        @media (min-width: 768px) {
+            .page-wrapper {
+                padding-right: 80px;
+            }
+
+            .loconess-sidebar {
+                width: 80px;
+                padding: 60px 0;
+            }
+
+            .intro-section {
+                padding: 120px 80px;
+            }
+
+            .intro-text {
+                font-size: 2.8rem;
+                max-width: 850px;
+            }
+
+            .content-row {
+                flex-direction: row;
+                height: 80vh;
+                padding: 80px;
+                gap: 80px;
+            }
+
+            .content-row.reverse {
+                flex-direction: row-reverse;
+            }
+
+            .image-box {
+                flex: 1.5;
+                height: 500px;
+            }
+
+            .text-box {
+                flex: 1;
+            }
         }
-
-        .sidebar-track {
-            position: absolute;
-            top: 20%;
-            height: 60%;
-            width: 1px;
-            background: #ddd;
-        }
-
-        .sidebar-marker {
-            position: absolute;
-            width: 8px;
-            height: 8px;
-            background: var(--yellow);
-            border-radius: 50%;
-            left: -4px;
-            transition: top 0.3s ease-out;
-        }
-
-        .time-icon { font-size: 1.2rem; color: #ccc; }
-
-        .loconess-text {
-            writing-mode: vertical-rl;
-            text-transform: uppercase;
-            font-size: 0.55rem;
-            letter-spacing: 2px;
-            color: #999;
-            margin: 20px 0;
-        }
-
     </style>
 </head>
 <body>
@@ -162,39 +185,39 @@
     <div class="page-wrapper">
         
         <aside class="loconess-sidebar">
-            <div class="time-icon">☼</div>
+            <span style="font-size: 1rem;">☼</span>
             <div class="sidebar-track">
                 <div class="sidebar-marker" id="marker" style="top: 0%;"></div>
             </div>
             <div class="loconess-text">Increase of Loconess</div>
-            <div class="time-icon">☾</div>
+            <span style="font-size: 1rem;">☾</span>
         </aside>
 
         <section class="intro-section">
             <span class="yellow-label">About Us</span>
             <h1 class="intro-text">coffee and pastries by morning. snacks and cocktails as the day flows.</h1>
-            <a href="#" class="reservation-link">make a reservation</a>
+            <a href="#" style="font-size: 0.7rem; color: #666;">make a reservation</a>
         </section>
 
-        <section class="content-row" id="breakfast">
+        <section class="content-row">
             <div class="image-box">
-                <img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&q=80&w=800" alt="Breakfast Coffee">
+                <img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=800" alt="Specialty Coffee">
             </div>
             <div class="text-box">
                 <span class="yellow-label">Breakfast</span>
-                <p style="font-weight: 700; margin-bottom: 10px;">from 10:00</p>
+                <p style="font-weight: 700; margin-bottom: 5px;">from 10:00</p>
                 <p class="section-desc">Start your day with our specialty coffee. Smooth, expressive, and crafted with care.</p>
                 <a href="#" class="pdf-link">Link to the pdf of the menu</a>
             </div>
         </section>
 
-        <section class="content-row reverse" id="food">
+        <section class="content-row reverse">
             <div class="image-box">
-                <img src="https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?auto=format&fit=crop&q=80&w=800" alt="Wine and Food">
+                <img src="https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?w=800" alt="Wine Selection">
             </div>
             <div class="text-box">
                 <span class="yellow-label">Food Menu</span>
-                <p style="font-weight: 700; margin-bottom: 10px;">served all day</p>
+                <p style="font-weight: 700; margin-bottom: 5px;">served all day</p>
                 <p class="section-desc">Our wine list is shaped by curiosity and conversation. We seek out soulful, small-scale producers.</p>
                 <a href="#" class="pdf-link">Link to the pdf of the menu</a>
             </div>
@@ -203,8 +226,13 @@
     </div>
 
     <script>
-        // Interactive "Loconess" Marker
+        // Smooth scroll logic for the Loconess marker
         window.addEventListener('scroll', () => {
             const marker = document.getElementById('marker');
-            const scrollPercent = (window.scrollY / (document
-
+            const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
+            const progress = (window.scrollY / totalHeight) * 100;
+            marker.style.top = Math.min(Math.max(progress, 0), 100) + '%';
+        });
+    </script>
+</body>
+</html>
