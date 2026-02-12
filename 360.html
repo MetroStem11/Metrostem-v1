@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LOCO OTRO | The Immersive Experience</title>
+    <title>LOCO OTRO | Full-Size Immersive Experience</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700;900&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -26,19 +26,7 @@
 
         body.night-mode { background-color: var(--night-bg); color: #fff; }
 
-        /* --- 1. TIME-BASED HERO --- */
-        .hero {
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            padding: 0 10%;
-            position: relative;
-        }
-        .hero h1 { font-family: 'Playfair Display', serif; font-size: 3.5rem; line-height: 1.2; max-width: 800px; }
-        .hero-tag { background: var(--yellow); padding: 5px 15px; font-weight: 900; font-size: 0.8rem; display: inline-block; margin-bottom: 20px; color: #000; text-transform: uppercase; }
-
-        /* --- 2. 360 RECAP SECTION (Fixed Background) --- */
+        /* --- 1. FULL-SIZE 360 VIDEO STAGE --- */
         .recap-viewport {
             position: relative;
             height: 400vh; /* Long scroll for overlays */
@@ -49,51 +37,28 @@
             top: 0;
             width: 100%;
             height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
             z-index: 1;
-        }
-
-        /* Oval Mask */
-        .oval-clipper {
-            width: 85vw;
-            height: 80vh;
-            border-radius: 50%;
-            overflow: hidden;
-            border: 4px solid rgba(0,0,0,0.1);
-            position: relative;
             background: #000;
+            overflow: hidden; /* Removed oval-clipper */
         }
 
         .video-wrapper {
             position: absolute;
-            top: 50%; left: 50%;
-            transform: translate(-50%, -50%);
+            top: 0; left: 0;
             width: 100%; height: 100%;
             pointer-events: none;
         }
 
         .video-wrapper iframe {
-            width: 177.78vh; height: 100vh; min-width: 100vw;
+            width: 100vw; height: 100vh;
             border: none;
             filter: sepia(0.4) brightness(0.7);
+            object-fit: cover;
         }
 
-        /* --- SURREALIST OVERLAYS --- */
-        .recap-content {
-            position: relative;
-            z-index: 10;
-        }
-
-        .recap-step {
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-        }
+        /* --- 2. SURREALIST OVERLAYS --- */
+        .recap-content { position: relative; z-index: 10; }
+        .recap-step { height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
 
         .overlay-svg {
             width: 320px; height: 320px;
@@ -123,37 +88,23 @@
         }
 
         .sidebar-track { height: 60%; width: 1px; background: #ddd; position: relative; }
-        .sidebar-marker {
-            position: absolute; width: 12px; height: 12px;
-            background: var(--yellow); border-radius: 50%;
-            left: -6px; transition: top 0.1s linear;
-        }
+        .sidebar-marker { position: absolute; width: 12px; height: 12px; background: var(--yellow); border-radius: 50%; left: -6px; transition: top 0.1s linear; }
 
-        .content-row {
-            display: flex; align-items: center; padding: 100px 80px; gap: 80px;
-        }
+        .content-row { display: flex; align-items: center; padding: 100px 80px; gap: 80px; }
         .content-row.reverse { flex-direction: row-reverse; }
 
         .image-box { flex: 1.2; height: 500px; overflow: hidden; }
         .image-box img { width: 100%; height: 100%; object-fit: cover; }
         .text-box { flex: 1; }
+        .yellow-tag { background: var(--yellow); padding: 5px 15px; font-weight: 900; font-size: 0.8rem; display: inline-block; margin-bottom: 20px; color: #000; text-transform: uppercase; }
 
         /* --- 4. MAGNETIC FOOTER --- */
-        footer {
-            background: #fff; padding: 100px 10%;
-            display: flex; justify-content: space-between; align-items: center;
-        }
+        footer { background: #fff; padding: 100px 10%; display: flex; justify-content: space-between; align-items: center; }
         .social-row { display: flex; gap: 20px; }
-        .magnetic-btn {
-            width: 50px; height: 50px; background: #000; color: #fff;
-            border-radius: 50%; display: flex; align-items: center; justify-content: center;
-            cursor: pointer; transition: transform 0.2s ease-out; font-weight: 800;
-        }
+        .magnetic-btn { width: 50px; height: 50px; background: #000; color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: transform 0.2s ease-out; font-weight: 800; }
 
-        /* Responsive Mobile */
         @media (max-width: 768px) {
             .content-row { flex-direction: column; padding: 40px 20px; text-align: center; }
-            .hero h1 { font-size: 2.2rem; }
             .image-box { height: 300px; width: 100%; }
             .loconess-sidebar { width: 40px; }
             .about-wrapper { padding-right: 40px; }
@@ -162,17 +113,10 @@
 </head>
 <body>
 
-    <div class="hero" id="hero">
-        <span class="hero-tag" id="time-tag">About Us</span>
-        <h1 id="hero-title">coffee and pastries by morning.</h1>
-    </div>
-
     <div class="recap-viewport">
         <div class="video-fixed-container">
-            <div class="oval-clipper">
-                <div class="video-wrapper">
-                    <iframe src="https://www.youtube.com/embed/XQLb-bA47q0?autoplay=1&mute=1&loop=1&playlist=XQLb-bA47q0&controls=0&enablejsapi=1" allow="autoplay; encrypted-media"></iframe>
-                </div>
+            <div class="video-wrapper">
+                <iframe src="https://www.youtube.com/embed/XQLb-bA47q0?autoplay=1&mute=1&loop=1&playlist=XQLb-bA47q0&controls=0&enablejsapi=1" allow="autoplay; encrypted-media"></iframe>
             </div>
         </div>
 
@@ -200,16 +144,6 @@
                 </div>
                 <div class="green-label">200% Off Every Time You Dine</div>
             </section>
-
-            <section class="recap-step">
-                <div class="overlay-svg">
-                    <svg viewBox="0 0 200 200" fill="white">
-                        <circle cx="60" cy="80" r="15"/><circle cx="100" cy="70" r="15"/><circle cx="140" cy="80" r="15"/>
-                        <path d="M40 160 L160 160 L150 110 L50 110 Z" />
-                    </svg>
-                </div>
-                <div class="green-label">Special Celebration</div>
-            </section>
         </div>
     </div>
 
@@ -225,7 +159,7 @@
             <div class="image-box"><img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=800"></div>
             <div class="text-box">
                 <span class="yellow-tag">Breakfast</span>
-                <p>from 10:00. specialty coffee, smooth and crafted with care.</p>
+                <p>From 10:00. Specialty coffee, smooth and crafted with care.</p>
             </div>
         </section>
 
@@ -233,15 +167,7 @@
             <div class="image-box"><img src="https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?w=800"></div>
             <div class="text-box">
                 <span class="yellow-tag">Food Menu</span>
-                <p>served all day. soulful producers and small-scale wines.</p>
-            </div>
-        </section>
-
-        <section class="content-row">
-            <div class="image-box"><img src="https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?w=800"></div>
-            <div class="text-box">
-                <span class="yellow-tag">Cocktails</span>
-                <p>bold yet balanced. shaped by local flavour and character.</p>
+                <p>Served all day. Soulful producers and small-scale wines.</p>
             </div>
         </section>
     </div>
@@ -256,17 +182,6 @@
     </footer>
 
     <script>
-        // 1. Time Switching
-        function updateTheme() {
-            const hour = new Date().getHours();
-            const title = document.getElementById('hero-title');
-            if (hour >= 18 || hour < 6) {
-                title.innerText = "snacks and cocktails as the day flows.";
-                document.body.classList.add('night-mode');
-            }
-        }
-
-        // 2. Intersection Observer for Recap Overlays
         const obs = new IntersectionObserver((entries) => {
             entries.forEach(e => {
                 if (e.isIntersecting) e.target.classList.add('in-view');
@@ -275,7 +190,6 @@
         }, { threshold: 0.6 });
         document.querySelectorAll('.recap-step').forEach(s => obs.observe(s));
 
-        // 3. Scroll Tracking for Sidebar
         window.addEventListener('scroll', () => {
             const about = document.querySelector('.about-wrapper');
             const aboutTop = about.offsetTop;
@@ -288,7 +202,6 @@
             }
         });
 
-        // 4. Magnetic Footer
         document.querySelectorAll('.magnetic-btn').forEach(btn => {
             btn.addEventListener('mousemove', (e) => {
                 const r = btn.getBoundingClientRect();
@@ -296,8 +209,6 @@
             });
             btn.addEventListener('mouseleave', () => btn.style.transform = '');
         });
-
-        updateTheme();
     </script>
 </body>
 </html>
