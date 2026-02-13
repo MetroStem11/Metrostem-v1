@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LOCO OTRO | Cinematic Experience</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700;900&family=Playfair+Display:ital,wght@1,700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-cream: #f9f9f7;
+            --yellow: #f4d03f;
+            --text-dark: #1a1a1a;
+            --accent-red: #a62626;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: var(--bg-cream);
+            font-family: 'Montserrat', sans-serif;
+            color: var(--text-dark);
+            /* Creating enough scroll depth for the animation */
+            min-height: 400vh;
+            overflow-x: hidden;
+        }
+
+        /* --- THE CINEMATIC HERO (Fixed Stage) --- */
+        .hero-stage {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
+            overflow: hidden;
+            pointer-events: none; /* Allows user to scroll through to the content */
+        }
+
+        .zoom-text {
+            display: flex;
+            gap: 20px;
+            font-family: 'Playfair Display', serif;
+            font-size: 8vw;
+            z-index: 20;
+            color: var(--text-dark);
+            text-transform: uppercase;
+        }
+
+        .zoom-text span {
+            display: inline-block;
+            transition: transform 0.1s ease-out, opacity 0.3s ease-out;
+        }
+
+        /* Background Zoom Layer */
+        .zoom-bg-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 5;
+            background: #000;
+        }
+
+        .zoom-bg-container iframe, .zoom-bg-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transform: scale(0); /* Starts from nothing */
+            opacity: 0;
+            transition: transform 0.1s ease-out, opacity 0.5s ease-out;
+            filter: sepia(0.3) brightness(0.6);
+        }
+
+        /* --- THE CONTENT SECTIONS --- */
+        .main-content {
+            position: relative;
+            z-index: 100;
+            margin-top: 150vh; /* Delays content appearance */
+            background: var(--bg-cream);
+            box-shadow: 0 -20px 50px rgba(0,0,0,0.1);
+        }
+
+        /* Responsive Boutique Rows */
+        section {
+            display: flex;
+            flex-direction: column;
+            padding: 60px 20px;
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .image-box { width: 100%; height: 350px; background: #eee; overflow: hidden; }
+        .image-box img { width: 100%; height: 100%; object-fit: cover; }
+        
+        .text-box { padding: 20px 0; }
+        .yellow-tag { background: var(--yellow); padding: 5px 15px; font-weight: 800; font-size: 0.7rem; margin-bottom: 15px; display: inline-block; }
+
+        /* --- SIDEBAR JOURNEY --- */
+        .sidebar {
+            position: fixed; top: 0; right: 0; bottom: 0;
+            width: 60px; display: flex; flex-direction: column;
+            align-items: center; justify-content: space-between;
+            padding: 40px 0; border-left: 1px solid #ddd;
+            background: var(--bg-cream); z-index: 200;
+        }
+
+        .sidebar-track { height: 40%; width: 1px; background: #ddd; position: relative; }
+        .sidebar-marker { position: absolute; width: 10px; height: 10px; background: var(--yellow); border-radius: 50%; left: -5px; }
+
+        /* --- DESKTOP REFINEMENTS --- */
+        @media (min-width: 768px) {
+            section { flex-direction: row; padding: 100px 80px; align-items: center; gap: 80px; }
+            section.reverse { flex-direction: row-reverse; }
+            .image-box { flex: 1.2; height: 550px; }
+            .text-box { flex: 1; }
+            .sidebar { width: 80px; }
+        }
+    </style>
+</head>
+<body>
+
+    <aside class="sidebar">
+        <span>☼</span>
+        <div class="sidebar-track"><div class="sidebar-marker" id="marker"></div></div>
+        <span style="writing-mode: vertical-rl; text-transform: uppercase; font-size: 0.6rem; color: #999;">Loconess Meter</span>
+        <span>☾</span>
+    </aside>
+
+    <div class="hero-stage">
+        <h1 class="zoom-text">
+            <span id="left-text">LOCO</span>
+            <span id="right-text">OTRO</span>
+        </h1>
+        <div class="zoom-bg-container">
+            <iframe id="bg-visual" src="https://www.youtube.com/embed/XQLb-bA47q0?autoplay=1&mute=1&loop=1&playlist=XQLb-bA47q0&controls=0&enablejsapi=1" allow="autoplay; encrypted-media"></iframe>
+        </div>
+    </div>
+
+    <main class="main-content">
+        <section>
+            <div class="image-box">
+                <img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=800" alt="Specialty Coffee">
+            </div>
+            <div class="text-box">
+                <span class="yellow-tag">Breakfast</span>
+                <p>From 10:00. Start your day with specialty brews crafted with care.</p>
+            </div>
+        </section>
+
+        <section class="reverse">
+            <div class="image-box">
+                <img src="https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?w=800" alt="Cocktails">
+            </div>
+            <div class="text-box">
+                <span class="yellow-tag">Cocktails</span>
+                <p>As evening settles, the bar finds a new rhythm. Bold yet balanced.</p>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // DOM Elements
+        const leftText = document.getElementById('left-text');
+        const rightText = document.getElementById('right-text');
+        const bgVisual = document.getElementById('bg-visual');
+        const marker = document.getElementById('marker');
+
+        window.addEventListener('scroll', () => {
+            const scrollY = window.scrollY;
+            const viewportHeight = window.innerHeight;
+            
+            // 1. ZOOM ANIMATION LOGIC (Vermeer Effect)
+            // We map the first 100vh of scrolling to the animation
+            let progress = Math.min(scrollY / viewportHeight, 1);
+            
+            // Text Splitting: Moves LOCO left and OTRO right
+            leftText.style.transform = `translateX(${-50 * (1 - progress)}vw)`;
+            rightText.style.transform = `translateX(${50 * (1 - progress)}vw)`;
+            leftText.style.opacity = progress;
+            rightText.style.opacity = progress;
+
+            // Image Zooming: Scale from 0 to 1
+            bgVisual.style.transform = `scale(${progress})`;
+            bgVisual.style.opacity = progress;
+
+            // 2. SIDEBAR MARKER LOGIC
+            const totalScroll = document.documentElement.scrollHeight - viewportHeight;
+            const markerPos = (scrollY / totalScroll) * 100;
+            marker.style.top = Math.min(markerPos, 100) + "%";
+
+            // 3. FADE OUT HERO
+            // As the user continues scrolling deep into the content
+            if (scrollY > viewportHeight) {
+                const fadeProgress = 1 - Math.min((scrollY - viewportHeight) / 500, 1);
+                document.querySelector('.hero-stage').style.opacity = fadeProgress;
+            } else {
+                document.querySelector('.hero-stage').style.opacity = 1;
+            }
+        });
+    </script>
+</body>
+</html>
