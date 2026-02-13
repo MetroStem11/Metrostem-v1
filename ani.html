@@ -3,30 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LOCO OTRO | About Us</title>
+    <title>LOCO OTRO | Cinematic Experience</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700;900&family=Playfair+Display:ital,wght@1,700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-cream: #f9f9f7;
-            --yellow: #f4d03f;
+            --bg-cream: #f9f9f7; /* Boutique UI Background */
+            --yellow: #f4d03f; /* Signature Label Yellow */
             --text-dark: #1a1a1a;
             --night-bg: #111;
         }
 
+        /* --- GLOBAL RESET --- */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
         body {
             background-color: var(--bg-cream);
             font-family: 'Montserrat', sans-serif;
             color: var(--text-dark);
-            min-height: 400vh; /* Controlled scroll depth for join */
+            min-height: 450vh; /* Scroll depth for animations */
             overflow-x: hidden;
             transition: background-color 0.8s ease, color 0.8s ease;
         }
 
         body.night-mode { background-color: var(--night-bg); color: #fff; }
 
-        /* --- 1. HERO SPLIT JOIN EFFECT --- */
+        /* --- 1. HERO IMAGE JOIN (Vermeer Effect) --- */
         .hero-stage {
             position: fixed;
             top: 0; left: 0; width: 100vw; height: 100vh;
@@ -39,21 +40,20 @@
             position: relative; transition: transform 0.1s linear;
         }
 
-        /* Using your existing image for the reveal */
         .image-half img {
             width: 100vw; height: 100vh; object-fit: cover;
             position: absolute; top: 0;
-            filter: sepia(0.1) brightness(0.8);
+            filter: sepia(0.1) brightness(0.7);
         }
 
-        /* Alignment for the join */
+        /* Pixel-Perfect Alignment for Join */
         .left-half img { left: 0; }
         .right-half img { left: -50vw; }
 
         .left-half { transform: translateX(-100%); }
         .right-half { transform: translateX(100%); }
 
-        .hero-branding {
+        .branding-title {
             position: absolute; z-index: 60;
             font-family: 'Playfair Display', serif; font-size: 6vw;
             text-transform: uppercase; opacity: 0; letter-spacing: 8px;
@@ -68,11 +68,11 @@
 
         section {
             display: flex; flex-direction: column; 
-            padding: 60px 20px; gap: 40px; 
+            padding: 80px 20px; gap: 40px; 
             max-width: 1200px; margin: 0 auto;
         }
 
-        .img-box { width: 100%; height: 400px; overflow: hidden; }
+        .img-box { width: 100%; height: 400px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
         .img-box img { width: 100%; height: 100%; object-fit: cover; }
         
         .yellow-label {
@@ -92,54 +92,61 @@
         .sidebar-track { height: 40%; width: 1px; background: #ddd; position: relative; }
         .sidebar-marker { position: absolute; width: 10px; height: 10px; background: var(--yellow); border-radius: 50%; left: -5px; }
 
+        .loconess-text {
+            writing-mode: vertical-rl; text-transform: uppercase; 
+            font-size: 0.55rem; color: #999; letter-spacing: 2px;
+            margin: 20px 0;
+        }
+
         /* --- 4. MAGNETIC FOOTER --- */
         footer {
             background: #fff; padding: 100px 10%;
             display: flex; justify-content: space-between; align-items: center;
             color: #000; position: relative; z-index: 200;
         }
+        .social-row { display: flex; gap: 20px; }
         .social-dot {
             width: 55px; height: 55px; background: #000; color: #fff;
             border-radius: 50%; display: flex; align-items: center; justify-content: center;
             cursor: pointer; transition: transform 0.2s ease-out; font-weight: 800;
         }
 
-        /* --- DESKTOP REFINEMENTS (No extra gaps) --- */
+        /* --- DESKTOP REFINEMENTS (No Extra Space) --- */
         @media (min-width: 768px) {
             section { flex-direction: row; padding: 100px 80px; align-items: center; gap: 80px; }
             section.reverse { flex-direction: row-reverse; }
             .img-box { flex: 1.3; height: 600px; }
             .text-box { flex: 1; }
             .sidebar { width: 85px; }
-            .hero-branding { font-size: 5rem; }
+            .branding-title { font-size: 5rem; }
         }
     </style>
 </head>
-<body id="page-body">
+<body id="master-body">
 
     <div class="hero-stage">
-        <h1 class="hero-branding" id="hero-title">LOCO OTRO.</h1>
-        <div class="split-container" style="display: flex; width: 100%; height: 100%;">
-            <div class="image-half left-half" id="left-side">
+        <h1 class="branding-title" id="hero-title">LOCO OTRO.</h1>
+        <div style="display: flex; width: 100%; height: 100%;">
+            <div class="image-half left-half" id="left-pnl">
                 <img src="1000385307.jpg" alt="Reveal Left">
             </div>
-            <div class="image-half right-half" id="right-side">
+            <div class="image-half right-half" id="right-pnl">
                 <img src="1000385307.jpg" alt="Reveal Right">
             </div>
         </div>
     </div>
 
-    <aside class="sidebar" id="main-sidebar">
+    <aside class="sidebar">
         <span>☼</span>
         <div class="sidebar-track"><div class="sidebar-marker" id="marker"></div></div>
-        <span style="writing-mode: vertical-rl; text-transform: uppercase; font-size: 0.6rem; color: #999; letter-spacing: 2px;">Increase of Loconess</span>
+        <span class="loconess-text">Increase of Loconess</span>
         <span>☾</span>
     </aside>
 
     <main class="main-content">
         <section id="morning">
             <div class="img-box">
-                <img src="1000385023.jpg" alt="Breakfast Coffee Storyboard">
+                <img src="1000385023.jpg" alt="Breakfast and Coffee">
             </div>
             <div class="text-box">
                 <span class="yellow-label">Breakfast</span>
@@ -151,7 +158,7 @@
 
         <section class="reverse" id="night">
             <div class="img-box">
-                <img src="1000385039.jpg" alt="Cocktail Menu Storyboard">
+                <img src="1000385039.jpg" alt="Cocktail Drinks">
             </div>
             <div class="text-box">
                 <span class="yellow-label">Cocktails</span>
@@ -164,7 +171,7 @@
 
     <footer>
         <div style="font-weight: 800; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px;">Instagram / Phone / Location</div>
-        <div style="display: flex; gap: 20px;">
+        <div class="social-row">
             <div class="social-dot magnetic">ig</div>
             <div class="social-dot magnetic">wa</div>
             <div class="social-dot magnetic">📍</div>
@@ -172,10 +179,10 @@
     </footer>
 
     <script>
-        const leftSide = document.getElementById('left-side');
-        const rightSide = document.getElementById('right-side');
+        const leftPanel = document.getElementById('left-pnl');
+        const rightPanel = document.getElementById('right-pnl');
         const heroTitle = document.getElementById('hero-title');
-        const body = document.getElementById('page-body');
+        const body = document.getElementById('master-body');
         const marker = document.getElementById('marker');
 
         window.addEventListener('scroll', () => {
@@ -184,14 +191,14 @@
             
             // 1. IMAGE JOINING
             let joinProgress = Math.min(scrollY / vh, 1);
-            leftSide.style.transform = `translateX(${-100 + (joinProgress * 100)}%)`;
-            rightSide.style.transform = `translateX(${100 - (joinProgress * 100)}%)`;
+            leftPanel.style.transform = `translateX(${-100 + (joinProgress * 100)}%)`;
+            rightPanel.style.transform = `translateX(${100 - (joinProgress * 100)}%)`;
 
-            // Branding Reveal
+            // Branding Fade
             if (joinProgress > 0.9) heroTitle.style.opacity = (joinProgress - 0.9) * 10;
             else heroTitle.style.opacity = 0;
 
-            // 2. SIDEBAR TRACKER
+            // 2. SIDEBAR PROGRESS
             const totalScroll = document.documentElement.scrollHeight - vh;
             marker.style.top = (scrollY / totalScroll * 100) + "%";
 
@@ -201,7 +208,7 @@
             else body.classList.remove('night-mode');
         });
 
-        // MAGNETIC CURSOR
+        // MAGNETIC INTERACTION
         document.querySelectorAll('.magnetic').forEach(btn => {
             btn.addEventListener('mousemove', (e) => {
                 const r = btn.getBoundingClientRect();
