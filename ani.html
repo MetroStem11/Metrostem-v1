@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LOCO OTRO | Cinematic Reveal</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700;800&family=Playfair+Display:ital,wght@1,700&display=swap" rel="stylesheet">
+    <title>LOCO OTRO | About Us</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700;900&family=Playfair+Display:ital,wght@1,700&display=swap" rel="stylesheet">
     <style>
         :root {
             --bg-cream: #f9f9f7;
@@ -13,109 +13,78 @@
             --night-bg: #111;
         }
 
-        /* --- GLOBAL RESET --- */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
         body {
             background-color: var(--bg-cream);
             font-family: 'Montserrat', sans-serif;
             color: var(--text-dark);
-            min-height: 450vh; /* Controlled scroll depth for the join effect */
+            min-height: 400vh; /* Controlled scroll depth for join */
             overflow-x: hidden;
             transition: background-color 0.8s ease, color 0.8s ease;
         }
 
         body.night-mode { background-color: var(--night-bg); color: #fff; }
 
-        /* --- 1. PIXEL-PERFECT IMAGE JOIN --- */
+        /* --- 1. HERO SPLIT JOIN EFFECT --- */
         .hero-stage {
             position: fixed;
-            top: 0; left: 0; 
-            width: 100vw; height: 100vh;
-            z-index: 50; 
-            pointer-events: none; 
-            overflow: hidden;
-            display: flex; 
-            justify-content: center; 
-            align-items: center;
-        }
-
-        .split-container {
-            position: absolute; 
-            width: 100%; height: 100%;
-            display: flex;
-            opacity: 1;
-            transition: opacity 0.5s ease;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            z-index: 50; pointer-events: none; overflow: hidden;
+            display: flex; justify-content: center; align-items: center;
         }
 
         .image-half {
-            width: 50%; height: 100%; 
-            overflow: hidden;
-            position: relative;
+            width: 50%; height: 100%; overflow: hidden;
+            position: relative; transition: transform 0.1s linear;
         }
 
+        /* Using your existing image for the reveal */
         .image-half img {
-            width: 100vw; height: 100vh; 
-            object-fit: cover;
-            position: absolute; 
-            filter: sepia(0.2) brightness(0.7);
-            top: 0;
+            width: 100vw; height: 100vh; object-fit: cover;
+            position: absolute; top: 0;
+            filter: sepia(0.1) brightness(0.8);
         }
 
-        /* Precise alignment for the split images */
+        /* Alignment for the join */
         .left-half img { left: 0; }
-        .right-half img { left: -50vw; } /* Matches the half-width container */
+        .right-half img { left: -50vw; }
 
-        /* Animation Starting Positions (Off-screen) */
-        .left-half { transform: translateX(-100%); transition: transform 0.1s linear; }
-        .right-half { transform: translateX(100%); transition: transform 0.1s linear; }
+        .left-half { transform: translateX(-100%); }
+        .right-half { transform: translateX(100%); }
 
-        .branding-overlay {
-            position: absolute;
-            z-index: 60;
-            font-family: 'Playfair Display', serif;
-            font-size: 6vw;
-            text-transform: uppercase;
-            opacity: 0;
-            letter-spacing: 10px;
+        .hero-branding {
+            position: absolute; z-index: 60;
+            font-family: 'Playfair Display', serif; font-size: 6vw;
+            text-transform: uppercase; opacity: 0; letter-spacing: 8px;
             transition: opacity 0.4s ease;
         }
 
-        /* --- 2. BOUTIQUE CONTENT SECTIONS --- */
+        /* --- 2. BOUTIQUE CONTENT LAYOUT --- */
         .main-content {
-            position: relative;
-            z-index: 100;
-            margin-top: 130vh; /* Content appears after the join is complete */
-            background: var(--bg-cream);
+            position: relative; z-index: 100;
+            margin-top: 130vh; background: var(--bg-cream);
         }
 
         section {
-            display: flex;
-            flex-direction: column;
-            padding: 80px 20px;
-            gap: 40px;
-            max-width: 1200px;
-            margin: 0 auto;
+            display: flex; flex-direction: column; 
+            padding: 60px 20px; gap: 40px; 
+            max-width: 1200px; margin: 0 auto;
         }
 
-        .img-container { width: 100%; height: 400px; overflow: hidden; background: #eee; }
-        .img-container img { width: 100%; height: 100%; object-fit: cover; }
-
+        .img-box { width: 100%; height: 400px; overflow: hidden; }
+        .img-box img { width: 100%; height: 100%; object-fit: cover; }
+        
         .yellow-label {
-            background: var(--yellow); 
-            padding: 6px 14px;
-            font-weight: 800; 
-            font-size: 0.75rem; 
-            text-transform: uppercase;
-            display: inline-block; 
-            margin-bottom: 25px; 
-            color: #000;
+            background: var(--yellow); padding: 5px 12px;
+            font-weight: 800; font-size: 0.75rem; text-transform: uppercase;
+            display: inline-block; margin-bottom: 20px; color: #000;
         }
 
-        /* --- 3. LOCONESS SIDEBAR --- */
+        /* --- 3. SIDEBAR LOCONESS METER --- */
         .sidebar {
             position: fixed; top: 0; right: 0; bottom: 0;
-            width: 60px; display: flex; flex-direction: column;
+            width: 50px; display: flex; flex-direction: column;
             align-items: center; justify-content: space-between;
             padding: 40px 0; border-left: 1px solid rgba(0,0,0,0.05);
             background: var(--bg-cream); z-index: 200;
@@ -129,38 +98,38 @@
             display: flex; justify-content: space-between; align-items: center;
             color: #000; position: relative; z-index: 200;
         }
-        .social-btn {
+        .social-dot {
             width: 55px; height: 55px; background: #000; color: #fff;
             border-radius: 50%; display: flex; align-items: center; justify-content: center;
             cursor: pointer; transition: transform 0.2s ease-out; font-weight: 800;
         }
 
-        /* --- DESKTOP REFINEMENTS (768px+) --- */
+        /* --- DESKTOP REFINEMENTS (No extra gaps) --- */
         @media (min-width: 768px) {
-            section { flex-direction: row; padding: 120px 80px; align-items: center; gap: 80px; }
+            section { flex-direction: row; padding: 100px 80px; align-items: center; gap: 80px; }
             section.reverse { flex-direction: row-reverse; }
-            .img-container { flex: 1.3; height: 600px; }
+            .img-box { flex: 1.3; height: 600px; }
             .text-box { flex: 1; }
             .sidebar { width: 85px; }
-            .branding-overlay { font-size: 5rem; }
+            .hero-branding { font-size: 5rem; }
         }
     </style>
 </head>
-<body id="master-body">
+<body id="page-body">
 
-    <div class="hero-stage" id="hero-stage">
-        <h1 class="branding-overlay" id="branding">LOCO OTRO.</h1>
-        <div class="split-container" id="split-wrap">
-            <div class="image-half left-half" id="left-pnl">
-                <img src="https://images.unsplash.com/photo-1550966841-3ee7adac1661?w=1600&q=80" alt="Loco View Left">
+    <div class="hero-stage">
+        <h1 class="hero-branding" id="hero-title">LOCO OTRO.</h1>
+        <div class="split-container" style="display: flex; width: 100%; height: 100%;">
+            <div class="image-half left-half" id="left-side">
+                <img src="1000385307.jpg" alt="Reveal Left">
             </div>
-            <div class="image-half right-half" id="right-pnl">
-                <img src="https://images.unsplash.com/photo-1550966841-3ee7adac1661?w=1600&q=80" alt="Loco View Right">
+            <div class="image-half right-half" id="right-side">
+                <img src="1000385307.jpg" alt="Reveal Right">
             </div>
         </div>
     </div>
 
-    <aside class="sidebar">
+    <aside class="sidebar" id="main-sidebar">
         <span>☼</span>
         <div class="sidebar-track"><div class="sidebar-marker" id="marker"></div></div>
         <span style="writing-mode: vertical-rl; text-transform: uppercase; font-size: 0.6rem; color: #999; letter-spacing: 2px;">Increase of Loconess</span>
@@ -168,9 +137,9 @@
     </aside>
 
     <main class="main-content">
-        <section id="morning-flow">
-            <div class="img-container">
-                <img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=1200" alt="Specialty Coffee">
+        <section id="morning">
+            <div class="img-box">
+                <img src="1000385023.jpg" alt="Breakfast Coffee Storyboard">
             </div>
             <div class="text-box">
                 <span class="yellow-label">Breakfast</span>
@@ -180,14 +149,14 @@
             </div>
         </section>
 
-        <section class="reverse" id="night-flow">
-            <div class="img-container">
-                <img src="https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?w=1200" alt="Night Cocktails">
+        <section class="reverse" id="night">
+            <div class="img-box">
+                <img src="1000385039.jpg" alt="Cocktail Menu Storyboard">
             </div>
             <div class="text-box">
                 <span class="yellow-label">Cocktails</span>
                 <p style="font-weight: 700; margin-bottom: 8px;">served all day</p>
-                <p style="font-weight: 300; line-height: 1.7; font-size: 1.1rem;">As evening settles in, the bar finds a new rhythm. Cocktails are bold yet balanced, made with care.</p>
+                <p style="font-weight: 300; line-height: 1.7; font-size: 1.1rem;">As evening settles in, the bar finds a new rhythm. Cocktails are bold yet balanced.</p>
                 <a href="#" style="font-size: 0.8rem; color: #000; text-decoration: underline; display: block; margin-top: 20px;">view our drinks menu</a>
             </div>
         </section>
@@ -196,34 +165,50 @@
     <footer>
         <div style="font-weight: 800; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px;">Instagram / Phone / Location</div>
         <div style="display: flex; gap: 20px;">
-            <div class="social-btn magnetic">ig</div>
-            <div class="social-btn magnetic">in</div>
-            <div class="social-btn magnetic">📍</div>
+            <div class="social-dot magnetic">ig</div>
+            <div class="social-dot magnetic">wa</div>
+            <div class="social-dot magnetic">📍</div>
         </div>
     </footer>
 
     <script>
-        const leftPanel = document.getElementById('left-pnl');
-        const rightPanel = document.getElementById('right-pnl');
-        const branding = document.getElementById('branding');
+        const leftSide = document.getElementById('left-side');
+        const rightSide = document.getElementById('right-side');
+        const heroTitle = document.getElementById('hero-title');
+        const body = document.getElementById('page-body');
         const marker = document.getElementById('marker');
-        const body = document.getElementById('master-body');
 
         window.addEventListener('scroll', () => {
             const scrollY = window.scrollY;
             const vh = window.innerHeight;
             
-            // 1. PIXEL-JOIN ANIMATION
-            // We complete the join over the first 100vh of scrolling
+            // 1. IMAGE JOINING
             let joinProgress = Math.min(scrollY / vh, 1);
-            leftPanel.style.transform = `translateX(${-100 + (joinProgress * 100)}%)`;
-            rightPanel.style.transform = `translateX(${100 - (joinProgress * 100)}%)`;
+            leftSide.style.transform = `translateX(${-100 + (joinProgress * 100)}%)`;
+            rightSide.style.transform = `translateX(${100 - (joinProgress * 100)}%)`;
 
-            // Reveal branding at the very end of the join
-            if (joinProgress > 0.95) branding.style.opacity = (joinProgress - 0.95) * 20;
-            else branding.style.opacity = 0;
+            // Branding Reveal
+            if (joinProgress > 0.9) heroTitle.style.opacity = (joinProgress - 0.9) * 10;
+            else heroTitle.style.opacity = 0;
 
-            // 2. LOCONESS TRACKER
+            // 2. SIDEBAR TRACKER
             const totalScroll = document.documentElement.scrollHeight - vh;
-            marker.style.top = (scrollY / totalScroll *
-                                
+            marker.style.top = (scrollY / totalScroll * 100) + "%";
+
+            // 3. COLOR TRANSITION
+            const nightPoint = document.getElementById('night').offsetTop;
+            if (scrollY > nightPoint - (vh / 2)) body.classList.add('night-mode');
+            else body.classList.remove('night-mode');
+        });
+
+        // MAGNETIC CURSOR
+        document.querySelectorAll('.magnetic').forEach(btn => {
+            btn.addEventListener('mousemove', (e) => {
+                const r = btn.getBoundingClientRect();
+                btn.style.transform = `translate(${(e.clientX - r.left - r.width/2)*0.4}px, ${(e.clientY - r.top - r.height/2)*0.4}px)`;
+            });
+            btn.addEventListener('mouseleave', () => btn.style.transform = '');
+        });
+    </script>
+</body>
+</html>
