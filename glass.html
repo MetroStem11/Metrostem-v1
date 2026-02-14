@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>flôr - Coffee, Wine & Cocktails</title>
+    <style>
+        /* 1. Global Reset & Fonts */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body, html {
+            height: 100%;
+            overflow: hidden;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: #ffffff54 /* Neutral base */
+        }
+
+        /* 2. Dynamic Blurred Background */
+       #bg-blur-container {
+    position: fixed;
+    top: -10%; 
+    left: -10%;
+    width: 120%;
+    height: 120%;
+    z-index: -2;
+    /* Lower brightness (0.6) and high blur create the "shades" */
+    filter: blur(80px) brightness(0.6) saturate(1.4); 
+    background-size: cover;
+    background-position: center;
+    transition: background-image 1.2s ease-in-out;
+}
+/* This layer adds the black shades around the edges */
+body::after {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    /* Creates a dark 'vignette' to emphasize the glass card */
+    background: radial-gradient(circle, rgba(0,0,0,0) 20%, rgba(0,0,0,0.4) 100%);
+    z-index: -1;
+    pointer-events: none;
+}
+/* 3. The Vignette (This creates the dark atmospheric shadows) */
+    .vignette-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: radial-gradient(circle, rgba(0,0,0,0) 30%, rgba(0,0,0,0.5) 100%);
+        z-index: -1;
+        pointer-events: none;
+    }
+        /* 3. Main Layout Wrapper */
+        .wrapper {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 100vh;
+            padding: 40px;
+            color: #1a1a1a;
+        }
+
+        /* 4. Navigation & Header */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 11px;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+        }
+
+        .local-time {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            font-weight: 500;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+        }
+
+        .book-link {
+            text-decoration: none;
+            color: inherit;
+            border-bottom: 1px solid rgba(0,0,0,0.2);
+            padding-bottom: 2px;
+        }
+
+        .hamburger {
+            width: 20px;
+            height: 2px;
+            background: #000;
+            position: relative;
+        }
+        .hamburger::after {
+            content: '';
+            position: absolute;
+            top: 6px;
+            width: 20px;
+            height: 2px;
+            background: #000;
+        }
+
+        /* 5. Central Hero Card */
+        .hero-section {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-grow: 1;
+        }
+
+        .card {
+            position: relative;
+            width: 70vw;
+            max-width: 900px;
+            height: 50vh;
+            border-radius: 40px;
+            overflow: hidden;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.12);
+        }
+
+        #hero-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: opacity 0.8s ease-in-out;
+        }
+
+        .logo-overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-family: "Brush Script MT", "Cursive", sans-serif; /* Replace with 'Southwell' for exact match */
+            font-size: clamp(5rem, 15vw, 10rem);
+            color: white;
+            pointer-events: none;
+            letter-spacing: -2px;
+        }
+
+        /* 6. Footer Content */
+        footer {
+            text-align: center;
+        }
+
+        .categories {
+            font-size: 18px;
+            margin-bottom: 20px;
+            color: rgba(0,0,0,0.4);
+        }
+
+        .categories span {
+            margin: 0 10px;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .categories .active {
+            color: #000;
+            font-weight: 500;
+        }
+
+        .footer-nav {
+            font-size: 14px;
+            font-weight: 500;
+            word-spacing: 5px;
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            .card { width: 90vw; height: 40vh; }
+            .local-time { display: none; }
+        }
+         
+        
+        .layer {
+   
+
+
+  position: absolute;
+  height: 100%;
+  width: 100%;;
+  border-radius: 15px;
+  background: #eeeeff33;
+  backdrop-filter: blur(8px);
+ 
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 2rem;
+  box-shadow:
+    0 12px 20px #00000080,
+    inset 2px 1px 10px #ededed80,
+    inset -2px -1px 10px #00000030
+   ;
+  transition: all 0.3s ease;
+
+
+}
+    </style>
+</head>
+<body>
+
+    <div id="bg-blur-container"></div>
+    <div class="layer"></div>
+<div class="bgblur">
+    <div class="wrapper">
+        <header>
+            <div>EN / PT</div>
+            <div class="local-time" id="clock">LOCAL TIME AT FLÔR: --:-- --</div>
+            <div class="nav-right">
+                <a href="#" class="book-link">book a table</a>
+                <div class="hamburger"></div>
+            </div>
+        </header>
+
+        <main class="hero-section">
+            <div class="card">
+                <img id="hero-img" src="" alt="Atmospheric View">
+                <h1 class="logo-overlay">flôr</h1>
+            </div>
+        </main>
+</div>
+        <footer>
+            <div class="categories">
+                <span>coffee</span> • <span class="active">wine</span> • <span>cocktails</span>
+            </div>
+            <div class="footer-nav">
+                FOOD MENU / DRINKS MENU / CHEF SID'S CLUB
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // Configuration: Add your image URLs here
+        const themes = {
+            morning: "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&q=80&w=1200", // Coffee
+            afternoon: "https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?auto=format&fit=crop&q=80&w=1200", // Wine/Day
+            evening: "https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?auto=format&fit=crop&q=80&w=1200"   // Cocktails/Night
+        };
+
+        function updateUI() {
+            const now = new Date();
+            const hours = now.getHours();
+            const timeString = now.toLocaleTimeString('en-US', { 
+                hour: '2-digit', 
+                minute: '2-digit', 
+                hour12: true 
+            });
+
+            // Update Clock
+            document.getElementById('clock').innerText = `LOCAL TIME AT FLÔR: ${timeString}`;
+
+            // Determine Theme
+            let selectedImg = "";
+            if (hours >= 5 && hours < 12) {
+                selectedImg = themes.morning;
+            } else if (hours >= 12 && hours < 18) {
+                selectedImg = themes.afternoon;
+            } else {
+                selectedImg = themes.evening;
+            }
+
+            // Apply Images
+            const heroImg = document.getElementById('hero-img');
+            const bgContainer = document.getElementById('bg-blur-container');
+
+            if (heroImg.src !== selectedImg) {
+                heroImg.style.opacity = 0;
+                setTimeout(() => {
+                    heroImg.src = selectedImg;
+                    bgContainer.style.backgroundImage = `url('${selectedImg}')`;
+                    heroImg.style.opacity = 1;
+                }, 500);
+            }
+        }
+
+        // Initialize and Set Interval
+        updateUI();
+        setInterval(updateUI, 60000); // Update every minute
+    </script>
+</body>
+</html>
