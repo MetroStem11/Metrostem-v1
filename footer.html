@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sticker Bomb Footer</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --red-border: #e63946;
+            --bg-white: #ffffff;
+            --black: #000000;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            font-family: 'Arial', sans-serif;
+        }
+
+        /* Footer Container */
+        .sticker-footer {
+            background-color: var(--bg-white);
+            border-top: 12px solid var(--red-border);
+            border-bottom: 12px solid var(--red-border);
+            padding: 80px 20px;
+            overflow: hidden; /* Prevents rotations from creating scrollbars */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        .footer-inner {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    max-width: 1300px;
+    gap: 20px;
+    flex-wrap: nowrap;
+}
+
+        /* Base Sticker Logic */
+        .sticker {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer;
+            filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.1));
+        }
+
+        .sticker:hover {
+            transform: scale(1.1) rotate(0deg) !important;
+            z-index: 10;
+        }
+
+        /* 1. Circular Logo Stamp */
+        .logo-stamp {
+            width: 150px;
+            height: 150px;
+            border: 2px solid var(--black);
+            border-radius: 50%;
+            padding: 5px;
+            transform: rotate(-8deg);
+            text-align: center;
+            font-size: 10px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        .logo-stamp img { width: 80%; border-radius: 5px; }
+
+        /* 2. LinkedIn Circle */
+        .linkedin-sticker {
+            background: var(--black);
+            color: white;
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            font-size: 40px;
+            transform: rotate(12deg) translateY(20px);
+        }
+
+        /* 3. Email Pill */
+        .email-pill {
+            background: var(--black);
+            color: white;
+            padding: 12px 25px;
+            border-radius: 15px;
+            font-size: 14px;
+            transform: translateY(50px) rotate(-3deg);
+        }
+
+        /* 4. The Giant "C'est Par La" Pointer */
+        .pointer-sticker {
+            font-family: 'Impact', 'Arial Black', sans-serif;
+            background: var(--black);
+            color: white;
+            padding: 15px 30px;
+            font-size: 45px;
+            text-transform: uppercase;
+            transform: rotate(-10deg);
+            position: relative;
+        }
+        .pointer-sticker::after {
+            content: "👉"; /* Simplified pointer for demo */
+            position: absolute;
+            right: -50px;
+            font-size: 60px;
+        }
+
+        /* 5. Ticket Sticker */
+        .ticket-sticker {
+            background: var(--black);
+            color: white;
+            padding: 10px 20px;
+            clip-path: polygon(10% 0, 90% 0, 100% 20%, 100% 80%, 90% 100%, 10% 100%, 0 80%, 0 20%);
+            transform: rotate(15deg) translateY(-20px);
+            font-size: 12px;
+            text-align: center;
+        }
+
+        /* 6. Instagram Circle */
+        .insta-sticker {
+            border: 6px solid var(--black);
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            font-size: 40px;
+            color: var(--black);
+            transform: rotate(-5deg);
+        }
+
+        /* 7. Vertical Text (Legal) */
+        .legal-sticker {
+            background: var(--black);
+            color: white;
+            padding: 15px 8px;
+            border-radius: 12px;
+            writing-mode: vertical-rl;
+            text-transform: uppercase;
+            font-size: 11px;
+            letter-spacing: 1px;
+            transform: rotate(5deg) translateY(-10px);
+        }
+
+        /* 8. WhatsApp Circle */
+        .wa-sticker {
+            background: var(--black);
+            color: white;
+            width: 85px;
+            height: 85px;
+            border-radius: 50%;
+            font-size: 45px;
+            transform: rotate(-12deg) translateY(10px);
+        }
+
+        /* 9. Orange Chat Bubble */
+        .chat-sticker {
+            background: #ff4500;
+            color: white;
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            font-size: 30px;
+            transform: rotate(8deg);
+        }
+
+        /* Responsive Mobile Fix */
+        @media (max-width: 768px) {
+            .footer-inner {
+                justify-content: center;
+                gap: 40px;
+            }
+            .sticker {
+                transform: rotate(0) translateY(0) !important;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<footer class="sticker-footer">
+    <div class="footer-inner">
+        
+        <div class="sticker logo-stamp">
+            <p>Resident de l'atelier<br><b>Tire Fesse</b><br>Lyon 1er</p>
+        </div>
+
+        <a href="#" class="sticker linkedin-sticker">
+            <i class="fab fa-linkedin-in"></i>
+        </a>
+
+        <div class="sticker email-pill">
+            bonjour@ateliercestparla.com
+        </div>
+
+        <div class="sticker pointer-sticker">
+            C'est Par Là
+        </div>
+
+        <div class="sticker ticket-sticker">
+            CARPETTE<br><b>DINETTE</b><br>MARKET
+        </div>
+
+        <a href="#" class="sticker insta-sticker">
+            <i class="fab fa-instagram"></i>
+        </a>
+
+        <a href="#" class="sticker legal-sticker">
+            Mentions Légales
+        </a>
+
+        <a href="#" class="sticker wa-sticker">
+            <i class="fab fa-whatsapp"></i>
+        </a>
+
+        <div class="sticker chat-sticker">
+            <i class="fas fa-comment-dots"></i>
+        </div>
+
+    </div>
+</footer>
+
+</body>
+</html>
