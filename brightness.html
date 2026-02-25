@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day to Night Scroll Effect</title>
+
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: Arial, sans-serif;
+        transition: filter 0.2s linear;
+    }
+
+    /* Full page wrapper */
+    .content {
+        min-height: 300vh; /* Makes page scrollable */
+        background: linear-gradient(to bottom, #87CEEB, #001848);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 50px;
+        color: white;
+        text-align: center;
+        padding-top: 100px;
+    }
+
+    h1 {
+        position: fixed;
+        top: 40%;
+    }
+</style>
+</head>
+<body>
+
+<div class="content">
+    <h1>Scroll Down 🌅 → 🌇 → 🌙</h1>
+</div>
+
+<script>
+    window.addEventListener("scroll", function () {
+        const scrollTop = window.scrollY;
+        const maxScroll = document.body.scrollHeight - window.innerHeight;
+        
+        // Calculate scroll percentage (0 to 1)
+        const scrollFraction = scrollTop / maxScroll;
+
+        // Brightness decreases from 1 to 0.3
+        const brightness = 1 - (scrollFraction * 0.7);
+
+        document.body.style.filter = `brightness(${brightness})`;
+    });
+</script>
+
+</body>
+</html>
