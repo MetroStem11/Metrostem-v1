@@ -25,15 +25,16 @@
 
     /* ---------- NAVIGATION ---------- */
     .navbar { padding: 1rem 2rem; z-index: 100; background: linear-gradient(to bottom, rgba(0,0,0,0.9) 0%, transparent 100%); }
-    .navbar-brand { font-family: 'Playfair Display', serif; font-weight: 900; letter-spacing: 2px; }
+    .navbar-brand { font-family: 'Playfair Display', serif; font-weight: 900; letter-spacing: 2px; text-decoration: none; color: white;}
     
     .reel-tag {
         color: white; font-size: 10px; letter-spacing: 2px; text-transform: uppercase;
         background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px);
         padding: 5px 12px; border-radius: 50px; border: 1px solid rgba(255, 255, 255, 0.2);
+        text-decoration: none;
     }
 
-    /* ---------- SECTION TITLES (Shared Style) ---------- */
+    /* ---------- SECTION TITLES ---------- */
     .section-title {
         font-family: 'Playfair Display', serif; 
         font-size: clamp(2.5rem, 8vw, 4rem); 
@@ -54,12 +55,12 @@
         background-repeat: no-repeat;
         background-size: cover;
         position: relative;
-        z-index: 1; /* Keep below carousel */
+        z-index: 1;
     }
 
     .hero-title-wrapper {
         text-align: center;
-        margin-top: 20vh; /* Pushed a little lower */
+        margin-top: 20vh;
         z-index: 2;
     }
     
@@ -68,7 +69,6 @@
         font-size: clamp(4rem, 12vw, 8rem);
         margin-bottom: 0;
         opacity: 0;
-        /* Cooler, Cinematic Entrance */
         animation: cinematicEntrance 2s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
     }
 
@@ -98,7 +98,7 @@
         overflow: hidden;
         position: relative;
         white-space: nowrap;
-        z-index: 10; /* Scroll over the hero parallax */
+        z-index: 10;
         border-top: 1px solid #222;
     }
 
@@ -137,20 +137,10 @@
     }
 
     .services-header { text-align: center; margin-bottom: 30px; opacity: 0; }
-
     .card-container { display: flex; perspective: 1500px; }
-
     .flip-card { width: var(--card-w); height: var(--card-h); position: relative; transform-style: preserve-3d; }
-
-    .card-face {
-        position: absolute; inset: 0; backface-visibility: hidden;
-        border-radius: 15px; overflow: hidden; border: 1px solid #333;
-    }
-
-    .card-back {
-        background: #161616; transform: rotateY(180deg);
-        display: flex; flex-direction: column; justify-content: flex-end; padding: 25px;
-    }
+    .card-face { position: absolute; inset: 0; backface-visibility: hidden; border-radius: 15px; overflow: hidden; border: 1px solid #333; }
+    .card-back { background: #161616; transform: rotateY(180deg); display: flex; flex-direction: column; justify-content: flex-end; padding: 25px; }
 
     /* ---------- CAMERA BURST ---------- */
     .hero-story { height: 350vh; position: relative; z-index: 10; background: var(--bg); }
@@ -171,7 +161,8 @@
         transform: translate(0,0) scale(0.5); z-index: 10;
     }
 
-    /* ---------- CONTACT / FOOTER ---------- */
+    /* ---------- CONTACT SECTION ---------- */
+   /* ---------- CONTACT / FOOTER ---------- */
     .contact-section {
         min-height: 50vh;
         display: flex;
@@ -188,15 +179,35 @@
     /* ---------- MOBILE OVERRIDES ---------- */
     @media (max-width: 768px) {
         .hero-story, .services-wrapper { height: auto !important; }
-        .camera-scene, .services-sticky { position: relative !important; height: auto !important; padding: 100px 20px; }
+        .camera-scene, .services-sticky { position: relative !important; height: auto !important; padding: 60px 20px; }
         
-        .card-container { flex-direction: column; gap: 20px !important; width: 100%; align-items: center; }
-        .flip-card { opacity: 1 !important; transform: none !important; height: 300px; width: 100%; max-width: 320px; }
-        .card-face { position: relative; height: 300px; }
-        .card-back { transform: none !important; position: relative !important; height: auto; border-radius: 0 0 15px 15px; margin-top: -10px; }
+        .card-container { flex-direction: column; gap: 40px !important; width: 100%; align-items: center; }
+        .flip-card { opacity: 1 !important; transform: none !important; height: auto; width: 100%; max-width: 320px; display: flex; flex-direction: column; }
+        
+        .card-face { position: relative; height: 300px; width: 100%; }
         .card-front { border-radius: 15px 15px 0 0; }
+        .card-back { 
+            transform: none !important; 
+            position: relative !important; 
+            height: auto; 
+            border-radius: 0 0 15px 15px; 
+            padding: 20px;
+            display: flex !important;
+            opacity: 1 !important;
+            background: #161616;
+        }
 
-        .film-burst-frame { display: none; }
+        /* Achievements mobile fix */
+        .film-burst-frame { 
+            position: relative; 
+            display: block; 
+            opacity: 1 !important; 
+            transform: none !important; 
+            margin: 20px auto;
+            width: 90%;
+            height: 300px;
+        }
+        .camera-scene { flex-direction: column; }
         .services-header { opacity: 1 !important; transform: none !important; }
     }
 </style>
@@ -205,45 +216,35 @@
 
     <nav class="navbar navbar-dark fixed-top px-4 d-flex">
         <a class="navbar-brand" href="#home">WINLIGHT</a>
-        <!-- Grouped links pushed to the right -->
         <div class="ms-auto d-flex gap-3 align-items-center">
-            <a href="#Recent" class="reel-tag nav-scroll-link">Recent work</a>
-            <a href="#expertise" class="reel-tag nav-scroll-link">Expertise</a>
-            <a href="#contact" class="reel-tag nav-scroll-link">Contact Us</a>
+            <a href="#Recent" class="reel-tag">Recent work</a>
+            <a href="#expertise" class="reel-tag">Expertise</a>
+            <a href="#contact" class="reel-tag">Contact Us</a>
         </div>
     </nav>
 
-    <!-- 1. HERO BANNER -->
-    <div class="herobanner">
+    <div class="herobanner" id="home">
         <div class="hero-title-wrapper">
             <h1 class="hero-title">Winlight Studio</h1>
             <h5 class="hero-subtitle mt-3">Production House</h5>
         </div>
     </div>
 
-    <!-- 2. INFINITE CAROUSEL (Recent Work) -->
-    <section class="carousel-section" id="expertise">
-        <div class="container" id="Recent">
-            <!-- Typography matched with Our Expertise -->
-            <h2 class="section-title  mb-2 text-white">Recent Work</h2>
+    <section class="carousel-section" id="Recent">
+        <div class="container">
+            <h2 class="section-title mb-2 text-white">Recent Work</h2>
         </div>
         <div class="carousel-track">
-            <!-- Image Set 1 (Reliable Unsplash Links) -->
             <div class="carousel-card"><img src="images/chunni.jpg"></div>
             <div class="carousel-card"><img src="images/chunni2.jpg"></div>
             <div class="carousel-card"><img src="images/sound.jpg"></div>
-             <div class="carousel-card"><img src="images/banner.png"></div>
-              <div class="carousel-card"><img src="images/insta.jpg"></div>
-            
-            
-            <div class="carousel-card"><img src="images/logo.jpg"> <!-- Image Set 2 (Duplicated for loop) -->
-            <div class="carousel-card"><img src="images/chunni.jpg"></div> <div class="carousel-card"><img src="https://images.unsplash.com/photo-1505686994434-e3cc5abf1330?auto=format&fit=crop&w=800&q=80"></div>
-            <div class="carousel-card"><img src="images/papercut.jpg"></div> <div class="carousel-card"><img src="https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?auto=format&fit=crop&w=800&q=80"></div>
+            <div class="carousel-card"><img src="images/banner.png"></div>
+            <div class="carousel-card"><img src="images/insta.jpg"></div>
+            <div class="carousel-card"><img src="images/logo.jpg"></div>
         </div>
     </section>
 
-    <!-- 3. FLIPPING CARDS (Our Expertise) -->
-    <section class="services-wrapper">
+    <section class="services-wrapper" id="expertise">
         <div class="services-sticky">
             <div class="services-header">
                 <h2 class="section-title">Our Expertise</h2>
@@ -255,7 +256,7 @@
                     <div class="card-face card-front"><img src="images/directing.PNG" class="w-100 h-100 object-fit-cover"></div>
                     <div class="card-back"><h3>01</h3><p class="m-0 text-white" style="font-family: 'Playfair Display', serif; font-size: 1.5rem;">Directing</p></div>
                 </div>
-                <div class="flip-card f-card">
+                <div class="flip-card f-card mx-md-4">
                     <div class="card-face card-front"><img src="https://images.unsplash.com/photo-1497032628192-86f99bcd76bc?auto=format&fit=crop&w=800&q=80" class="w-100 h-100 object-fit-cover"></div>
                     <div class="card-back"><h3>02</h3><p class="m-0 text-white" style="font-family: 'Playfair Display', serif; font-size: 1.5rem;">Cinematography</p></div>
                 </div>
@@ -267,7 +268,6 @@
         </div>
     </section>
 
-    <!-- 4. CAMERA BURST -->
     <section class="hero-story">
         <div class="camera-scene">
             <div class="camera-body">
@@ -280,25 +280,19 @@
             <div class="film-burst-frame b-frame"><img src="images/sound.jpg" class="w-100 h-100 object-fit-cover"></div>
             <div class="film-burst-frame b-frame"><img src="images/papercut.jpg" class="w-100 h-100 object-fit-cover"></div>
         </div>
-        <div style="height: 20%;">
-            <img src="images/cam.png"style="width: 250px; height: auto;">
+        <div style="text-align: center; padding-bottom: 50px;">
+            <img src="images/cam.png" style="width: 250px; height: auto;">
         </div>
     </section>
 
-    <!-- 5. CONTACT US FOOTER -->
     <section class="contact-section" id="contact">
-        <h2 class="section-title text-white mb-3" href="#contact">Contact us</h2>
-        <!-- Text is now bright white -->
+        <h2 class="section-title text-white mb-3">Contact us</h2>
         <p class="text-white opacity-75 mb-5 text-center" style="max-width: 500px; letter-spacing: 1px;">
             Ready to bring your vision to life? Let's create something extraordinary together.
         </p>
         <div class="d-flex flex-wrap justify-content-center gap-4">
-            <a href="mailto:hello@winlightstudios.com" class="btn btn-outline-light rounded-pill px-5 py-3 fw-bold" style="letter-spacing: 2px; text-transform: uppercase; font-size: 0.8rem;">
-                Email Us
-            </a>
-            <a href="https://wa.me/1234567890" class="btn btn-light text-dark rounded-pill px-5 py-3 fw-bold" style="letter-spacing: 2px; text-transform: uppercase; font-size: 0.8rem;">
-                WhatsApp
-            </a>
+            <a href="mailto:hello@winlightstudios.com" class="btn btn-outline-light rounded-pill px-5 py-3 fw-bold">Email Us</a>
+            <a href="https://wa.me/1234567890" class="btn btn-light text-dark rounded-pill px-5 py-3 fw-bold">WhatsApp</a>
         </div>
     </section>
 
@@ -321,9 +315,11 @@
                         <span class="ms-2 fw-bold" style="letter-spacing: 1px;">Follow on Instagram</span>
                     </a>
                 </div>
-            </div>
+            
        
     </footer>
+</div>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.19/bundled/lenis.min.js"></script>
@@ -334,26 +330,17 @@
         gsap.ticker.add((time) => { lenis.raf(time * 1000); });
         gsap.registerPlugin(ScrollTrigger);
 
-        // HERO PARALLAX SCROLL ANIMATION
-        // As you scroll down, the title moves downward and gently fades/scales away
         gsap.to(".hero-title-wrapper", {
-            y: "40vh", // Moves down
+            y: "40vh",
             scale: 0.8,
             opacity: 0,
             ease: "none",
-            scrollTrigger: {
-                trigger: ".herobanner",
-                start: "top top",
-                end: "bottom top",
-                scrub: true
-            }
+            scrollTrigger: { trigger: ".herobanner", start: "top top", end: "bottom top", scrub: true }
         });
 
         let mm = gsap.matchMedia();
 
         mm.add("(min-width: 769px)", () => {
-            
-            // Flip Cards Timeline
             const flipTl = gsap.timeline({
                 scrollTrigger: { trigger: ".services-wrapper", start: "top top", end: "bottom bottom", scrub: 1 }
             });
@@ -361,7 +348,6 @@
                   .to(".card-container", { gap: "25px", duration: 2 })
                   .to(".f-card", { rotateY: 180, stagger: 0.4, duration: 3 });
                   
-            // Camera Timeline 
             const cameraTl = gsap.timeline({
                 scrollTrigger: { trigger: ".hero-story", start: "top top", end: "bottom bottom", scrub: 1 }
             });
