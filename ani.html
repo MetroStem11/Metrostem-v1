@@ -1,368 +1,458 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Winlight Studios | High-End Production</title>
-    
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,900;1,900&family=Plus+Jakarta+Sans:wght@300;400;800&display=swap" rel="stylesheet">
-
-<style>
-    :root {
-        --bg: #0a0a0a;
-        --card-w: 280px;
-        --card-h: 380px;
-    }
-
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { 
-        background: var(--bg); 
-        color: #fff; 
-        font-family: 'Plus Jakarta Sans', sans-serif;
-        overflow-x: hidden;
-    }
-
-    /* ---------- NAVIGATION ---------- */
-    .navbar { padding: 1rem 2rem; z-index: 100; background: linear-gradient(to bottom, rgba(0,0,0,0.9) 0%, transparent 100%); }
-    .navbar-brand { font-family: 'Playfair Display', serif; font-weight: 900; letter-spacing: 2px; text-decoration: none; color: white;}
-    
-    .reel-tag {
-        color: white; font-size: 10px; letter-spacing: 2px; text-transform: uppercase;
-        background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px);
-        padding: 5px 12px; border-radius: 50px; border: 1px solid rgba(255, 255, 255, 0.2);
-        text-decoration: none;
-    }
-
-    /* ---------- SECTION TITLES ---------- */
-    .section-title {
-        font-family: 'Playfair Display', serif; 
-        font-size: clamp(2.5rem, 8vw, 4rem); 
-        font-style: italic;
-        text-align: center;
-    }
-
-    /* ---------- HERO BANNER ---------- */
-    .herobanner {
-        height: 100vh;
-        background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.8)), url("https://images.unsplash.com/photo-1485846234645-a62644f84728?auto=format&fit=crop&w=1920&q=80");
-        background-color: #111; 
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        background-position: center;
-        background-repeat: no-repeat;
-        background-size: cover;
-        position: relative;
-        z-index: 1;
-    }
-
-    .hero-title-wrapper {
-        text-align: center;
-        margin-top: 20vh;
-        z-index: 2;
-    }
-    
-    .hero-title {
-        font-family: 'Playfair Display', serif;
-        font-size: clamp(4rem, 12vw, 8rem);
-        margin-bottom: 0;
-        opacity: 0;
-        animation: cinematicEntrance 2s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
-    }
-
-    .hero-subtitle {
-        letter-spacing: 5px; 
-        text-transform: uppercase;
-        opacity: 0;
-        animation: fadeUp 1.5s ease forwards;
-        animation-delay: 0.8s;
-        color: #aaa;
-    }
-
-    @keyframes cinematicEntrance {
-        0% { opacity: 0; letter-spacing: 30px; filter: blur(12px); transform: translateY(-40px) scale(1.1); }
-        100% { opacity: 1; letter-spacing: normal; filter: blur(0); transform: translateY(0) scale(1); }
-    }
-
-    @keyframes fadeUp {
-        from { opacity: 0; transform: translateY(20px); }
-        to { opacity: 1; transform: translateY(0); }
-    }
-
-    /* ---------- INFINITE CAROUSEL ---------- */
-    .carousel-section {
-        padding: 5rem 0 4rem 0;
-        background: var(--bg);
-        overflow: hidden;
-        position: relative;
-        white-space: nowrap;
-        z-index: 10;
-        border-top: 1px solid #222;
-    }
-
-    .carousel-track {
-        display: inline-flex;
-        gap: 2rem;
-        animation: slideRight 18s linear infinite;
-        width: max-content;
-        padding-right: 2rem;
-        margin-top: 2rem;
-    }
-
-    .carousel-card {
-        width: 320px; height: 200px;
-        border-radius: 12px; overflow: hidden;
-        flex-shrink: 0; border: 1px solid #333; position: relative;
-    }
-
-    .carousel-card img {
-        width: 100%; height: 100%; object-fit: cover; filter: grayscale(0.6);
-        transition: filter 0.4s ease, transform 0.4s ease;
-    }
-
-    .carousel-card:hover img { filter: grayscale(0); transform: scale(1.05); }
-
-    @keyframes slideRight {
-        from { transform: translateX(-50%); }
-        to { transform: translateX(0); }
-    }
-
-    /* ---------- SERVICES (FLIPPING CARDS) ---------- */
-    .services-wrapper { height: 400vh; position: relative; z-index: 10; background: var(--bg); }
-    .services-sticky {
-        position: sticky; top: 0; height: 100vh;
-        display: flex; flex-direction: column; align-items: center; justify-content: center;
-    }
-
-    .services-header { text-align: center; margin-bottom: 30px; opacity: 0; }
-    .card-container { display: flex; perspective: 1500px; }
-    .flip-card { width: var(--card-w); height: var(--card-h); position: relative; transform-style: preserve-3d; }
-    .card-face { position: absolute; inset: 0; backface-visibility: hidden; border-radius: 15px; overflow: hidden; border: 1px solid #333; }
-    .card-back { background: #161616; transform: rotateY(180deg); display: flex; flex-direction: column; justify-content: flex-end; padding: 25px; }
-
-    /* ---------- CAMERA BURST ---------- */
-    .hero-story { height: 350vh; position: relative; z-index: 10; background: var(--bg); }
-    .camera-scene {
-        position: sticky; top: 0; height: 100vh;
-        display: flex; align-items: center; justify-content: center; overflow: hidden;
-    }
-
-    .camera-body {
-        position: relative; width: min(300px, 80vw); height: 180px;
-        background: #111; border-radius: 35px; z-index: 20; border: 1px solid #222;
-        display: flex; align-items: center; justify-content: center;
-    }
-
-    .film-burst-frame {
-        position: absolute; width: 200px; height: 260px;
-        background: #111; border: 6px solid #000; opacity: 0;
-        transform: translate(0,0) scale(0.5); z-index: 10;
-    }
-
-    /* ---------- CONTACT SECTION ---------- */
-   /* ---------- CONTACT / FOOTER ---------- */
-    .contact-section {
-        min-height: 50vh;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        background: #050505;
-        border-top: 1px solid #222;
-        padding: 5rem 2rem;
-        z-index: 10;
-        position: relative;
-    }
-
-    /* ---------- MOBILE OVERRIDES ---------- */
-    @media (max-width: 768px) {
-        .hero-story, .services-wrapper { height: auto !important; }
-        .camera-scene, .services-sticky { position: relative !important; height: auto !important; padding: 60px 20px; }
-        
-        .card-container { flex-direction: column; gap: 40px !important; width: 100%; align-items: center; }
-        .flip-card { opacity: 1 !important; transform: none !important; height: auto; width: 100%; max-width: 320px; display: flex; flex-direction: column; }
-        
-        .card-face { position: relative; height: 300px; width: 100%; }
-        .card-front { border-radius: 15px 15px 0 0; }
-        .card-back { 
-            transform: none !important; 
-            position: relative !important; 
-            height: auto; 
-            border-radius: 0 0 15px 15px; 
-            padding: 20px;
-            display: flex !important;
-            opacity: 1 !important;
-            background: #161616;
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hinglish Rhyme Game - Freestyle Studio</title>
+    <!-- Tailwind CSS for Cyber Velvet Styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        studioDark: '#0C091A',
+                        neonPurple: '#9E00FF',
+                        electricCyan: '#00F5FF',
+                        neonOrange: '#FF5722',
+                        panelDark: '#16112C'
+                    }
+                }
+            }
         }
-
-        /* Achievements mobile fix */
-        .film-burst-frame { 
-            position: relative; 
-            display: block; 
-            opacity: 1 !important; 
-            transform: none !important; 
-            margin: 20px auto;
-            width: 90%;
-            height: 300px;
-        }
-        .camera-scene { flex-direction: column; }
-        .services-header { opacity: 1 !important; transform: none !important; }
-    }
-</style>
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&display=swap');
+        body { font-family: 'Space Grotesk', sans-serif; background-color: #0C091A; }
+    </style>
 </head>
-<body>
+<body class="text-white min-h-screen flex flex-col items-center justify-center p-4">
 
-    <nav class="navbar navbar-dark fixed-top px-4 d-flex">
-        <a class="navbar-brand" href="#home">WINLIGHT</a>
-        <div class="ms-auto d-flex gap-3 align-items-center">
-            <a href="#Recent" class="reel-tag">Recent work</a>
-            <a href="#expertise" class="reel-tag">Expertise</a>
-            <a href="#contact" class="reel-tag">Contact Us</a>
+    <!-- Main Container -->
+    <div class="w-full max-w-md bg-panelDark rounded-3xl border border-neonPurple/20 shadow-2xl shadow-neonPurple/10 overflow-hidden flex flex-col h-[92vh]">
+        
+        <!-- Header / Status Bar -->
+        <div class="p-5 border-b border-white/5 bg-black/20 flex justify-between items-center">
+            <div>
+                <h1 class="text-xl font-bold tracking-wider text-electricCyan">HINGLISH RHYME</h1>
+                <p class="text-xs text-white/40 tracking-widest uppercase">Freestyle Practice Loop</p>
+            </div>
+            <div class="text-right">
+                <span id="timerDisplay" class="text-sm font-mono text-neonPurple font-bold">00:00</span>
+                <p id="barCounter" class="text-xs text-neonOrange font-bold">Bar: 0/0</p>
+            </div>
         </div>
-    </nav>
 
-    <div class="herobanner" id="home">
-        <div class="hero-title-wrapper">
-            <h1 class="hero-title">Winlight Studio</h1>
-            <h5 class="hero-subtitle mt-3">Production House</h5>
+        <!-- Interactive Visual Metronome -->
+        <div class="relative bg-black/40 p-4 border-b border-white/5">
+            <div class="grid grid-cols-4 gap-2 text-center text-xs font-mono text-white/20 mb-2">
+                <div id="beat-1" class="py-1 rounded bg-white/5 border border-white/5">BEAT 1</div>
+                <div id="beat-2" class="py-1 rounded bg-white/5 border border-white/5">BEAT 2</div>
+                <div id="beat-3" class="py-1 rounded bg-white/5 border border-white/5">BEAT 3</div>
+                <div id="beat-4" class="py-1 rounded bg-white/5 border border-white/5">BEAT 4</div>
+            </div>
+            <!-- High-Performance Canvas for Parabolic Metronome Ball -->
+            <canvas id="metronomeCanvas" class="w-full h-16 rounded-xl bg-studioDark/80 border border-white/5"></canvas>
+            
+            <!-- Count-In Overlay -->
+            <div id="countInOverlay" class="absolute inset-0 bg-studioDark/95 flex flex-col items-center justify-center hidden rounded-xl mx-4 my-4 border border-neonOrange/30">
+                <span class="text-xs text-neonOrange tracking-widest font-bold uppercase animate-pulse">Pre-Roll Count-In</span>
+                <span id="countInText" class="text-xl font-black text-white">READY...</span>
+            </div>
+        </div>
+
+        <!-- Scrollable Rhyme Targets Panel -->
+        <div class="flex-1 p-5 overflow-y-auto space-y-3 flex flex-col justify-center">
+            <div class="flex justify-between items-center mb-1">
+                <span class="text-xs text-white/60 tracking-wider uppercase font-semibold">Rhyme Target Sounds</span>
+                <span id="schemeBadge" class="text-[10px] bg-neonPurple/20 border border-neonPurple/50 text-electricCyan px-2 py-0.5 rounded-full font-mono uppercase">Scheme: AAAA</span>
+            </div>
+
+            <!-- Target Cards -->
+            <div id="cardsContainer" class="space-y-2.5">
+                <!-- Dynamic cards will render here -->
+                <div class="p-4 rounded-xl bg-studioDark border border-white/5 flex justify-between items-center opacity-40">
+                    <span class="text-lg font-bold tracking-wide text-white/50">Start loop to load targets</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Studio Controls & Configuration Dashboard -->
+        <div class="p-5 bg-black/30 border-t border-white/5 space-y-4">
+            <!-- Audio Engine & Setup Controls -->
+            <div class="grid grid-cols-2 gap-3">
+                <div>
+                    <label class="text-[10px] uppercase tracking-wider text-white/40 block mb-1">Audio Beat Model</label>
+                    <select id="beatSelect" class="w-full bg-studioDark border border-white/10 rounded-xl px-3 py-2 text-xs font-medium focus:outline-none focus:border-electricCyan">
+                        <option value="click">Metronome Click</option>
+                        <option value="boombap" selected>Boom-Bap Loop</option>
+                        <option value="trap">Trap Beat Subdivisions</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="text-[10px] uppercase tracking-wider text-white/40 block mb-1">Rhyme Scheme</label>
+                    <select id="schemeSelect" class="w-full bg-studioDark border border-white/10 rounded-xl px-3 py-2 text-xs font-medium focus:outline-none focus:border-electricCyan">
+                        <option value="AAAA">AAAA (1 Sound Group)</option>
+                        <option value="AABB">AABB (2 Sound Groups)</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- BPM Sliders & Waveform Space -->
+            <div class="flex items-center space-x-4 bg-studioDark/50 p-3 rounded-xl border border-white/5">
+                <div class="flex-1">
+                    <div class="flex justify-between text-xs font-mono text-white/40 mb-1">
+                        <span>Tempo Engine</span>
+                        <span id="bpmVal" class="text-electricCyan font-bold">90 BPM</span>
+                    </div>
+                    <input id="bpmSlider" type="range" min="60" max="180" value="90" class="w-full h-1 bg-white/10 rounded-lg appearance-none cursor-pointer accent-electricCyan">
+                </div>
+                
+                <!-- Freestyle Voice Recorder Visualizer Indicator -->
+                <button id="micBtn" class="p-3 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl transition-all group flex items-center justify-center">
+                    <svg id="micIcon" class="w-5 h-5 text-white/60 group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"></path>
+                    </svg>
+                    <!-- Simulated mic audio waves container -->
+                    <div id="waveVisualizer" class="hidden h-5 items-center space-x-0.5 px-0.5">
+                        <span class="w-0.5 h-3 bg-neonOrange rounded animate-bounce"></span>
+                        <span class="w-0.5 h-5 bg-neonOrange rounded animate-bounce [animation-delay:0.15s]"></span>
+                        <span class="w-0.5 h-2 bg-neonOrange rounded animate-bounce [animation-delay:0.3s]"></span>
+                    </div>
+                </button>
+            </div>
+
+            <!-- Primary Master Control Button -->
+            <button id="playBtn" class="w-full py-3.5 bg-gradient-to-r from-neonPurple to-purple-700 hover:from-purple-600 hover:to-purple-800 text-white font-bold rounded-xl transition-all shadow-lg shadow-neonPurple/20 tracking-wider text-sm flex items-center justify-center space-x-2">
+                <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                <span>DROP THE BEAT</span>
+            </button>
         </div>
     </div>
 
-    <section class="carousel-section" id="Recent">
-        <div class="container">
-            <h2 class="section-title mb-2 text-white">Recent Work</h2>
-        </div>
-        <div class="carousel-track">
-            <div class="carousel-card"><img src="images/chunni.jpg"></div>
-            <div class="carousel-card"><img src="images/chunni2.jpg"></div>
-            <div class="carousel-card"><img src="images/sound.jpg"></div>
-            <div class="carousel-card"><img src="images/banner.png"></div>
-            <div class="carousel-card"><img src="images/insta.jpg"></div>
-            <div class="carousel-card"><img src="images/logo.jpg"></div>
-        </div>
-    </section>
-
-    <section class="services-wrapper" id="expertise">
-        <div class="services-sticky">
-            <div class="services-header">
-                <h2 class="section-title">Our Expertise</h2>
-                <p class="text-muted mt-2">Production Solutions</p>
-            </div>
-
-            <div class="card-container">
-                <div class="flip-card f-card">
-                    <div class="card-face card-front"><img src="images/directing.PNG" class="w-100 h-100 object-fit-cover"></div>
-                    <div class="card-back"><h3>01</h3><p class="m-0 text-white" style="font-family: 'Playfair Display', serif; font-size: 1.5rem;">Directing</p></div>
-                </div>
-                <div class="flip-card f-card mx-md-4">
-                    <div class="card-face card-front"><img src="https://images.unsplash.com/photo-1497032628192-86f99bcd76bc?auto=format&fit=crop&w=800&q=80" class="w-100 h-100 object-fit-cover"></div>
-                    <div class="card-back"><h3>02</h3><p class="m-0 text-white" style="font-family: 'Playfair Display', serif; font-size: 1.5rem;">Cinematography</p></div>
-                </div>
-                <div class="flip-card f-card">
-                    <div class="card-face card-front"><img src="https://images.unsplash.com/photo-1601506521937-0121a7fc2a6b?auto=format&fit=crop&w=800&q=80" class="w-100 h-100 object-fit-cover"></div>
-                    <div class="card-back"><h3>03</h3><p class="m-0 text-white" style="font-family: 'Playfair Display', serif; font-size: 1.5rem;">Post-Production</p></div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="hero-story">
-        <div class="camera-scene">
-            <div class="camera-body">
-                 <h3>Achievements</h3>
-                <div style="width:80px; height:80px; border-radius:50%; background:#050505; border:8px solid #1a1a1a; box-shadow: inset 0 0 10px #000;"></div>
-                <div class="flash" id="camera-flash" style="position: absolute; inset:0; background:#fff; opacity:0; border-radius:35px;"></div>
-            </div>
-            <div class="film-burst-frame b-frame"><img src="images/selection.jpeg" class="w-100 h-100 object-fit-cover"></div>
-            <div class="film-burst-frame b-frame"><img src="images/woman.PNG" class="w-100 h-100 object-fit-cover"></div>
-            <div class="film-burst-frame b-frame"><img src="images/sound.jpg" class="w-100 h-100 object-fit-cover"></div>
-            <div class="film-burst-frame b-frame"><img src="images/papercut.jpg" class="w-100 h-100 object-fit-cover"></div>
-        </div>
-        <div style="text-align: center; padding-bottom: 50px;">
-            <img src="images/cam.png" style="width: 250px; height: auto;">
-        </div>
-    </section>
-
-    <section class="contact-section" id="contact">
-        <h2 class="section-title text-white mb-3">Contact us</h2>
-        <p class="text-white opacity-75 mb-5 text-center" style="max-width: 500px; letter-spacing: 1px;">
-            Ready to bring your vision to life? Let's create something extraordinary together.
-        </p>
-        <div class="d-flex flex-wrap justify-content-center gap-4">
-            <a href="mailto:hello@winlightstudios.com" class="btn btn-outline-light rounded-pill px-5 py-3 fw-bold">Email Us</a>
-            <a href="https://wa.me/1234567890" class="btn btn-light text-dark rounded-pill px-5 py-3 fw-bold">WhatsApp</a>
-        </div>
-    </section>
-
-    <footer class="footer-bottom">
-        <div class="container">
-            <div class="row align-items-center">
-                <!-- Map Left Side (Generic Studio Location) -->
-                <div class="col-md-6 mb-4 mb-md-0">
-                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3305.0238803117466!2d-118.3288130847814!3d34.05389668060481!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x80c2b8d4f40f09b5%3A0x67396a60cdfb8eb9!2sParamount%20Pictures%20Studio%20Tour!5e0!3m2!1sen!2sus!4v1680000000000!5m2!1sen!2sus" width="100%" height="250" style="border:0; border-radius:12px; filter: invert(90%) hue-rotate(180deg);" allowfullscreen="" loading="lazy">
-                    </iframe>
-                </div>
-                <!-- Studio Info & Insta Right Side -->
-                <div class="col-md-6 text-center text-md-start px-md-5">
-                    <h3 style="font-family: 'Playfair Display', serif; font-size: 2rem;">Winlight Studios</h3>
-                    <p class="text-white opacity-50 mb-4">New delhi dash dash temp one <br>Global Production Solutions</p>
-                    <a href="https://instagram.com" target="_blank" class="text-white text-decoration-none d-inline-flex align-items-center" style="transition: opacity 0.3s; opacity: 0.8;">
-                        <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"></path>
-                        </svg>
-                        <span class="ms-2 fw-bold" style="letter-spacing: 1px;">Follow on Instagram</span>
-                    </a>
-                </div>
-            
-       
-    </footer>
-</div>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.19/bundled/lenis.min.js"></script>
-
+    <!-- Script Application Logic -->
     <script>
-        const lenis = new Lenis();
-        lenis.on('scroll', ScrollTrigger.update);
-        gsap.ticker.add((time) => { lenis.raf(time * 1000); });
-        gsap.registerPlugin(ScrollTrigger);
+        // --- 1. HINGLISH RHYME TARGET DATABASE ---
+        const RhymeDatabase = [
+            { id: 1, sound: "-aal / -all", words: ["Bawaal", "Raftaar", "Call", "Dhamaal", "Fall", "Jaal", "Hall", "Misaal"] },
+            { id: 2, sound: "-een / -ene", words: ["Zameen", "Kamine", "Scene", "Machine", "Glowin'", "Shine", "Sangeen", "Clean"] },
+            { id: 3, sound: "-ill / -il", words: ["Dil", "Chill", "Mushkil", "Bill", "Kill", "Mil", "Skill", "Fill"] },
+            { id: 4, sound: "-aar / -ar", words: ["Yaar", "Pyaar", "Car", "Ithefaaq", "Bar", "Bazaar", "Star", "Intezaar"] },
+            { id: 5, sound: "-or / -aur",နှစ်ခုလုံး: ["Aur", "Chor", "Door", "More", "Floor", "Shor", "Store", "Zor"] }
+        ];
 
-        gsap.to(".hero-title-wrapper", {
-            y: "40vh",
-            scale: 0.8,
-            opacity: 0,
-            ease: "none",
-            scrollTrigger: { trigger: ".herobanner", start: "top top", end: "bottom top", scrub: true }
+        // --- 2. AUDIO SYNTH ENGINE (Low-Latency Web Audio API) ---
+        let audioCtx = null;
+        let nextBeatTime = 0.0;
+        let currentBeatInBar = 0; 
+        let bpm = 90;
+        let lookahead = 25.0; 
+        let scheduleAheadTime = 0.1; 
+        let timerId = null;
+
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+        }
+
+        function playNoiseSnare(time) {
+            let bufferSize = audioCtx.sampleRate * 0.15;
+            let buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+            let data = buffer.getChannelData(0);
+            for (let i = 0; i < bufferSize; i++) { data[i] = Math.random() * 2 - 1; }
+
+            let noise = audioCtx.createBufferSource();
+            noise.buffer = buffer;
+
+            let filter = audioCtx.createBiquadFilter();
+            filter.type = 'bandpass';
+            filter.frequency.value = 1200;
+
+            let gain = audioCtx.createGain();
+            gain.gain.setValueAtTime(0.3, time);
+            gain.gain.exponentialRampToValueAtTime(0.01, time + 0.12);
+
+            noise.connect(filter);
+            filter.connect(gain);
+            gain.connect(audioCtx.destination);
+            noise.start(time);
+        }
+
+        function playSynthKick(time, isAccent = false) {
+            let osc = audioCtx.createOscillator();
+            let gain = audioCtx.createGain();
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+
+            osc.frequency.setValueAtTime(isAccent ? 160 : 110, time);
+            osc.frequency.exponentialRampToValueAtTime(0.01, time + 0.12);
+
+            gain.gain.setValueAtTime(isAccent ? 0.6 : 0.4, time);
+            gain.gain.exponentialRampToValueAtTime(0.01, time + 0.12);
+
+            osc.start(time);
+            osc.stop(time + 0.15);
+        }
+
+        function playTick(time, pitch) {
+            let osc = audioCtx.createOscillator();
+            let gain = audioCtx.createGain();
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.frequency.setValueAtTime(pitch, time);
+            gain.gain.setValueAtTime(0.2, time);
+            gain.gain.exponentialRampToValueAtTime(0.001, time + 0.05);
+            osc.start(time);
+            osc.stop(time + 0.06);
+        }
+
+        function playProceduralSound(beatNumber, time, engineType) {
+            if (engineType === 'click') {
+                playTick(time, beatNumber === 0 ? 1000 : 600);
+            } else if (engineType === 'boombap') {
+                if (beatNumber === 0 || beatNumber === 2) playSynthKick(time, beatNumber === 0);
+                if (beatNumber === 1 || beatNumber === 3) playNoiseSnare(time);
+            } else if (engineType === 'trap') {
+                if (beatNumber === 0) playSynthKick(time, true);
+                if (beatNumber === 2) playNoiseSnare(time);
+                // Subdivisions (Hi-hats pattern simulated)
+                playTick(time, 1500);
+                playTick(time + (60.0 / bpm) / 2, 1800);
+            }
+        }
+
+        // --- 3. STATE MANAGEMENT ENGINE ---
+        let isPlaying = false;
+        let totalSeconds = 0;
+        let absoluteBarsCompleted = -2; // Start from pre-roll countdown bars
+        let activeScheme = "AAAA";
+        let currentTargetWords = [];
+        let timerInterval = null;
+
+        // Core Dom References
+        const playBtn = document.getElementById('playBtn');
+        const bpmSlider = document.getElementById('bpmSlider');
+        const bpmVal = document.getElementById('bpmVal');
+        const beatSelect = document.getElementById('beatSelect');
+        const schemeSelect = document.getElementById('schemeSelect');
+        const countInOverlay = document.getElementById('countInOverlay');
+        const countInText = document.getElementById('countInText');
+        const cardsContainer = document.getElementById('cardsContainer');
+        const barCounter = document.getElementById('barCounter');
+        const timerDisplay = document.getElementById('timerDisplay');
+        const canvas = document.getElementById('metronomeCanvas');
+        const ctx = canvas.getContext('2d');
+
+        // Dynamic Resizing of Canvas Context
+        function resizeCanvas() {
+            canvas.width = canvas.parentElement.clientWidth * window.devicePixelRatio;
+            canvas.height = 64 * window.devicePixelRatio;
+            ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        function scheduler() {
+            while (nextBeatTime < audioCtx.currentTime + scheduleAheadTime) {
+                scheduleBeat(currentBeatInBar, nextBeatTime);
+                advanceBeat();
+            }
+            timerId = setTimeout(scheduler, lookahead);
+        }
+
+        function advanceBeat() {
+            let secondsPerBeat = 60.0 / bpm;
+            nextBeatTime += secondsPerBeat;
+            currentBeatInBar = (currentBeatInBar + 1) % 4;
+            
+            if (currentBeatInBar === 0) {
+                absoluteBarsCompleted++;
+                handleBarCycleUpdate();
+            }
+        }
+
+        function scheduleBeat(beatNumber, time) {
+            playProceduralSound(beatNumber, time, beatSelect.value);
+            // Dynamic UI highlights corresponding to the beat array
+            audioCtx.resume();
+            setTimeout(() => {
+                document.querySelectorAll('[id^="beat-"]').forEach(el => el.classList.remove('bg-neonOrange/20', 'text-neonOrange', 'border-neonOrange/30'));
+                const activeIndicator = document.getElementById(`beat-${beatNumber + 1}`);
+                if (activeIndicator) activeIndicator.classList.add('bg-neonOrange/20', 'text-neonOrange', 'border-neonOrange/30');
+            }, (time - audioCtx.currentTime) * 1000);
+        }
+
+        function handleBarCycleUpdate() {
+            setTimeout(() => {
+                if (absoluteBarsCompleted < 0) {
+                    barCounter.innerText = `Bar: Count-In`;
+                    countInOverlay.classList.remove('hidden');
+                    countInText.innerText = absoluteBarsCompleted === -2 ? "READY... 3" : "DROP THE FLOW... 1";
+                } else {
+                    countInOverlay.classList.add('hidden');
+                    barCounter.innerText = `Bars Run: ${absoluteBarsCompleted}`;
+                    
+                    // Trigger word updates every 4 phrases or on startup
+                    if (absoluteBarsCompleted % 4 === 0 || currentTargetWords.length === 0) {
+                        generateNewPhrases();
+                    }
+                    renderWordCards();
+                }
+            }, 0);
+        }
+
+        function generateNewPhrases() {
+            let selectedGroup = RhymeDatabase[Math.floor(Math.random() * RhymeDatabase.length)];
+            let shuff = [...selectedGroup.words].sort(() => 0.5 - Math.random());
+            
+            if (activeScheme === "AAAA") {
+                currentTargetWords = shuff.slice(0, 4).map(w => ({ word: w, meta: selectedGroup.sound }));
+            } else { // AABB Multi Group Combo
+                let altGroup = RhymeDatabase.find(g => g.id !== selectedGroup.id) || selectedGroup;
+                let altShuff = [...altGroup.words].sort(() => 0.5 - Math.random());
+                currentTargetWords = [
+                    { word: shuff[0], meta: selectedGroup.sound },
+                    { word: shuff[1], meta: selectedGroup.sound },
+                    { word: altShuff[0], meta: altGroup.sound },
+                    { word: altShuff[1], meta: altGroup.sound }
+                ];
+            }
+        }
+
+        function renderWordCards() {
+            if (absoluteBarsCompleted < 0) return;
+            // Highlighting based on current active track bar in phrasing loop 
+            let activeCardIndex = absoluteBarsCompleted % 4; 
+            
+            cardsContainer.innerHTML = currentTargetWords.map((item, idx) => {
+                let isActive = idx === activeCardIndex;
+                return `
+                    <div class="p-4 rounded-xl transition-all duration-300 flex justify-between items-center ${isActive ? 'bg-gradient-to-r from-neonPurple/30 to-studioDark border-2 border-electricCyan shadow-lg shadow-electricCyan/5 scale-[1.02]' : 'bg-studioDark/60 border border-white/5 opacity-60'}">
+                        <div>
+                            <span class="text-xs font-mono block ${isActive ? 'text-electricCyan' : 'text-white/40'}">Target ${idx + 1}</span>
+                            <span class="text-xl font-bold tracking-wide">${item.word}</span>
+                        </div>
+                        <span class="text-xs font-mono uppercase tracking-widest text-white/30">${item.meta}</span>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // --- 4. RENDER PHYSICS VISUALIZER LOOP ---
+        function drawMetronome() {
+            if (!isPlaying) {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                requestAnimationFrame(drawMetronome);
+                return;
+            }
+
+            let w = canvas.width / window.devicePixelRatio;
+            let h = canvas.height / window.devicePixelRatio;
+            ctx.clearRect(0, 0, w, h);
+
+            // Compute exact current location phase within a full 4-beat bar cycle
+            let totalBeatDuration = 60.0 / bpm;
+            let currentPlaybackTime = audioCtx.currentTime;
+            let timeInBar = ((currentPlaybackTime - nextBeatTime) + totalBeatDuration * currentBeatInBar) % (totalBeatDuration * 4);
+            if (timeInBar < 0) timeInBar += (totalBeatDuration * 4);
+            
+            let barProgress = timeInBar / (totalBeatDuration * 4); 
+            let posX = barProgress * w;
+
+            // Parabolic Formula for high-accuracy rhythmic arc transitions (y = H * 4 * p * (1 - p))
+            let beatProgress = (timeInBar / totalBeatDuration) % 1;
+            let posY = h - 15 - (h - 30) * (4 * beatProgress * (1 - beatProgress));
+
+            // Grid Reference Indicators
+            ctx.strokeStyle = "rgba(255,255,255,0.03)";
+            ctx.lineWidth = 1;
+            for(let i=1; i<4; i++) {
+                ctx.beginPath(); ctx.moveTo((w/4)*i, 0); ctx.lineTo((w/4)*i, h); ctx.stroke();
+            }
+
+            // Draw glowing orange ball
+            ctx.shadowBlur = 12;
+            ctx.shadowColor = "#FF5722";
+            ctx.fillStyle = "#FF5722";
+            ctx.beginPath();
+            ctx.arc(posX, posY, 7, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.shadowBlur = 0; // reset
+
+            requestAnimationFrame(drawMetronome);
+        }
+
+        // --- 5. INTERFACE UTILITIES & EVENT HANDLERS ---
+        function startTimer() {
+            totalSeconds = 0;
+            timerInterval = setInterval(() => {
+                totalSeconds++;
+                let mins = String(Math.floor(totalSeconds / 60)).padStart(2, '0');
+                let secs = String(totalSeconds % 60).padStart(2, '0');
+                timerDisplay.innerText = `${mins}:${secs}`;
+            }, 1000);
+        }
+
+        playBtn.addEventListener('click', () => {
+            initAudio();
+            if (isPlaying) {
+                // Halt Pipeline Execution
+                isPlaying = false;
+                clearTimeout(timerId);
+                clearInterval(timerInterval);
+                playBtn.innerHTML = `<svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg><span>DROP THE BEAT</span>`;
+                playBtn.className = "w-full py-3.5 bg-gradient-to-r from-neonPurple to-purple-700 text-white font-bold rounded-xl transition-all shadow-lg tracking-wider text-sm flex items-center justify-center space-x-2";
+                countInOverlay.classList.add('hidden');
+                document.querySelectorAll('[id^="beat-"]').forEach(el => el.classList.remove('bg-neonOrange/20', 'text-neonOrange', 'border-neonOrange/30'));
+            } else {
+                // Initialize Application Sequence
+                isPlaying = true;
+                currentBeatInBar = 0;
+                absoluteBarsCompleted = -2; 
+                nextBeatTime = audioCtx.currentTime + 0.05;
+                scheduler();
+                startTimer();
+                handleBarCycleUpdate();
+                playBtn.innerHTML = `<svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg><span>PAUSE SESSION</span>`;
+                playBtn.className = "w-full py-3.5 bg-gradient-to-r from-red-600 to-amber-700 text-white font-bold rounded-xl transition-all shadow-lg tracking-wider text-sm flex items-center justify-center space-x-2";
+            }
         });
 
-        let mm = gsap.matchMedia();
-
-        mm.add("(min-width: 769px)", () => {
-            const flipTl = gsap.timeline({
-                scrollTrigger: { trigger: ".services-wrapper", start: "top top", end: "bottom bottom", scrub: 1 }
-            });
-            flipTl.to(".services-header", { opacity: 1, y: 0, duration: 1 })
-                  .to(".card-container", { gap: "25px", duration: 2 })
-                  .to(".f-card", { rotateY: 180, stagger: 0.4, duration: 3 });
-                  
-            const cameraTl = gsap.timeline({
-                scrollTrigger: { trigger: ".hero-story", start: "top top", end: "bottom bottom", scrub: 1 }
-            });
-            cameraTl.to("#camera-flash", { opacity: 1, duration: 0.1 }).to("#camera-flash", { opacity: 0, duration: 0.3 })
-                    .to(".b-frame", { opacity: 1, scale: 1, stagger: 0.1, x: (i) => [-300, -100, 100, 300][i], y: (i) => [-200, -250, -250, -200][i], rotate: (i) => [-15, -5, 5, 15][i], duration: 2 }, 0.1);
+        bpmSlider.addEventListener('input', (e) => {
+            bpm = parseInt(e.target.value);
+            bpmVal.innerText = `${bpm} BPM`;
         });
 
-        mm.add("(max-width: 768px)", () => {
-            gsap.utils.toArray('.f-card').forEach(card => {
-                gsap.from(card, {
-                    scrollTrigger: { trigger: card, start: "top 80%", toggleActions: "play none none reverse" },
-                    opacity: 0, y: 50, duration: 1
-                });
-            });
+        schemeSelect.addEventListener('change', (e) => {
+            activeScheme = e.target.value;
+            document.getElementById('schemeBadge').innerText = `Scheme: ${activeScheme}`;
+            if (isPlaying) generateNewPhrases();
         });
+
+        // Microphone Mock Animation Event Toggle
+        const micBtn = document.getElementById('micBtn');
+        const micIcon = document.getElementById('micIcon');
+        const waveVisualizer = document.getElementById('waveVisualizer');
+        let micActive = false;
+
+        micBtn.addEventListener('click', () => {
+            micActive = !micActive;
+            if (micActive) {
+                micIcon.classList.add('hidden');
+                waveVisualizer.classList.remove('hidden');
+                waveVisualizer.classList.add('flex');
+                micBtn.classList.add('border-neonOrange/50', 'bg-neonOrange/10');
+            } else {
+                micIcon.classList.remove('hidden');
+                waveVisualizer.classList.add('hidden');
+                waveVisualizer.classList.remove('flex');
+                micBtn.classList.remove('border-neonOrange/50', 'bg-neonOrange/10');
+            }
+        });
+
+        // Fire-Up Animation Processing Core Frame Loops
+        requestAnimationFrame(drawMetronome);
     </script>
 </body>
 </html>
