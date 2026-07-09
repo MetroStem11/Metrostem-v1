@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hinglish Rhyme Game - Freestyle Studio</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Hinglish Rhyme Game - Fullscreen Studio</title>
     <!-- Tailwind CSS for Cyber Velvet Styling -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -23,125 +23,134 @@
     </script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&display=swap');
-        body { font-family: 'Space Grotesk', sans-serif; background-color: #0C091A; }
+        body { 
+            font-family: 'Space Grotesk', sans-serif; 
+            background-color: #0C091A;
+            -webkit-tap-highlight-color: transparent;
+        }
     </style>
 </head>
-<body class="text-white min-h-screen flex flex-col items-center justify-center p-4">
+<body class="text-white min-h-screen flex flex-col justify-between selection:bg-neonPurple/30">
 
-    <!-- Main Container -->
-    <div class="w-full max-w-md bg-panelDark rounded-3xl border border-neonPurple/20 shadow-2xl shadow-neonPurple/10 overflow-hidden flex flex-col h-[92vh]">
-        
-        <!-- Header / Status Bar -->
-        <div class="p-5 border-b border-white/5 bg-black/20 flex justify-between items-center">
-            <div>
-                <h1 class="text-xl font-bold tracking-wider text-electricCyan">HINGLISH RHYME</h1>
-                <p class="text-xs text-white/40 tracking-widest uppercase">Freestyle Practice Loop</p>
-            </div>
-            <div class="text-right">
-                <span id="timerDisplay" class="text-sm font-mono text-neonPurple font-bold">00:00</span>
-                <p id="barCounter" class="text-xs text-neonOrange font-bold">Bar: 0/0</p>
-            </div>
+    <!-- Top Dashboard: Dynamic Status Panel -->
+    <div class="w-full bg-panelDark/80 backdrop-blur-md sticky top-0 z-30 border-b border-white/5 px-5 py-4 flex justify-between items-center shadow-xl">
+        <div>
+            <h1 class="text-xl font-bold tracking-wider text-electricCyan">HINGLISH RHYME</h1>
+            <p class="text-[10px] text-white/40 tracking-widest uppercase">Freestyle Practice Loop</p>
         </div>
-
-        <!-- Interactive Visual Metronome -->
-        <div class="relative bg-black/40 p-4 border-b border-white/5">
-            <div class="grid grid-cols-4 gap-2 text-center text-xs font-mono text-white/20 mb-2">
-                <div id="beat-1" class="py-1 rounded bg-white/5 border border-white/5">BEAT 1</div>
-                <div id="beat-2" class="py-1 rounded bg-white/5 border border-white/5">BEAT 2</div>
-                <div id="beat-3" class="py-1 rounded bg-white/5 border border-white/5">BEAT 3</div>
-                <div id="beat-4" class="py-1 rounded bg-white/5 border border-white/5">BEAT 4</div>
-            </div>
-            <!-- High-Performance Canvas for Parabolic Metronome Ball -->
-            <canvas id="metronomeCanvas" class="w-full h-16 rounded-xl bg-studioDark/80 border border-white/5"></canvas>
-            
-            <!-- Count-In Overlay -->
-            <div id="countInOverlay" class="absolute inset-0 bg-studioDark/95 flex flex-col items-center justify-center hidden rounded-xl mx-4 my-4 border border-neonOrange/30">
-                <span class="text-xs text-neonOrange tracking-widest font-bold uppercase animate-pulse">Pre-Roll Count-In</span>
-                <span id="countInText" class="text-xl font-black text-white">READY...</span>
-            </div>
-        </div>
-
-        <!-- Scrollable Rhyme Targets Panel -->
-        <div class="flex-1 p-5 overflow-y-auto space-y-3 flex flex-col justify-center">
-            <div class="flex justify-between items-center mb-1">
-                <span class="text-xs text-white/60 tracking-wider uppercase font-semibold">Rhyme Target Sounds</span>
-                <span id="schemeBadge" class="text-[10px] bg-neonPurple/20 border border-neonPurple/50 text-electricCyan px-2 py-0.5 rounded-full font-mono uppercase">Scheme: AAAA</span>
-            </div>
-
-            <!-- Target Cards -->
-            <div id="cardsContainer" class="space-y-2.5">
-                <!-- Dynamic cards will render here -->
-                <div class="p-4 rounded-xl bg-studioDark border border-white/5 flex justify-between items-center opacity-40">
-                    <span class="text-lg font-bold tracking-wide text-white/50">Start loop to load targets</span>
-                </div>
-            </div>
-        </div>
-
-        <!-- Studio Controls & Configuration Dashboard -->
-        <div class="p-5 bg-black/30 border-t border-white/5 space-y-4">
-            <!-- Audio Engine & Setup Controls -->
-            <div class="grid grid-cols-2 gap-3">
-                <div>
-                    <label class="text-[10px] uppercase tracking-wider text-white/40 block mb-1">Audio Beat Model</label>
-                    <select id="beatSelect" class="w-full bg-studioDark border border-white/10 rounded-xl px-3 py-2 text-xs font-medium focus:outline-none focus:border-electricCyan">
-                        <option value="click">Metronome Click</option>
-                        <option value="boombap" selected>Boom-Bap Loop</option>
-                        <option value="trap">Trap Beat Subdivisions</option>
-                    </select>
-                </div>
-                <div>
-                    <label class="text-[10px] uppercase tracking-wider text-white/40 block mb-1">Rhyme Scheme</label>
-                    <select id="schemeSelect" class="w-full bg-studioDark border border-white/10 rounded-xl px-3 py-2 text-xs font-medium focus:outline-none focus:border-electricCyan">
-                        <option value="AAAA">AAAA (1 Sound Group)</option>
-                        <option value="AABB">AABB (2 Sound Groups)</option>
-                    </select>
-                </div>
-            </div>
-
-            <!-- BPM Sliders & Waveform Space -->
-            <div class="flex items-center space-x-4 bg-studioDark/50 p-3 rounded-xl border border-white/5">
-                <div class="flex-1">
-                    <div class="flex justify-between text-xs font-mono text-white/40 mb-1">
-                        <span>Tempo Engine</span>
-                        <span id="bpmVal" class="text-electricCyan font-bold">90 BPM</span>
-                    </div>
-                    <input id="bpmSlider" type="range" min="60" max="180" value="90" class="w-full h-1 bg-white/10 rounded-lg appearance-none cursor-pointer accent-electricCyan">
-                </div>
-                
-                <!-- Freestyle Voice Recorder Visualizer Indicator -->
-                <button id="micBtn" class="p-3 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl transition-all group flex items-center justify-center">
-                    <svg id="micIcon" class="w-5 h-5 text-white/60 group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"></path>
-                    </svg>
-                    <!-- Simulated mic audio waves container -->
-                    <div id="waveVisualizer" class="hidden h-5 items-center space-x-0.5 px-0.5">
-                        <span class="w-0.5 h-3 bg-neonOrange rounded animate-bounce"></span>
-                        <span class="w-0.5 h-5 bg-neonOrange rounded animate-bounce [animation-delay:0.15s]"></span>
-                        <span class="w-0.5 h-2 bg-neonOrange rounded animate-bounce [animation-delay:0.3s]"></span>
-                    </div>
-                </button>
-            </div>
-
-            <!-- Primary Master Control Button -->
-            <button id="playBtn" class="w-full py-3.5 bg-gradient-to-r from-neonPurple to-purple-700 hover:from-purple-600 hover:to-purple-800 text-white font-bold rounded-xl transition-all shadow-lg shadow-neonPurple/20 tracking-wider text-sm flex items-center justify-center space-x-2">
-                <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-                <span>DROP THE BEAT</span>
-            </button>
+        <div class="text-right">
+            <span id="timerDisplay" class="text-base font-mono text-neonPurple font-bold">00:00</span>
+            <p id="barCounter" class="text-xs text-neonOrange font-bold">Bar: 0/0</p>
         </div>
     </div>
 
-    <!-- Script Application Logic -->
+    <!-- Scrolling Core Interaction Workspace -->
+    <div class="w-full flex-1 overflow-y-auto px-4 py-5 space-y-6 pb-48">
+        
+        <!-- Interactive Visual Metronome Layer -->
+        <div class="relative bg-panelDark rounded-2xl p-4 border border-white/5 shadow-inner">
+            <div class="grid grid-cols-4 gap-2 text-center text-[10px] font-mono text-white/20 mb-3">
+                <div id="beat-1" class="py-1 rounded bg-black/20 border border-white/5 transition-all">BEAT 1</div>
+                <div id="beat-2" class="py-1 rounded bg-black/20 border border-white/5 transition-all">BEAT 2</div>
+                <div id="beat-3" class="py-1 rounded bg-black/20 border border-white/5 transition-all">BEAT 3</div>
+                <div id="beat-4" class="py-1 rounded bg-black/20 border border-white/5 transition-all">BEAT 4</div>
+            </div>
+            
+            <!-- High-Performance Canvas for Parabolic Metronome Ball -->
+            <canvas id="metronomeCanvas" class="w-full h-20 rounded-xl bg-studioDark border border-white/5"></canvas>
+            
+            <!-- Count-In Overlay -->
+            <div id="countInOverlay" class="absolute inset-0 bg-studioDark/95 flex flex-col items-center justify-center hidden rounded-2xl border border-neonOrange/30">
+                <span class="text-xs text-neonOrange tracking-widest font-bold uppercase animate-pulse">Pre-Roll Count-In</span>
+                <span id="countInText" class="text-xl font-black text-white mt-1">READY...</span>
+            </div>
+        </div>
+
+        <!-- Target Rhyme Cards Segment -->
+        <div class="space-y-3">
+            <div class="flex justify-between items-center px-1">
+                <span class="text-xs text-white/50 tracking-wider uppercase font-semibold">Rhyme Target Sounds</span>
+                <span id="schemeBadge" class="text-[10px] bg-neonPurple/20 border border-neonPurple/40 text-electricCyan px-2 py-0.5 rounded-full font-mono uppercase">Scheme: AAAA</span>
+            </div>
+
+            <!-- Main Render Area for Dynamic Flashcards -->
+            <div id="cardsContainer" class="space-y-3">
+                <div class="p-5 rounded-2xl bg-panelDark border border-white/5 text-center py-12 transition-all">
+                    <p class="text-sm font-medium text-white/40">Tap "DROP THE BEAT" below to load active rhymes</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sticky Bottom Studio Control Dock -->
+    <div class="w-full fixed bottom-0 left-0 right-0 bg-panelDark/90 backdrop-blur-lg border-t border-white/10 p-5 pb-6 space-y-4 shadow-2xl z-40">
+        
+        <!-- Dropdown Selections Grid -->
+        <div class="grid grid-cols-2 gap-3">
+            <div>
+                <label class="text-[10px] uppercase tracking-wider text-white/40 block mb-1.5 font-semibold">Audio Beat Engine</label>
+                <select id="beatSelect" class="w-full bg-studioDark border border-white/10 rounded-xl px-3 py-3 text-xs font-medium text-white focus:outline-none focus:border-electricCyan appearance-none">
+                    <option value="click">1. Metronome Click</option>
+                    <option value="boombap" selected>2. Classic Boom-Bap</option>
+                    <option value="trap">3. Hyper-Trap Subdivision</option>
+                    <option value="lofi">4. Chill Lo-Fi Lounge</option>
+                    <option value="gfunk">5. West Coast G-Funk</option>
+                    <option value="drill">6. UK Drill Syncopation</option>
+                    <option value="electro">7. Old School 808 Breaks</option>
+                    <option value="reggaeton">8. Dembow Riddim Flow</option>
+                </select>
+            </div>
+            <div>
+                <label class="text-[10px] uppercase tracking-wider text-white/40 block mb-1.5 font-semibold">Rhyme Scheme Configuration</label>
+                <select id="schemeSelect" class="w-full bg-studioDark border border-white/10 rounded-xl px-3 py-3 text-xs font-medium text-white focus:outline-none focus:border-electricCyan appearance-none">
+                    <option value="AAAA">AAAA Pattern (1 Group)</option>
+                    <option value="AABB">AABB Split (2 Groups)</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- BPM Slider Panel -->
+        <div class="flex items-center space-x-4 bg-studioDark border border-white/5 p-3 rounded-xl">
+            <div class="flex-1">
+                <div class="flex justify-between text-[11px] font-mono text-white/40 mb-1">
+                    <span>Tempo Controller</span>
+                    <span id="bpmVal" class="text-electricCyan font-bold">90 BPM</span>
+                </div>
+                <input id="bpmSlider" type="range" min="60" max="180" value="90" class="w-full h-1 bg-white/10 rounded-lg appearance-none cursor-pointer accent-electricCyan">
+            </div>
+            
+            <!-- Mic Waveform Action Visualizer Button -->
+            <button id="micBtn" class="p-3 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl transition-all flex items-center justify-center">
+                <svg id="micIcon" class="w-5 h-5 text-white/60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"></path>
+                </svg>
+                <div id="waveVisualizer" class="hidden h-5 items-center space-x-0.5 px-0.5">
+                    <span class="w-0.5 h-3 bg-neonOrange rounded animate-bounce"></span>
+                    <span class="w-0.5 h-5 bg-neonOrange rounded animate-bounce [animation-delay:0.15s]"></span>
+                    <span class="w-0.5 h-2 bg-neonOrange rounded animate-bounce [animation-delay:0.3s]"></span>
+                </div>
+            </button>
+        </div>
+
+        <!-- Primary Master Control Launcher Button -->
+        <button id="playBtn" class="w-full py-4 bg-gradient-to-r from-neonPurple to-purple-700 active:scale-[0.99] text-white font-bold rounded-xl transition-all shadow-lg shadow-neonPurple/20 tracking-wider text-sm flex items-center justify-center space-x-2">
+            <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+            <span>DROP THE BEAT</span>
+        </button>
+    </div>
+
+    <!-- Web Core Architecture Logic -->
     <script>
-        // --- 1. HINGLISH RHYME TARGET DATABASE ---
+        // --- 1. CONFIGURABLE HINGLISH BASELINE DICTIONARIES ---
         const RhymeDatabase = [
             { id: 1, sound: "-aal / -all", words: ["Bawaal", "Raftaar", "Call", "Dhamaal", "Fall", "Jaal", "Hall", "Misaal"] },
             { id: 2, sound: "-een / -ene", words: ["Zameen", "Kamine", "Scene", "Machine", "Glowin'", "Shine", "Sangeen", "Clean"] },
             { id: 3, sound: "-ill / -il", words: ["Dil", "Chill", "Mushkil", "Bill", "Kill", "Mil", "Skill", "Fill"] },
             { id: 4, sound: "-aar / -ar", words: ["Yaar", "Pyaar", "Car", "Ithefaaq", "Bar", "Bazaar", "Star", "Intezaar"] },
-            { id: 5, sound: "-or / -aur",နှစ်ခုလုံး: ["Aur", "Chor", "Door", "More", "Floor", "Shor", "Store", "Zor"] }
+            { id: 5, sound: "-or / -aur", words: ["Aur", "Chor", "Door", "More", "Floor", "Shor", "Store", "Zor"] }
         ];
 
-        // --- 2. AUDIO SYNTH ENGINE (Low-Latency Web Audio API) ---
+        // --- 2. ADVANCED PROCEDURAL 8-BEAT AUDIO ENGINE (Web Audio API) ---
         let audioCtx = null;
         let nextBeatTime = 0.0;
         let currentBeatInBar = 0; 
@@ -151,86 +160,112 @@
         let timerId = null;
 
         function initAudio() {
-            if (!audioCtx) {
-                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            }
+            if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         }
 
-        function playNoiseSnare(time) {
-            let bufferSize = audioCtx.sampleRate * 0.15;
+        function createNoiseBuffer(duration = 0.15) {
+            let bufferSize = audioCtx.sampleRate * duration;
             let buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
             let data = buffer.getChannelData(0);
-            for (let i = 0; i < bufferSize; i++) { data[i] = Math.random() * 2 - 1; }
+            for (let i = 0; i < bufferSize; i++) data[i] = Math.random() * 2 - 1;
+            return buffer;
+        }
 
-            let noise = audioCtx.createBufferSource();
-            noise.buffer = buffer;
-
-            let filter = audioCtx.createBiquadFilter();
-            filter.type = 'bandpass';
-            filter.frequency.value = 1200;
-
+        // Procedural Audio Components (Synthesized Real-Time Components)
+        function synthKick(time, freq = 120, decay = 0.15, gainVal = 0.5) {
+            let osc = audioCtx.createOscillator();
             let gain = audioCtx.createGain();
-            gain.gain.setValueAtTime(0.3, time);
-            gain.gain.exponentialRampToValueAtTime(0.01, time + 0.12);
+            osc.connect(gain); gain.connect(audioCtx.destination);
+            osc.frequency.setValueAtTime(freq, time);
+            osc.frequency.exponentialRampToValueAtTime(0.01, time + decay);
+            gain.gain.setValueAtTime(gainVal, time);
+            gain.gain.exponentialRampToValueAtTime(0.01, time + decay);
+            osc.start(time); osc.stop(time + decay);
+        }
 
-            noise.connect(filter);
-            filter.connect(gain);
-            gain.connect(audioCtx.destination);
+        function synthSnare(time, freq = 1000, decay = 0.12, gainVal = 0.25) {
+            let noise = audioCtx.createBufferSource();
+            noise.buffer = createNoiseBuffer(decay);
+            let filter = audioCtx.createBiquadFilter();
+            filter.type = 'bandpass'; filter.frequency.value = freq;
+            let gain = audioCtx.createGain();
+            noise.connect(filter); filter.connect(gain); gain.connect(audioCtx.destination);
+            gain.gain.setValueAtTime(gainVal, time);
+            gain.gain.exponentialRampToValueAtTime(0.01, time + decay);
             noise.start(time);
         }
 
-        function playSynthKick(time, isAccent = false) {
+        function synthHat(time, freq = 8000, decay = 0.03, gainVal = 0.15) {
             let osc = audioCtx.createOscillator();
             let gain = audioCtx.createGain();
-            osc.connect(gain);
-            gain.connect(audioCtx.destination);
-
-            osc.frequency.setValueAtTime(isAccent ? 160 : 110, time);
-            osc.frequency.exponentialRampToValueAtTime(0.01, time + 0.12);
-
-            gain.gain.setValueAtTime(isAccent ? 0.6 : 0.4, time);
-            gain.gain.exponentialRampToValueAtTime(0.01, time + 0.12);
-
-            osc.start(time);
-            osc.stop(time + 0.15);
+            osc.type = 'triangle'; osc.connect(gain); gain.connect(audioCtx.destination);
+            osc.frequency.setValueAtTime(freq, time);
+            gain.gain.setValueAtTime(gainVal, time);
+            gain.gain.exponentialRampToValueAtTime(0.001, time + decay);
+            osc.start(time); osc.stop(time + decay);
         }
 
-        function playTick(time, pitch) {
-            let osc = audioCtx.createOscillator();
-            let gain = audioCtx.createGain();
-            osc.connect(gain);
-            gain.connect(audioCtx.destination);
-            osc.frequency.setValueAtTime(pitch, time);
-            gain.gain.setValueAtTime(0.2, time);
-            gain.gain.exponentialRampToValueAtTime(0.001, time + 0.05);
-            osc.start(time);
-            osc.stop(time + 0.06);
-        }
+        // Engine Routing Configuration: Maps the Selected Dropdown Value to 8 Unique Loop Frameworks
+        function processEngineBeats(beatNumber, time, engineType) {
+            let secondsPerBeat = 60.0 / bpm;
+            let sub = secondsPerBeat / 2;
 
-        function playProceduralSound(beatNumber, time, engineType) {
-            if (engineType === 'click') {
-                playTick(time, beatNumber === 0 ? 1000 : 600);
-            } else if (engineType === 'boombap') {
-                if (beatNumber === 0 || beatNumber === 2) playSynthKick(time, beatNumber === 0);
-                if (beatNumber === 1 || beatNumber === 3) playNoiseSnare(time);
-            } else if (engineType === 'trap') {
-                if (beatNumber === 0) playSynthKick(time, true);
-                if (beatNumber === 2) playNoiseSnare(time);
-                // Subdivisions (Hi-hats pattern simulated)
-                playTick(time, 1500);
-                playTick(time + (60.0 / bpm) / 2, 1800);
+            switch (engineType) {
+                case 'click': // 1. Metronome Click
+                    synthKick(time, beatNumber === 0 ? 1200 : 700, 0.04, 0.2);
+                    break;
+                case 'boombap': // 2. Classic Boom-Bap
+                    if (beatNumber === 0) { synthKick(time, 100, 0.2, 0.6); }
+                    if (beatNumber === 1.5) { synthKick(time, 95, 0.12, 0.4); }
+                    if (beatNumber === 1 || beatNumber === 3) { synthSnare(time, 1100, 0.15, 0.35); }
+                    synthHat(time, 9000, 0.04, 0.08);
+                    break;
+                case 'trap': // 3. Hyper-Trap Subdivisions
+                    if (beatNumber === 0) synthKick(time, 65, 0.25, 0.7);
+                    if (beatNumber === 2) synthSnare(time, 1500, 0.12, 0.4);
+                    // Double-time Hi-Hats Pattern
+                    synthHat(time, 11000, 0.03, 0.12);
+                    synthHat(time + sub, 12000, 0.02, 0.1);
+                    break;
+                case 'lofi': // 4. Chill Lo-Fi Lounge
+                    if (beatNumber === 0 || beatNumber === 2.5) synthKick(time, 80, 0.14, 0.4);
+                    if (beatNumber === 1 || beatNumber === 3) synthSnare(time, 600, 0.2, 0.18); // Low pass filtered vibe snare
+                    if (beatNumber % 1 === 0) synthHat(time, 5000, 0.06, 0.04);
+                    break;
+                case 'gfunk': // 5. West Coast G-Funk
+                    if (beatNumber === 0 || beatNumber === 0.5 || beatNumber === 2) synthKick(time, 110, 0.15, 0.5);
+                    if (beatNumber === 1 || beatNumber === 3) synthSnare(time, 2200, 0.08, 0.4); // Hard Clap Emulation
+                    if (beatNumber % 0.5 === 0) synthHat(time, 9500, 0.03, 0.08);
+                    break;
+                case 'drill': // 6. UK Drill Syncopation
+                    if (beatNumber === 0) synthKick(time, 55, 0.3, 0.7);
+                    if (beatNumber === 1.5) synthKick(time + sub/2, 58, 0.2, 0.5); // Staggered 808 slides slide
+                    if (beatNumber === 2) synthSnare(time, 1400, 0.14, 0.45);
+                    // Skipping typical rhythmic intervals for Drill triplet hat patterns
+                    if (beatNumber !== 1 && beatNumber !== 3) synthHat(time, 13000, 0.02, 0.12);
+                    break;
+                case 'electro': // 7. Old School 808 Breaks
+                    if (beatNumber === 0 || beatNumber === 0.75 || beatNumber === 2) synthKick(time, 130, 0.12, 0.6);
+                    if (beatNumber === 1 || beatNumber === 3) synthSnare(time, 1800, 0.1, 0.35);
+                    synthHat(time, 8000, 0.05, 0.1);
+                    break;
+                case 'reggaeton': // 8. Dembow Riddim Flow
+                    if (beatNumber === 0 || beatNumber === 2) synthKick(time, 90, 0.18, 0.6);
+                    if (beatNumber === 0.75 || beatNumber === 1.5 || beatNumber === 2.75) synthSnare(time, 900, 0.12, 0.3); // Syncopated Riddim Snares
+                    synthHat(time, 10000, 0.03, 0.06);
+                    break;
             }
         }
 
-        // --- 3. STATE MANAGEMENT ENGINE ---
+        // --- 3. STATE CONTROLLER STORAGE SECTIONS ---
         let isPlaying = false;
         let totalSeconds = 0;
-        let absoluteBarsCompleted = -2; // Start from pre-roll countdown bars
+        let absoluteBarsCompleted = -2; 
         let activeScheme = "AAAA";
         let currentTargetWords = [];
         let timerInterval = null;
 
-        // Core Dom References
+        // Core UI References Objects
         const playBtn = document.getElementById('playBtn');
         const bpmSlider = document.getElementById('bpmSlider');
         const bpmVal = document.getElementById('bpmVal');
@@ -244,10 +279,9 @@
         const canvas = document.getElementById('metronomeCanvas');
         const ctx = canvas.getContext('2d');
 
-        // Dynamic Resizing of Canvas Context
         function resizeCanvas() {
             canvas.width = canvas.parentElement.clientWidth * window.devicePixelRatio;
-            canvas.height = 64 * window.devicePixelRatio;
+            canvas.height = 80 * window.devicePixelRatio;
             ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
         }
         window.addEventListener('resize', resizeCanvas);
@@ -273,13 +307,12 @@
         }
 
         function scheduleBeat(beatNumber, time) {
-            playProceduralSound(beatNumber, time, beatSelect.value);
-            // Dynamic UI highlights corresponding to the beat array
+            processEngineBeats(beatNumber, time, beatSelect.value);
             audioCtx.resume();
             setTimeout(() => {
-                document.querySelectorAll('[id^="beat-"]').forEach(el => el.classList.remove('bg-neonOrange/20', 'text-neonOrange', 'border-neonOrange/30'));
+                document.querySelectorAll('[id^="beat-"]').forEach(el => el.className = 'py-1 rounded bg-black/20 border border-white/5 text-white/20');
                 const activeIndicator = document.getElementById(`beat-${beatNumber + 1}`);
-                if (activeIndicator) activeIndicator.classList.add('bg-neonOrange/20', 'text-neonOrange', 'border-neonOrange/30');
+                if (activeIndicator) activeIndicator.className = 'py-1 rounded bg-neonOrange/20 text-neonOrange border border-neonOrange/40 font-bold';
             }, (time - audioCtx.currentTime) * 1000);
         }
 
@@ -292,8 +325,6 @@
                 } else {
                     countInOverlay.classList.add('hidden');
                     barCounter.innerText = `Bars Run: ${absoluteBarsCompleted}`;
-                    
-                    // Trigger word updates every 4 phrases or on startup
                     if (absoluteBarsCompleted % 4 === 0 || currentTargetWords.length === 0) {
                         generateNewPhrases();
                     }
@@ -308,7 +339,7 @@
             
             if (activeScheme === "AAAA") {
                 currentTargetWords = shuff.slice(0, 4).map(w => ({ word: w, meta: selectedGroup.sound }));
-            } else { // AABB Multi Group Combo
+            } else { 
                 let altGroup = RhymeDatabase.find(g => g.id !== selectedGroup.id) || selectedGroup;
                 let altShuff = [...altGroup.words].sort(() => 0.5 - Math.random());
                 currentTargetWords = [
@@ -322,16 +353,15 @@
 
         function renderWordCards() {
             if (absoluteBarsCompleted < 0) return;
-            // Highlighting based on current active track bar in phrasing loop 
             let activeCardIndex = absoluteBarsCompleted % 4; 
             
             cardsContainer.innerHTML = currentTargetWords.map((item, idx) => {
                 let isActive = idx === activeCardIndex;
                 return `
-                    <div class="p-4 rounded-xl transition-all duration-300 flex justify-between items-center ${isActive ? 'bg-gradient-to-r from-neonPurple/30 to-studioDark border-2 border-electricCyan shadow-lg shadow-electricCyan/5 scale-[1.02]' : 'bg-studioDark/60 border border-white/5 opacity-60'}">
+                    <div class="p-5 rounded-2xl transition-all duration-300 flex justify-between items-center ${isActive ? 'bg-gradient-to-r from-neonPurple/20 to-panelDark border-2 border-electricCyan shadow-xl shadow-electricCyan/5 scale-[1.01]' : 'bg-panelDark border border-white/5 opacity-40'}">
                         <div>
-                            <span class="text-xs font-mono block ${isActive ? 'text-electricCyan' : 'text-white/40'}">Target ${idx + 1}</span>
-                            <span class="text-xl font-bold tracking-wide">${item.word}</span>
+                            <span class="text-[10px] font-mono block ${isActive ? 'text-electricCyan' : 'text-white/30'}">Target Track ${idx + 1}</span>
+                            <span class="text-lg font-bold tracking-wide">${item.word}</span>
                         </div>
                         <span class="text-xs font-mono uppercase tracking-widest text-white/30">${item.meta}</span>
                     </div>
@@ -339,7 +369,7 @@
             }).join('');
         }
 
-        // --- 4. RENDER PHYSICS VISUALIZER LOOP ---
+        // --- 4. RENDER PHYSICS PARABOLIC METRONOME LOOP ---
         function drawMetronome() {
             if (!isPlaying) {
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -351,7 +381,6 @@
             let h = canvas.height / window.devicePixelRatio;
             ctx.clearRect(0, 0, w, h);
 
-            // Compute exact current location phase within a full 4-beat bar cycle
             let totalBeatDuration = 60.0 / bpm;
             let currentPlaybackTime = audioCtx.currentTime;
             let timeInBar = ((currentPlaybackTime - nextBeatTime) + totalBeatDuration * currentBeatInBar) % (totalBeatDuration * 4);
@@ -360,30 +389,26 @@
             let barProgress = timeInBar / (totalBeatDuration * 4); 
             let posX = barProgress * w;
 
-            // Parabolic Formula for high-accuracy rhythmic arc transitions (y = H * 4 * p * (1 - p))
             let beatProgress = (timeInBar / totalBeatDuration) % 1;
-            let posY = h - 15 - (h - 30) * (4 * beatProgress * (1 - beatProgress));
+            let posY = h - 20 - (h - 40) * (4 * beatProgress * (1 - beatProgress));
 
-            // Grid Reference Indicators
-            ctx.strokeStyle = "rgba(255,255,255,0.03)";
+            // Grid Layout References Splits
+            ctx.strokeStyle = "rgba(255,255,255,0.02)";
             ctx.lineWidth = 1;
             for(let i=1; i<4; i++) {
                 ctx.beginPath(); ctx.moveTo((w/4)*i, 0); ctx.lineTo((w/4)*i, h); ctx.stroke();
             }
 
-            // Draw glowing orange ball
-            ctx.shadowBlur = 12;
-            ctx.shadowColor = "#FF5722";
+            // Draw Parabolic Glowing Ball Tracking Head
+            ctx.shadowBlur = 16; ctx.shadowColor = "#FF5722";
             ctx.fillStyle = "#FF5722";
-            ctx.beginPath();
-            ctx.arc(posX, posY, 7, 0, Math.PI * 2);
-            ctx.fill();
-            ctx.shadowBlur = 0; // reset
+            ctx.beginPath(); ctx.arc(posX, posY, 8, 0, Math.PI * 2); ctx.fill();
+            ctx.shadowBlur = 0; 
 
             requestAnimationFrame(drawMetronome);
         }
 
-        // --- 5. INTERFACE UTILITIES & EVENT HANDLERS ---
+        // --- 5. APP UTILITIES CONTROL BINDINGS ---
         function startTimer() {
             totalSeconds = 0;
             timerInterval = setInterval(() => {
@@ -397,16 +422,14 @@
         playBtn.addEventListener('click', () => {
             initAudio();
             if (isPlaying) {
-                // Halt Pipeline Execution
                 isPlaying = false;
                 clearTimeout(timerId);
                 clearInterval(timerInterval);
                 playBtn.innerHTML = `<svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg><span>DROP THE BEAT</span>`;
-                playBtn.className = "w-full py-3.5 bg-gradient-to-r from-neonPurple to-purple-700 text-white font-bold rounded-xl transition-all shadow-lg tracking-wider text-sm flex items-center justify-center space-x-2";
+                playBtn.className = "w-full py-4 bg-gradient-to-r from-neonPurple to-purple-700 text-white font-bold rounded-xl transition-all shadow-lg tracking-wider text-sm flex items-center justify-center space-x-2";
                 countInOverlay.classList.add('hidden');
-                document.querySelectorAll('[id^="beat-"]').forEach(el => el.classList.remove('bg-neonOrange/20', 'text-neonOrange', 'border-neonOrange/30'));
+                document.querySelectorAll('[id^="beat-"]').forEach(el => el.className = 'py-1 rounded bg-black/20 border border-white/5 text-white/20');
             } else {
-                // Initialize Application Sequence
                 isPlaying = true;
                 currentBeatInBar = 0;
                 absoluteBarsCompleted = -2; 
@@ -415,7 +438,7 @@
                 startTimer();
                 handleBarCycleUpdate();
                 playBtn.innerHTML = `<svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg><span>PAUSE SESSION</span>`;
-                playBtn.className = "w-full py-3.5 bg-gradient-to-r from-red-600 to-amber-700 text-white font-bold rounded-xl transition-all shadow-lg tracking-wider text-sm flex items-center justify-center space-x-2";
+                playBtn.className = "w-full py-4 bg-gradient-to-r from-red-600 to-amber-700 text-white font-bold rounded-xl transition-all shadow-lg tracking-wider text-sm flex items-center justify-center space-x-2";
             }
         });
 
@@ -430,7 +453,7 @@
             if (isPlaying) generateNewPhrases();
         });
 
-        // Microphone Mock Animation Event Toggle
+        // Microphone Visualizer Toggling Action Trigger
         const micBtn = document.getElementById('micBtn');
         const micIcon = document.getElementById('micIcon');
         const waveVisualizer = document.getElementById('waveVisualizer');
@@ -440,18 +463,16 @@
             micActive = !micActive;
             if (micActive) {
                 micIcon.classList.add('hidden');
-                waveVisualizer.classList.remove('hidden');
-                waveVisualizer.classList.add('flex');
-                micBtn.classList.add('border-neonOrange/50', 'bg-neonOrange/10');
+                waveVisualizer.className = 'flex h-5 items-center space-x-0.5 px-0.5';
+                micBtn.classList.add('border-neonOrange/40', 'bg-neonOrange/10');
             } else {
                 micIcon.classList.remove('hidden');
-                waveVisualizer.classList.add('hidden');
-                waveVisualizer.classList.remove('flex');
-                micBtn.classList.remove('border-neonOrange/50', 'bg-neonOrange/10');
+                waveVisualizer.className = 'hidden h-5 items-center space-x-0.5 px-0.5';
+                micBtn.classList.remove('border-neonOrange/40', 'bg-neonOrange/10');
             }
         });
 
-        // Fire-Up Animation Processing Core Frame Loops
+        // Fire-Up Animation Layout Frames loops execution
         requestAnimationFrame(drawMetronome);
     </script>
 </body>
