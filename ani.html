@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dr. Sherin's Advanced Skin & Aesthetics Clinic | Bramhapuri</title>
+    <title>Dr. Sherin's Advanced Skin & Hair Clinic | Bramhapuri</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- FontAwesome Icons -->
@@ -25,8 +25,7 @@
                             light: '#1B6B53',
                             pale: '#EAF4F1',
                         },
-                        softNeutral: '#FBF9F6',
-                        warmGray: '#7E8184'
+                        softNeutral: '#FBF9F6'
                     },
                     fontFamily: {
                         serif: ['"Playfair Display"', 'serif'],
@@ -42,7 +41,6 @@
             background-image: radial-gradient(#C5A059 0.75px, transparent 0.75px), radial-gradient(#C5A059 0.75px, #FBF9F6 0.75px);
             background-size: 30px 30px;
             background-position: 0 0, 15px 15px;
-            background-opacity: 0.1;
         }
         .glass-card {
             background: rgba(255, 255, 255, 0.9);
@@ -54,13 +52,13 @@
 <body class="font-sans text-gray-800 bg-softNeutral antialiased selection:bg-roseGold selection:text-white">
 
     <!-- Top Announcement Bar -->
-    <div class="bg-clinicGreen text-white text-xs sm:text-sm py-2 px-4 text-center font-medium tracking-wide">
-        <span class="inline-block bg-roseGold text-white px-2 py-0.5 rounded text-xs font-bold mr-2 uppercase tracking-wider">Bramhapuri Special</span>
-        Sunday Consultation: <span class="font-bold underline">10:00 AM – 1:00 PM</span> &amp; <span class="font-bold underline">6:00 PM – 8:00 PM</span> (Opp. Hutatma Smarak)
+    <div class="bg-clinicGreen text-white text-xs sm:text-sm py-2.5 px-4 text-center font-medium tracking-wide shadow-sm">
+        <span class="inline-block bg-roseGold text-white px-2 py-0.5 rounded text-xs font-bold mr-2 uppercase tracking-wider">Sunday Clinic</span>
+        Bramhapuri Consultation: <span class="font-bold underline">10:00 AM – 1:00 PM</span> &amp; <span class="font-bold underline">6:00 PM – 8:00 PM</span> (Opp. Hutatma Smarak)
     </div>
 
     <!-- Navigation Header -->
-    <header class="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-gray-100 shadow-sm transition-all duration-300">
+    <header class="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-gray-100 shadow-sm">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
             <!-- Brand Logo -->
             <a href="#" class="flex items-center gap-3 group">
@@ -69,7 +67,7 @@
                 </div>
                 <div>
                     <span class="font-serif text-xl sm:text-2xl font-bold text-clinicGreen tracking-tight block">Dr. Sherin's</span>
-                    <span class="text-xs uppercase tracking-widest text-roseGold font-semibold block">Skin &amp; Aesthetics Clinic</span>
+                    <span class="text-xs uppercase tracking-widest text-roseGold font-semibold block">Skin &amp; Hair Clinic</span>
                 </div>
             </a>
 
@@ -78,23 +76,22 @@
                 <a href="#about" class="hover:text-clinicGreen transition-colors">About Doctor</a>
                 <a href="#schedule" class="hover:text-clinicGreen transition-colors">Schedule &amp; Cities</a>
                 <a href="#services" class="hover:text-clinicGreen transition-colors">Treatments</a>
-                <a href="#location" class="hover:text-clinicGreen transition-colors">Bramhapuri Location</a>
+                <a href="#testimonials" class="hover:text-clinicGreen transition-colors">Testimonials</a>
+                <a href="#location" class="hover:text-clinicGreen transition-colors">Location</a>
             </nav>
 
-            <!-- Action Buttons -->
+            <!-- Header Contact Actions -->
             <div class="hidden sm:flex items-center gap-4">
-                <a href="tel:+919876543210" class="flex items-center gap-2 text-clinicGreen font-semibold text-sm hover:text-roseGold transition-colors">
-                    <div class="w-9 h-9 rounded-full bg-clinicGreen/10 flex items-center justify-center text-clinicGreen">
-                        <i class="fa-solid fa-phone text-xs"></i>
-                    </div>
-                    <span class="hidden lg:inline">+91 98765 43210</span>
+                <a href="https://wa.me/919876543210?text=Hello%20Dr.%20Sherin%2C%20I%20want%20to%20book%20an%20appointment%20for%20Sunday%20at%20Bramhapuri%20clinic." target="_blank" class="flex items-center gap-2 text-emerald-700 font-semibold text-sm hover:text-emerald-800 transition-colors bg-emerald-50 px-3.5 py-2 rounded-full border border-emerald-200">
+                    <i class="fa-brands fa-whatsapp text-lg text-emerald-600"></i>
+                    <span>WhatsApp</span>
                 </a>
                 <button onclick="openModal()" class="bg-clinicGreen hover:bg-clinicGreen-light text-white px-5 py-2.5 rounded-full text-sm font-semibold shadow-md hover:shadow-lg transition-all transform hover:-translate-y-0.5">
-                    Book Appointment
+                    Book Sunday Visit
                 </button>
             </div>
 
-            <!-- Mobile Menu Button -->
+            <!-- Mobile Menu Toggle Button -->
             <button onclick="toggleMobileMenu()" class="md:hidden text-clinicGreen text-2xl p-2 focus:outline-none">
                 <i class="fa-solid fa-bars" id="menuIcon"></i>
             </button>
@@ -105,13 +102,14 @@
             <a href="#about" onclick="toggleMobileMenu()" class="block text-gray-700 font-medium py-1">About Doctor</a>
             <a href="#schedule" onclick="toggleMobileMenu()" class="block text-gray-700 font-medium py-1">Schedule &amp; Cities</a>
             <a href="#services" onclick="toggleMobileMenu()" class="block text-gray-700 font-medium py-1">Treatments</a>
+            <a href="#testimonials" onclick="toggleMobileMenu()" class="block text-gray-700 font-medium py-1">Testimonials</a>
             <a href="#location" onclick="toggleMobileMenu()" class="block text-gray-700 font-medium py-1">Bramhapuri Location</a>
             <div class="pt-4 border-t border-gray-100 flex flex-col gap-3">
                 <button onclick="toggleMobileMenu(); openModal();" class="w-full bg-clinicGreen text-white py-3 rounded-xl font-semibold text-center shadow-md">
                     Book Sunday Appointment
                 </button>
-                <a href="tel:+919876543210" class="w-full bg-clinicGreen/10 text-clinicGreen py-3 rounded-xl font-semibold text-center flex items-center justify-center gap-2">
-                    <i class="fa-solid fa-phone"></i> Call Clinic Now
+                <a href="https://wa.me/919876543210?text=Hello%20Dr.%20Sherin%2C%20I%20want%20to%20book%20an%20appointment%20for%20Sunday%20at%20Bramhapuri%20clinic." target="_blank" class="w-full bg-emerald-600 text-white py-3 rounded-xl font-semibold text-center flex items-center justify-center gap-2">
+                    <i class="fa-brands fa-whatsapp text-lg"></i> WhatsApp Booking
                 </a>
             </div>
         </div>
@@ -121,16 +119,16 @@
     <section class="hero-pattern relative pt-12 pb-20 lg:pt-20 lg:pb-32 overflow-hidden">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-                <!-- Hero Content -->
+                <!-- Hero Text -->
                 <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
-                    <div class="inline-flex items-center gap-2 bg-roseGold/10 border border-roseGold/30 px-3 py-1.5 rounded-full text-xs font-semibold text-roseGold-dark uppercase tracking-wider">
-                        <i class="fa-solid fa-award"></i> Advanced Dermatology &amp; Aesthetics
+                    <div class="inline-flex items-center gap-2 bg-roseGold/10 border border-roseGold/30 px-3.5 py-1.5 rounded-full text-xs font-semibold text-roseGold-dark uppercase tracking-wider">
+                        <i class="fa-solid fa-award"></i> Expert Female Dermatologist
                     </div>
                     <h1 class="font-serif text-4xl sm:text-5xl lg:text-6xl font-bold text-clinicGreen leading-tight">
-                        Expert Skin Care, <br>Now in <span class="text-roseGold italic">Bramhapuri</span>
+                        Advanced Skin &amp; Hair Care in <span class="text-roseGold italic">Bramhapuri</span>
                     </h1>
-                    <p class="text-gray-600 text-base sm:text-lg max-w-2xl mx-auto lg:mx-0 font-normal">
-                        Consult expert female dermatologist <span class="font-semibold text-gray-800">Dr. Sherin</span>. Exclusively available in Bramhapuri every <span class="font-semibold text-clinicGreen underline">Sunday</span> opposite Hutatma Smarak. Mon–Sat practice in Nagpur.
+                    <p class="text-gray-600 text-base sm:text-lg max-w-2xl mx-auto lg:mx-0 font-normal leading-relaxed">
+                        Consult experienced dermatologist <span class="font-semibold text-gray-900">Dr. Sherin</span>. Exclusively available in Bramhapuri every <span class="font-semibold text-clinicGreen underline">Sunday</span> opposite Hutatma Smarak. Regular practice in Nagpur Monday to Saturday.
                     </p>
                     
                     <!-- Highlight Timing Badges -->
@@ -150,86 +148,91 @@
                                 <i class="fa-solid fa-clock"></i>
                             </div>
                             <div class="text-left">
-                                <span class="text-xs text-gray-500 block uppercase font-bold tracking-wider">Sunday Timings</span>
-                                <span class="font-bold text-clinicGreen text-sm sm:text-base">10 AM – 1 PM &amp; 6 PM – 8 PM</span>
+                                <span class="text-xs text-gray-500 block uppercase font-bold tracking-wider">Sunday Hours</span>
+                                <span class="font-bold text-clinicGreen text-sm sm:text-base">10 AM–1 PM &amp; 6 PM–8 PM</span>
                             </div>
                         </div>
                     </div>
 
-                    <!-- CTA Buttons -->
+                    <!-- Call To Action Buttons -->
                     <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-4">
-                        <button onclick="openModal()" class="w-full sm:w-auto bg-clinicGreen hover:bg-clinicGreen-light text-white px-8 py-4 rounded-full font-semibold shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-0.5 text-center flex items-center justify-center gap-2">
-                            <span>Book Consultation</span>
+                        <button onclick="openModal()" class="w-full sm:w-auto bg-clinicGreen hover:bg-clinicGreen-light text-white px-8 py-4 rounded-full font-semibold shadow-lg hover:shadow-xl transition-all text-center flex items-center justify-center gap-2">
+                            <span>Book Sunday Consultation</span>
                             <i class="fa-solid fa-arrow-right text-xs"></i>
                         </button>
-                        <a href="#location" class="w-full sm:w-auto bg-white hover:bg-gray-50 text-clinicGreen border-2 border-clinicGreen/20 px-8 py-4 rounded-full font-semibold transition-all text-center flex items-center justify-center gap-2">
+                        <a href="https://maps.app.goo.gl/N9bCmrJMoVbgwri28" target="_blank" class="w-full sm:w-auto bg-white hover:bg-gray-50 text-clinicGreen border-2 border-clinicGreen/20 px-8 py-4 rounded-full font-semibold transition-all text-center flex items-center justify-center gap-2 shadow-sm">
                             <i class="fa-solid fa-location-dot text-roseGold"></i>
-                            <span>View Bramhapuri Map</span>
+                            <span>Google Map Location</span>
                         </a>
                     </div>
                 </div>
 
-                <!-- Hero Doctor Card / Graphic -->
+                <!-- Hero Doctor Profile Card -->
                 <div class="lg:col-span-5 relative flex justify-center">
                     <div class="relative w-full max-w-md">
-                        <!-- Decorative Backdrop blob -->
                         <div class="absolute -inset-4 bg-gradient-to-tr from-roseGold/30 to-clinicGreen/20 rounded-3xl filter blur-xl opacity-70 animate-pulse"></div>
                         
-                        <!-- Main Card -->
                         <div class="relative bg-white rounded-3xl p-6 sm:p-8 shadow-2xl border border-roseGold/20 space-y-6">
                             <div class="flex items-center gap-4">
                                 <div class="w-16 h-16 rounded-2xl bg-clinicGreen text-roseGold flex items-center justify-center text-3xl font-serif font-bold shadow-inner">
                                     DS
                                 </div>
                                 <div>
-                                    <h2 class="font-serif text-xl font-bold text-clinicGreen">Dr. Sherin, MD</h2>
-                                    <p class="text-xs text-roseGold uppercase tracking-wider font-semibold">Consultant Dermatologist</p>
+                                    <h2 class="font-serif text-xl font-bold text-clinicGreen">Dr. Sherin</h2>
+                                    <p class="text-xs text-roseGold uppercase tracking-wider font-semibold">Consultant Female Dermatologist</p>
                                     <div class="flex items-center gap-1 text-amber-500 text-xs mt-1">
                                         <i class="fa-solid fa-star"></i>
                                         <i class="fa-solid fa-star"></i>
                                         <i class="fa-solid fa-star"></i>
                                         <i class="fa-solid fa-star"></i>
                                         <i class="fa-solid fa-star"></i>
-                                        <span class="text-gray-500 ml-1 font-medium">(Expert Care)</span>
+                                        <span class="text-gray-500 ml-1 font-medium">(4.9 Google Reviews)</span>
                                     </div>
                                 </div>
                             </div>
 
-                            <div class="space-y-3 pt-2 border-t border-gray-100 text-sm">
+                            <div class="space-y-3.5 pt-2 border-t border-gray-100 text-sm">
                                 <div class="flex items-start gap-3">
                                     <div class="w-7 h-7 rounded-full bg-clinicGreen-pale text-clinicGreen flex items-center justify-center shrink-0 mt-0.5">
-                                        <i class="fa-solid fa-map-pin text-xs"></i>
+                                        <i class="fa-solid fa-location-dot text-xs"></i>
                                     </div>
                                     <div>
-                                        <span class="font-bold text-gray-800 block">Bramhapuri Clinic</span>
-                                        <span class="text-gray-600">Opposite Hutatma Smarak, Bramhapuri</span>
+                                        <span class="font-bold text-gray-800 block">Bramhapuri Location</span>
+                                        <span class="text-gray-600 text-xs">Opposite Hutatma Smarak, Bramhapuri</span>
                                     </div>
                                 </div>
 
                                 <div class="flex items-start gap-3">
                                     <div class="w-7 h-7 rounded-full bg-clinicGreen-pale text-clinicGreen flex items-center justify-center shrink-0 mt-0.5">
-                                        <i class="fa-solid fa-building text-xs"></i>
+                                        <i class="fa-solid fa-building-user text-xs"></i>
                                     </div>
                                     <div>
                                         <span class="font-bold text-gray-800 block">Nagpur Practice</span>
-                                        <span class="text-gray-600">Monday to Saturday (Main Center)</span>
+                                        <span class="text-gray-600 text-xs">Monday to Saturday</span>
                                     </div>
                                 </div>
 
                                 <div class="flex items-start gap-3">
-                                    <div class="w-7 h-7 rounded-full bg-roseGold/10 text-roseGold-dark flex items-center justify-center shrink-0 mt-0.5">
-                                        <i class="fa-solid fa-calendar-check text-xs"></i>
+                                    <div class="w-7 h-7 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0 mt-0.5">
+                                        <i class="fa-brands fa-whatsapp text-sm"></i>
                                     </div>
                                     <div>
-                                        <span class="font-bold text-gray-800 block">Sunday Availability</span>
-                                        <span class="text-roseGold-dark font-semibold">10 AM – 1 PM &amp; 6 PM – 8 PM</span>
+                                        <span class="font-bold text-gray-800 block">WhatsApp Desk</span>
+                                        <a href="https://wa.me/919876543210?text=Hello%20Dr.%20Sherin%2C%20I%20want%20to%20book%20an%20appointment%20for%20Sunday%20at%20Bramhapuri%20clinic." target="_blank" class="text-emerald-600 font-semibold text-xs hover:underline">
+                                            +91 98765 43210
+                                        </a>
                                     </div>
                                 </div>
                             </div>
 
-                            <button onclick="openModal()" class="w-full bg-roseGold hover:bg-roseGold-dark text-white py-3 rounded-xl font-semibold shadow-md transition-colors text-sm flex items-center justify-center gap-2">
-                                <i class="fa-regular fa-calendar-plus"></i> Reserve Sunday Slot
-                            </button>
+                            <div class="grid grid-cols-2 gap-3">
+                                <button onclick="openModal()" class="bg-clinicGreen hover:bg-clinicGreen-light text-white py-3 rounded-xl font-semibold shadow-md transition-colors text-xs uppercase tracking-wider">
+                                    Book Visit
+                                </button>
+                                <a href="https://wa.me/919876543210?text=Hello%20Dr.%20Sherin%2C%20I%20want%20to%20book%20an%20appointment%20for%20Sunday%20at%20Bramhapuri%20clinic." target="_blank" class="bg-emerald-600 hover:bg-emerald-700 text-white py-3 rounded-xl font-semibold shadow-md transition-colors text-xs uppercase tracking-wider text-center flex items-center justify-center gap-1">
+                                    <i class="fa-brands fa-whatsapp"></i> Chat
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -237,13 +240,13 @@
         </div>
     </section>
 
-    <!-- Schedule & City Availability Section -->
+    <!-- City Schedule Section -->
     <section id="schedule" class="py-20 bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center max-w-3xl mx-auto mb-16 space-y-4">
-                <span class="text-xs uppercase tracking-widest text-roseGold font-bold bg-roseGold/10 px-3 py-1 rounded-full">Weekly Schedule</span>
-                <h2 class="font-serif text-3xl sm:text-4xl font-bold text-clinicGreen">City-Wise Availability</h2>
-                <p class="text-gray-600">Dr. Sherin practices in Nagpur from Monday through Saturday, and is exclusively available for patients in Bramhapuri every Sunday.</p>
+                <span class="text-xs uppercase tracking-widest text-roseGold font-bold bg-roseGold/10 px-3 py-1 rounded-full">Practice Schedule</span>
+                <h2 class="font-serif text-3xl sm:text-4xl font-bold text-clinicGreen">City Availability</h2>
+                <p class="text-gray-600">Dr. Sherin practices in Nagpur throughout the week and visits her Bramhapuri clinic every Sunday.</p>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
@@ -257,41 +260,22 @@
                             <i class="fa-solid fa-city"></i>
                         </div>
                         <div>
-                            <h3 class="font-serif text-2xl font-bold text-gray-900">Nagpur Practice</h3>
-                            <p class="text-xs text-roseGold font-semibold uppercase tracking-wider mt-1">Primary Consultation Hub</p>
+                            <h3 class="font-serif text-2xl font-bold text-gray-900">Nagpur Center</h3>
+                            <p class="text-xs text-roseGold font-semibold uppercase tracking-wider mt-1">Weekday Consultation &amp; Procedures</p>
                         </div>
                         <p class="text-gray-600 text-sm leading-relaxed">
-                            Dr. Sherin operates her primary advanced aesthetic and clinical dermatology center in Nagpur from Monday to Saturday for comprehensive surgeries and procedures.
+                            Main clinical center operating Monday through Saturday for advanced aesthetic treatments, laser procedures, and surgeries.
                         </p>
-                        <ul class="space-y-2 text-sm text-gray-700">
-                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-roseGold"></i> Advanced Laser Treatments</li>
-                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-roseGold"></i> Dermatological Surgeries</li>
-                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-roseGold"></i> Full Aesthetics Suite</li>
-                        </ul>
                     </div>
                     <div class="mt-8 pt-6 border-t border-gray-200 text-xs text-gray-500 font-medium">
-                        * Please contact Nagpur clinic for weekday appointments.
+                        * Available in Nagpur from Monday to Saturday.
                     </div>
                 </div>
 
-                <!-- Bramhapuri Card (Highlighted) -->
+                <!-- Bramhapuri Card -->
                 <div class="bg-gradient-to-br from-clinicGreen to-clinicGreen-light text-white rounded-3xl p-8 shadow-xl relative overflow-hidden flex flex-col justify-between border-2 border-roseGold">
                     <div class="absolute top-0 right-0 bg-roseGold text-white text-xs font-bold px-4 py-1.5 rounded-bl-2xl uppercase tracking-wider shadow-sm">
                         Sunday Special
                     </div>
                     <div class="space-y-6">
                         <div class="w-14 h-14 rounded-2xl bg-roseGold text-white flex items-center justify-center text-2xl font-bold shadow-md">
-                            <i class="fa-solid fa-hospital-user"></i>
-                        </div>
-                        <div>
-                            <h3 class="font-serif text-2xl font-bold text-white">Bramhapuri Clinic</h3>
-                            <p class="text-xs text-roseGold-light font-semibold uppercase tracking-wider mt-1">Opposite Hutatma Smarak</p>
-                        </div>
-                        <p class="text-gray-100 text-sm leading-relaxed">
-                            Dedicated Sunday clinic established to bring top-tier skin, hair, and nail treatments directly to the people of Bramhapuri and nearby regions.
-                        </p>
-                        
-                        <div class="bg-white/10 backdrop-blur-md rounded-2xl p-4 border border-white/20 space-y-2">
-                            <div class="text-xs uppercase font-bold tracking-wider text-roseGold-light">Sunday Timings</div>
-                            <div class="flex items-center justify-between text-sm font-semibold">
-                                <span><i class="fa-regular fa-clock mr
