@@ -1,489 +1,297 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Hinglish Rhyme Game - Fullscreen Studio</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dr. Sherin's Advanced Skin & Aesthetics Clinic | Bramhapuri</title>
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
-                        studioDark: '#0C091A',
-                        neonPurple: '#9E00FF',
-                        electricCyan: '#00F5FF',
-                        neonOrange: '#FF5722',
-                        panelDark: '#16112C'
+                        roseGold: {
+                            DEFAULT: '#C5A059',
+                            light: '#E6C687',
+                            dark: '#9F7B37',
+                        },
+                        clinicGreen: {
+                            DEFAULT: '#0F4C3A',
+                            light: '#1B6B53',
+                            pale: '#EAF4F1',
+                        },
+                        softNeutral: '#FBF9F6',
+                        warmGray: '#7E8184'
+                    },
+                    fontFamily: {
+                        serif: ['"Playfair Display"', 'serif'],
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
                     }
                 }
             }
         }
     </script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&display=swap');
-        body { 
-            font-family: 'Space Grotesk', sans-serif; 
-            background-color: #0C091A;
-            -webkit-tap-highlight-color: transparent;
+        .hero-pattern {
+            background-color: #FBF9F6;
+            background-image: radial-gradient(#C5A059 0.75px, transparent 0.75px), radial-gradient(#C5A059 0.75px, #FBF9F6 0.75px);
+            background-size: 30px 30px;
+            background-position: 0 0, 15px 15px;
+            background-opacity: 0.1;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(197, 160, 89, 0.2);
         }
     </style>
 </head>
-<body class="text-white min-h-screen flex flex-col justify-between selection:bg-neonPurple/30">
+<body class="font-sans text-gray-800 bg-softNeutral antialiased selection:bg-roseGold selection:text-white">
 
-    <!-- Wrapper to prevent ultra-wide stretching on landscape/desktop -->
-    <div class="w-full max-w-lg mx-auto flex flex-col min-h-screen relative shadow-2xl shadow-black">
+    <!-- Top Announcement Bar -->
+    <div class="bg-clinicGreen text-white text-xs sm:text-sm py-2 px-4 text-center font-medium tracking-wide">
+        <span class="inline-block bg-roseGold text-white px-2 py-0.5 rounded text-xs font-bold mr-2 uppercase tracking-wider">Bramhapuri Special</span>
+        Sunday Consultation: <span class="font-bold underline">10:00 AM – 1:00 PM</span> &amp; <span class="font-bold underline">6:00 PM – 8:00 PM</span> (Opp. Hutatma Smarak)
+    </div>
 
-        <!-- Top Dashboard: Dynamic Status Panel -->
-        <div class="w-full bg-panelDark/95 backdrop-blur-md sticky top-0 z-30 border-b border-white/5 px-5 py-4 flex justify-between items-center">
-            <div>
-                <h1 class="text-xl font-bold tracking-wider text-electricCyan">HINGLISH RHYME</h1>
-                <p class="text-[10px] text-white/40 tracking-widest uppercase">Freestyle Practice Loop</p>
-            </div>
-            <div class="text-right">
-                <span id="timerDisplay" class="text-base font-mono text-neonPurple font-bold">00:00</span>
-                <p id="barCounter" class="text-xs text-neonOrange font-bold">Bar: 0/0</p>
-            </div>
-        </div>
-
-        <!-- Scrolling Core Interaction Workspace -->
-        <div class="w-full flex-1 overflow-y-auto px-4 py-5 space-y-6 pb-56">
-            
-            <!-- Interactive Visual Metronome Layer -->
-            <div class="relative bg-panelDark rounded-2xl p-4 border border-white/5 shadow-inner">
-                <div class="grid grid-cols-4 gap-2 text-center text-[10px] font-mono text-white/20 mb-3">
-                    <div id="beat-1" class="py-1 rounded bg-black/20 border border-white/5 transition-all">BEAT 1</div>
-                    <div id="beat-2" class="py-1 rounded bg-black/20 border border-white/5 transition-all">BEAT 2</div>
-                    <div id="beat-3" class="py-1 rounded bg-black/20 border border-white/5 transition-all">BEAT 3</div>
-                    <div id="beat-4" class="py-1 rounded bg-black/20 border border-white/5 transition-all">BEAT 4</div>
-                </div>
-                
-                <canvas id="metronomeCanvas" class="w-full h-20 rounded-xl bg-studioDark border border-white/5"></canvas>
-                
-                <div id="countInOverlay" class="absolute inset-0 bg-studioDark/95 flex flex-col items-center justify-center hidden rounded-2xl border border-neonOrange/30">
-                    <span class="text-xs text-neonOrange tracking-widest font-bold uppercase animate-pulse">Pre-Roll Count-In</span>
-                    <span id="countInText" class="text-xl font-black text-white mt-1">READY...</span>
-                </div>
-            </div>
-
-            <!-- Target Rhyme Cards Segment -->
-            <div class="space-y-3">
-                <div class="flex justify-between items-center px-1">
-                    <span class="text-xs text-white/50 tracking-wider uppercase font-semibold">Rhyme Target Sounds</span>
-                    <span id="schemeBadge" class="text-[10px] bg-neonPurple/20 border border-neonPurple/40 text-electricCyan px-2 py-0.5 rounded-full font-mono uppercase">Scheme: AAAA</span>
-                </div>
-
-                <div id="cardsContainer" class="space-y-3">
-                    <div class="p-5 rounded-2xl bg-panelDark border border-white/5 text-center py-12 transition-all">
-                        <p class="text-sm font-medium text-white/40">Tap "DROP THE BEAT" below to load active rhymes</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Sticky Bottom Studio Control Dock -->
-        <div class="absolute bottom-0 left-0 right-0 bg-panelDark/95 backdrop-blur-lg border-t border-white/10 p-5 pb-6 space-y-4 shadow-2xl z-40">
-            
-            <div class="grid grid-cols-2 gap-3">
-                <div>
-                    <label class="text-[10px] uppercase tracking-wider text-white/40 block mb-1.5 font-semibold">Audio Beat Engine</label>
-                    <select id="beatSelect" class="w-full bg-studioDark border border-white/10 rounded-xl px-3 py-3 text-xs font-medium text-white focus:outline-none focus:border-electricCyan appearance-none">
-                        <option value="click">1. Metronome Click</option>
-                        <option value="boombap" selected>2. Classic Boom-Bap</option>
-                        <option value="trap">3. Hyper-Trap Subdivision</option>
-                        <option value="lofi">4. Chill Lo-Fi Lounge</option>
-                        <option value="gfunk">5. West Coast G-Funk</option>
-                        <option value="drill">6. UK Drill Syncopation</option>
-                        <option value="electro">7. Old School 808 Breaks</option>
-                        <option value="reggaeton">8. Dembow Riddim Flow</option>
-                    </select>
+    <!-- Navigation Header -->
+    <header class="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-gray-100 shadow-sm transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <!-- Brand Logo -->
+            <a href="#" class="flex items-center gap-3 group">
+                <div class="w-11 h-11 rounded-full bg-clinicGreen text-roseGold flex items-center justify-center font-serif text-xl font-bold shadow-md group-hover:scale-105 transition-transform">
+                    S
                 </div>
                 <div>
-                    <label class="text-[10px] uppercase tracking-wider text-white/40 block mb-1.5 font-semibold">Rhyme Scheme</label>
-                    <select id="schemeSelect" class="w-full bg-studioDark border border-white/10 rounded-xl px-3 py-3 text-xs font-medium text-white focus:outline-none focus:border-electricCyan appearance-none">
-                        <option value="AAAA">AAAA Pattern (1 Group)</option>
-                        <option value="AABB">AABB Split (2 Groups)</option>
-                    </select>
+                    <span class="font-serif text-xl sm:text-2xl font-bold text-clinicGreen tracking-tight block">Dr. Sherin's</span>
+                    <span class="text-xs uppercase tracking-widest text-roseGold font-semibold block">Skin &amp; Aesthetics Clinic</span>
                 </div>
-            </div>
+            </a>
 
-            <!-- BPM Slider Panel -->
-            <div class="flex items-center space-x-4 bg-studioDark border border-white/5 p-3 rounded-xl">
-                <div class="flex-1">
-                    <div class="flex justify-between text-[11px] font-mono text-white/40 mb-1">
-                        <span>Tempo Controller</span>
-                        <span id="bpmVal" class="text-electricCyan font-bold">90 BPM</span>
+            <!-- Desktop Nav Links -->
+            <nav class="hidden md:flex items-center gap-8 font-medium text-sm text-gray-600">
+                <a href="#about" class="hover:text-clinicGreen transition-colors">About Doctor</a>
+                <a href="#schedule" class="hover:text-clinicGreen transition-colors">Schedule &amp; Cities</a>
+                <a href="#services" class="hover:text-clinicGreen transition-colors">Treatments</a>
+                <a href="#location" class="hover:text-clinicGreen transition-colors">Bramhapuri Location</a>
+            </nav>
+
+            <!-- Action Buttons -->
+            <div class="hidden sm:flex items-center gap-4">
+                <a href="tel:+919876543210" class="flex items-center gap-2 text-clinicGreen font-semibold text-sm hover:text-roseGold transition-colors">
+                    <div class="w-9 h-9 rounded-full bg-clinicGreen/10 flex items-center justify-center text-clinicGreen">
+                        <i class="fa-solid fa-phone text-xs"></i>
                     </div>
-                    <input id="bpmSlider" type="range" min="60" max="180" value="90" class="w-full h-1 bg-white/10 rounded-lg appearance-none cursor-pointer accent-electricCyan">
-                </div>
-                
-                <button id="micBtn" class="p-3 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl transition-all flex items-center justify-center">
-                    <svg id="micIcon" class="w-5 h-5 text-white/60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"></path>
-                    </svg>
-                    <div id="waveVisualizer" class="hidden h-5 items-center space-x-0.5 px-0.5">
-                        <span class="w-0.5 h-3 bg-neonOrange rounded animate-bounce"></span>
-                        <span class="w-0.5 h-5 bg-neonOrange rounded animate-bounce [animation-delay:0.15s]"></span>
-                        <span class="w-0.5 h-2 bg-neonOrange rounded animate-bounce [animation-delay:0.3s]"></span>
-                    </div>
+                    <span class="hidden lg:inline">+91 98765 43210</span>
+                </a>
+                <button onclick="openModal()" class="bg-clinicGreen hover:bg-clinicGreen-light text-white px-5 py-2.5 rounded-full text-sm font-semibold shadow-md hover:shadow-lg transition-all transform hover:-translate-y-0.5">
+                    Book Appointment
                 </button>
             </div>
 
-            <button id="playBtn" class="w-full py-4 bg-gradient-to-r from-neonPurple to-purple-700 active:scale-[0.99] text-white font-bold rounded-xl transition-all shadow-lg shadow-neonPurple/20 tracking-wider text-sm flex items-center justify-center space-x-2">
-                <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-                <span>DROP THE BEAT</span>
+            <!-- Mobile Menu Button -->
+            <button onclick="toggleMobileMenu()" class="md:hidden text-clinicGreen text-2xl p-2 focus:outline-none">
+                <i class="fa-solid fa-bars" id="menuIcon"></i>
             </button>
         </div>
-    </div>
 
-    <script>
-        // --- 1. RHYME DATABASE ---
-        const RhymeDatabase = [
-            { id: 1, sound: "-aal / -all", words: ["Bawaal", "Raftaar", "Call", "Dhamaal", "Fall", "Jaal", "Hall", "Misaal"] },
-            { id: 2, sound: "-een / -ene", words: ["Zameen", "Kamine", "Scene", "Machine", "Glowin'", "Shine", "Sangeen", "Clean"] },
-            { id: 3, sound: "-ill / -il", words: ["Dil", "Chill", "Mushkil", "Bill", "Kill", "Mil", "Skill", "Fill"] },
-            { id: 4, sound: "-aar / -ar", words: ["Yaar", "Pyaar", "Car", "Ithefaaq", "Bar", "Bazaar", "Star", "Intezaar"] },
-            { id: 5, sound: "-or / -aur", words: ["Aur", "Chor", "Door", "More", "Floor", "Shor", "Store", "Zor"] }
-        ];
+        <!-- Mobile Menu Drawer -->
+        <div id="mobileMenu" class="hidden md:hidden bg-white border-b border-gray-100 px-6 py-6 space-y-4 shadow-xl">
+            <a href="#about" onclick="toggleMobileMenu()" class="block text-gray-700 font-medium py-1">About Doctor</a>
+            <a href="#schedule" onclick="toggleMobileMenu()" class="block text-gray-700 font-medium py-1">Schedule &amp; Cities</a>
+            <a href="#services" onclick="toggleMobileMenu()" class="block text-gray-700 font-medium py-1">Treatments</a>
+            <a href="#location" onclick="toggleMobileMenu()" class="block text-gray-700 font-medium py-1">Bramhapuri Location</a>
+            <div class="pt-4 border-t border-gray-100 flex flex-col gap-3">
+                <button onclick="toggleMobileMenu(); openModal();" class="w-full bg-clinicGreen text-white py-3 rounded-xl font-semibold text-center shadow-md">
+                    Book Sunday Appointment
+                </button>
+                <a href="tel:+919876543210" class="w-full bg-clinicGreen/10 text-clinicGreen py-3 rounded-xl font-semibold text-center flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-phone"></i> Call Clinic Now
+                </a>
+            </div>
+        </div>
+    </header>
 
-        // --- 2. GENRE BPM MAPPING ---
-        const genreBpmDefaults = {
-            click: 100,
-            boombap: 90,
-            trap: 140,
-            lofi: 75,
-            gfunk: 95,
-            drill: 142,
-            electro: 125,
-            reggaeton: 96
-        };
-
-        // --- 3. PROCEDURAL AUDIO ENGINE ---
-        let audioCtx = null;
-        let nextBeatTime = 0.0;
-        let currentBeatInBar = 0; 
-        let bpm = 90;
-        let lookahead = 25.0; 
-        let scheduleAheadTime = 0.1; 
-        let timerId = null;
-
-        function initAudio() {
-            if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        }
-
-        function createNoiseBuffer(duration = 0.15) {
-            let bufferSize = audioCtx.sampleRate * duration;
-            let buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
-            let data = buffer.getChannelData(0);
-            for (let i = 0; i < bufferSize; i++) data[i] = Math.random() * 2 - 1;
-            return buffer;
-        }
-
-        function synthKick(time, freq = 120, decay = 0.15, gainVal = 0.5) {
-            let osc = audioCtx.createOscillator();
-            let gain = audioCtx.createGain();
-            osc.connect(gain); gain.connect(audioCtx.destination);
-            osc.frequency.setValueAtTime(freq, time);
-            osc.frequency.exponentialRampToValueAtTime(0.01, time + decay);
-            gain.gain.setValueAtTime(gainVal, time);
-            gain.gain.exponentialRampToValueAtTime(0.01, time + decay);
-            osc.start(time); osc.stop(time + decay);
-        }
-
-        function synthSnare(time, freq = 1000, decay = 0.12, gainVal = 0.25) {
-            let noise = audioCtx.createBufferSource();
-            noise.buffer = createNoiseBuffer(decay);
-            let filter = audioCtx.createBiquadFilter();
-            filter.type = 'bandpass'; filter.frequency.value = freq;
-            let gain = audioCtx.createGain();
-            noise.connect(filter); filter.connect(gain); gain.connect(audioCtx.destination);
-            gain.gain.setValueAtTime(gainVal, time);
-            gain.gain.exponentialRampToValueAtTime(0.01, time + decay);
-            noise.start(time);
-        }
-
-        function synthHat(time, freq = 8000, decay = 0.03, gainVal = 0.15) {
-            let osc = audioCtx.createOscillator();
-            let gain = audioCtx.createGain();
-            osc.type = 'triangle'; osc.connect(gain); gain.connect(audioCtx.destination);
-            osc.frequency.setValueAtTime(freq, time);
-            gain.gain.setValueAtTime(gainVal, time);
-            gain.gain.exponentialRampToValueAtTime(0.001, time + decay);
-            osc.start(time); osc.stop(time + decay);
-        }
-
-        function processEngineBeats(beatNumber, time, engineType) {
-            let secondsPerBeat = 60.0 / bpm;
-            let sub = secondsPerBeat / 2;
-
-            switch (engineType) {
-                case 'click': 
-                    synthKick(time, beatNumber === 0 ? 1200 : 700, 0.04, 0.2);
-                    break;
-                case 'boombap': 
-                    if (beatNumber === 0) { synthKick(time, 100, 0.2, 0.6); }
-                    if (beatNumber === 1.5) { synthKick(time, 95, 0.12, 0.4); }
-                    if (beatNumber === 1 || beatNumber === 3) { synthSnare(time, 1100, 0.15, 0.35); }
-                    synthHat(time, 9000, 0.04, 0.08);
-                    break;
-                case 'trap': 
-                    if (beatNumber === 0) synthKick(time, 65, 0.25, 0.7);
-                    if (beatNumber === 2) synthSnare(time, 1500, 0.12, 0.4);
-                    synthHat(time, 11000, 0.03, 0.12);
-                    synthHat(time + sub, 12000, 0.02, 0.1);
-                    break;
-                case 'lofi': 
-                    if (beatNumber === 0 || beatNumber === 2.5) synthKick(time, 80, 0.14, 0.4);
-                    if (beatNumber === 1 || beatNumber === 3) synthSnare(time, 600, 0.2, 0.18); 
-                    if (beatNumber % 1 === 0) synthHat(time, 5000, 0.06, 0.04);
-                    break;
-                case 'gfunk': 
-                    if (beatNumber === 0 || beatNumber === 0.5 || beatNumber === 2) synthKick(time, 110, 0.15, 0.5);
-                    if (beatNumber === 1 || beatNumber === 3) synthSnare(time, 2200, 0.08, 0.4); 
-                    if (beatNumber % 0.5 === 0) synthHat(time, 9500, 0.03, 0.08);
-                    break;
-                case 'drill': 
-                    if (beatNumber === 0) synthKick(time, 55, 0.3, 0.7);
-                    if (beatNumber === 1.5) synthKick(time + sub/2, 58, 0.2, 0.5); 
-                    if (beatNumber === 2) synthSnare(time, 1400, 0.14, 0.45);
-                    if (beatNumber !== 1 && beatNumber !== 3) synthHat(time, 13000, 0.02, 0.12);
-                    break;
-                case 'electro': 
-                    if (beatNumber === 0 || beatNumber === 0.75 || beatNumber === 2) synthKick(time, 130, 0.12, 0.6);
-                    if (beatNumber === 1 || beatNumber === 3) synthSnare(time, 1800, 0.1, 0.35);
-                    synthHat(time, 8000, 0.05, 0.1);
-                    break;
-                case 'reggaeton': 
-                    if (beatNumber === 0 || beatNumber === 2) synthKick(time, 90, 0.18, 0.6);
-                    if (beatNumber === 0.75 || beatNumber === 1.5 || beatNumber === 2.75) synthSnare(time, 900, 0.12, 0.3);
-                    synthHat(time, 10000, 0.03, 0.06);
-                    break;
-            }
-        }
-
-        // --- 4. STATE CONTROLLER ---
-        let isPlaying = false;
-        let totalSeconds = 0;
-        let absoluteBarsCompleted = -2; 
-        let activeScheme = "AAAA";
-        let currentTargetWords = [];
-        let timerInterval = null;
-
-        const playBtn = document.getElementById('playBtn');
-        const bpmSlider = document.getElementById('bpmSlider');
-        const bpmVal = document.getElementById('bpmVal');
-        const beatSelect = document.getElementById('beatSelect');
-        const schemeSelect = document.getElementById('schemeSelect');
-        const countInOverlay = document.getElementById('countInOverlay');
-        const countInText = document.getElementById('countInText');
-        const cardsContainer = document.getElementById('cardsContainer');
-        const barCounter = document.getElementById('barCounter');
-        const timerDisplay = document.getElementById('timerDisplay');
-        const canvas = document.getElementById('metronomeCanvas');
-        const ctx = canvas.getContext('2d');
-
-        function resizeCanvas() {
-            canvas.width = canvas.parentElement.clientWidth * window.devicePixelRatio;
-            canvas.height = 80 * window.devicePixelRatio;
-            ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
-        }
-        window.addEventListener('resize', resizeCanvas);
-        resizeCanvas();
-
-        function scheduler() {
-            while (nextBeatTime < audioCtx.currentTime + scheduleAheadTime) {
-                scheduleBeat(currentBeatInBar, nextBeatTime);
-                advanceBeat();
-            }
-            timerId = setTimeout(scheduler, lookahead);
-        }
-
-        function advanceBeat() {
-            let secondsPerBeat = 60.0 / bpm;
-            nextBeatTime += secondsPerBeat;
-            currentBeatInBar = (currentBeatInBar + 1) % 4;
-            
-            if (currentBeatInBar === 0) {
-                absoluteBarsCompleted++;
-                handleBarCycleUpdate();
-            }
-        }
-
-        function scheduleBeat(beatNumber, time) {
-            processEngineBeats(beatNumber, time, beatSelect.value);
-            audioCtx.resume();
-            setTimeout(() => {
-                document.querySelectorAll('[id^="beat-"]').forEach(el => el.className = 'py-1 rounded bg-black/20 border border-white/5 text-white/20');
-                const activeIndicator = document.getElementById(`beat-${beatNumber + 1}`);
-                if (activeIndicator) activeIndicator.className = 'py-1 rounded bg-neonOrange/20 text-neonOrange border border-neonOrange/40 font-bold';
-            }, (time - audioCtx.currentTime) * 1000);
-        }
-
-        function handleBarCycleUpdate() {
-            setTimeout(() => {
-                if (absoluteBarsCompleted < 0) {
-                    barCounter.innerText = `Bar: Count-In`;
-                    countInOverlay.classList.remove('hidden');
-                    countInText.innerText = absoluteBarsCompleted === -2 ? "READY... 3" : "DROP THE FLOW... 1";
-                } else {
-                    countInOverlay.classList.add('hidden');
-                    barCounter.innerText = `Bars Run: ${absoluteBarsCompleted}`;
-                    if (absoluteBarsCompleted % 4 === 0 || currentTargetWords.length === 0) {
-                        generateNewPhrases();
-                    }
-                    renderWordCards();
-                }
-            }, 0);
-        }
-
-        function generateNewPhrases() {
-            let selectedGroup = RhymeDatabase[Math.floor(Math.random() * RhymeDatabase.length)];
-            let shuff = [...selectedGroup.words].sort(() => 0.5 - Math.random());
-            
-            if (activeScheme === "AAAA") {
-                currentTargetWords = shuff.slice(0, 4).map(w => ({ word: w, meta: selectedGroup.sound }));
-            } else { 
-                let altGroup = RhymeDatabase.find(g => g.id !== selectedGroup.id) || selectedGroup;
-                let altShuff = [...altGroup.words].sort(() => 0.5 - Math.random());
-                currentTargetWords = [
-                    { word: shuff[0], meta: selectedGroup.sound },
-                    { word: shuff[1], meta: selectedGroup.sound },
-                    { word: altShuff[0], meta: altGroup.sound },
-                    { word: altShuff[1], meta: altGroup.sound }
-                ];
-            }
-        }
-
-        function renderWordCards() {
-            if (absoluteBarsCompleted < 0) return;
-            let activeCardIndex = absoluteBarsCompleted % 4; 
-            
-            cardsContainer.innerHTML = currentTargetWords.map((item, idx) => {
-                let isActive = idx === activeCardIndex;
-                return `
-                    <div class="p-5 rounded-2xl transition-all duration-300 flex justify-between items-center ${isActive ? 'bg-gradient-to-r from-neonPurple/20 to-panelDark border-2 border-electricCyan shadow-xl shadow-electricCyan/5 scale-[1.01]' : 'bg-panelDark border border-white/5 opacity-40'}">
-                        <div>
-                            <span class="text-[10px] font-mono block ${isActive ? 'text-electricCyan' : 'text-white/30'}">Target Track ${idx + 1}</span>
-                            <span class="text-lg font-bold tracking-wide">${item.word}</span>
-                        </div>
-                        <span class="text-xs font-mono uppercase tracking-widest text-white/30">${item.meta}</span>
+    <!-- Hero Section -->
+    <section class="hero-pattern relative pt-12 pb-20 lg:pt-20 lg:pb-32 overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                <!-- Hero Content -->
+                <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
+                    <div class="inline-flex items-center gap-2 bg-roseGold/10 border border-roseGold/30 px-3 py-1.5 rounded-full text-xs font-semibold text-roseGold-dark uppercase tracking-wider">
+                        <i class="fa-solid fa-award"></i> Advanced Dermatology &amp; Aesthetics
                     </div>
-                `;
-            }).join('');
-        }
+                    <h1 class="font-serif text-4xl sm:text-5xl lg:text-6xl font-bold text-clinicGreen leading-tight">
+                        Expert Skin Care, <br>Now in <span class="text-roseGold italic">Bramhapuri</span>
+                    </h1>
+                    <p class="text-gray-600 text-base sm:text-lg max-w-2xl mx-auto lg:mx-0 font-normal">
+                        Consult expert female dermatologist <span class="font-semibold text-gray-800">Dr. Sherin</span>. Exclusively available in Bramhapuri every <span class="font-semibold text-clinicGreen underline">Sunday</span> opposite Hutatma Smarak. Mon–Sat practice in Nagpur.
+                    </p>
+                    
+                    <!-- Highlight Timing Badges -->
+                    <div class="flex flex-wrap justify-center lg:justify-start gap-4 pt-2">
+                        <div class="glass-card px-5 py-3 rounded-2xl shadow-sm border border-roseGold/20 flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-xl bg-clinicGreen text-roseGold flex items-center justify-center text-lg">
+                                <i class="fa-solid fa-calendar-days"></i>
+                            </div>
+                            <div class="text-left">
+                                <span class="text-xs text-gray-500 block uppercase font-bold tracking-wider">Bramhapuri Day</span>
+                                <span class="font-bold text-clinicGreen text-sm sm:text-base">Every Sunday</span>
+                            </div>
+                        </div>
 
-        // --- 5. RENDER PHYSICS PARABOLIC METRONOME ---
-        function drawMetronome() {
-            if (!isPlaying) {
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-                requestAnimationFrame(drawMetronome);
-                return;
-            }
+                        <div class="glass-card px-5 py-3 rounded-2xl shadow-sm border border-roseGold/20 flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-xl bg-roseGold text-white flex items-center justify-center text-lg">
+                                <i class="fa-solid fa-clock"></i>
+                            </div>
+                            <div class="text-left">
+                                <span class="text-xs text-gray-500 block uppercase font-bold tracking-wider">Sunday Timings</span>
+                                <span class="font-bold text-clinicGreen text-sm sm:text-base">10 AM – 1 PM &amp; 6 PM – 8 PM</span>
+                            </div>
+                        </div>
+                    </div>
 
-            let w = canvas.width / window.devicePixelRatio;
-            let h = canvas.height / window.devicePixelRatio;
-            ctx.clearRect(0, 0, w, h);
+                    <!-- CTA Buttons -->
+                    <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-4">
+                        <button onclick="openModal()" class="w-full sm:w-auto bg-clinicGreen hover:bg-clinicGreen-light text-white px-8 py-4 rounded-full font-semibold shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-0.5 text-center flex items-center justify-center gap-2">
+                            <span>Book Consultation</span>
+                            <i class="fa-solid fa-arrow-right text-xs"></i>
+                        </button>
+                        <a href="#location" class="w-full sm:w-auto bg-white hover:bg-gray-50 text-clinicGreen border-2 border-clinicGreen/20 px-8 py-4 rounded-full font-semibold transition-all text-center flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-location-dot text-roseGold"></i>
+                            <span>View Bramhapuri Map</span>
+                        </a>
+                    </div>
+                </div>
 
-            let totalBeatDuration = 60.0 / bpm;
-            let currentPlaybackTime = audioCtx.currentTime;
-            let timeInBar = ((currentPlaybackTime - nextBeatTime) + totalBeatDuration * currentBeatInBar) % (totalBeatDuration * 4);
-            if (timeInBar < 0) timeInBar += (totalBeatDuration * 4);
-            
-            let barProgress = timeInBar / (totalBeatDuration * 4); 
-            let posX = barProgress * w;
+                <!-- Hero Doctor Card / Graphic -->
+                <div class="lg:col-span-5 relative flex justify-center">
+                    <div class="relative w-full max-w-md">
+                        <!-- Decorative Backdrop blob -->
+                        <div class="absolute -inset-4 bg-gradient-to-tr from-roseGold/30 to-clinicGreen/20 rounded-3xl filter blur-xl opacity-70 animate-pulse"></div>
+                        
+                        <!-- Main Card -->
+                        <div class="relative bg-white rounded-3xl p-6 sm:p-8 shadow-2xl border border-roseGold/20 space-y-6">
+                            <div class="flex items-center gap-4">
+                                <div class="w-16 h-16 rounded-2xl bg-clinicGreen text-roseGold flex items-center justify-center text-3xl font-serif font-bold shadow-inner">
+                                    DS
+                                </div>
+                                <div>
+                                    <h2 class="font-serif text-xl font-bold text-clinicGreen">Dr. Sherin, MD</h2>
+                                    <p class="text-xs text-roseGold uppercase tracking-wider font-semibold">Consultant Dermatologist</p>
+                                    <div class="flex items-center gap-1 text-amber-500 text-xs mt-1">
+                                        <i class="fa-solid fa-star"></i>
+                                        <i class="fa-solid fa-star"></i>
+                                        <i class="fa-solid fa-star"></i>
+                                        <i class="fa-solid fa-star"></i>
+                                        <i class="fa-solid fa-star"></i>
+                                        <span class="text-gray-500 ml-1 font-medium">(Expert Care)</span>
+                                    </div>
+                                </div>
+                            </div>
 
-            let beatProgress = (timeInBar / totalBeatDuration) % 1;
-            let posY = h - 20 - (h - 40) * (4 * beatProgress * (1 - beatProgress));
+                            <div class="space-y-3 pt-2 border-t border-gray-100 text-sm">
+                                <div class="flex items-start gap-3">
+                                    <div class="w-7 h-7 rounded-full bg-clinicGreen-pale text-clinicGreen flex items-center justify-center shrink-0 mt-0.5">
+                                        <i class="fa-solid fa-map-pin text-xs"></i>
+                                    </div>
+                                    <div>
+                                        <span class="font-bold text-gray-800 block">Bramhapuri Clinic</span>
+                                        <span class="text-gray-600">Opposite Hutatma Smarak, Bramhapuri</span>
+                                    </div>
+                                </div>
 
-            ctx.strokeStyle = "rgba(255,255,255,0.02)";
-            ctx.lineWidth = 1;
-            for(let i=1; i<4; i++) {
-                ctx.beginPath(); ctx.moveTo((w/4)*i, 0); ctx.lineTo((w/4)*i, h); ctx.stroke();
-            }
+                                <div class="flex items-start gap-3">
+                                    <div class="w-7 h-7 rounded-full bg-clinicGreen-pale text-clinicGreen flex items-center justify-center shrink-0 mt-0.5">
+                                        <i class="fa-solid fa-building text-xs"></i>
+                                    </div>
+                                    <div>
+                                        <span class="font-bold text-gray-800 block">Nagpur Practice</span>
+                                        <span class="text-gray-600">Monday to Saturday (Main Center)</span>
+                                    </div>
+                                </div>
 
-            ctx.shadowBlur = 16; ctx.shadowColor = "#FF5722";
-            ctx.fillStyle = "#FF5722";
-            ctx.beginPath(); ctx.arc(posX, posY, 8, 0, Math.PI * 2); ctx.fill();
-            ctx.shadowBlur = 0; 
+                                <div class="flex items-start gap-3">
+                                    <div class="w-7 h-7 rounded-full bg-roseGold/10 text-roseGold-dark flex items-center justify-center shrink-0 mt-0.5">
+                                        <i class="fa-solid fa-calendar-check text-xs"></i>
+                                    </div>
+                                    <div>
+                                        <span class="font-bold text-gray-800 block">Sunday Availability</span>
+                                        <span class="text-roseGold-dark font-semibold">10 AM – 1 PM &amp; 6 PM – 8 PM</span>
+                                    </div>
+                                </div>
+                            </div>
 
-            requestAnimationFrame(drawMetronome);
-        }
+                            <button onclick="openModal()" class="w-full bg-roseGold hover:bg-roseGold-dark text-white py-3 rounded-xl font-semibold shadow-md transition-colors text-sm flex items-center justify-center gap-2">
+                                <i class="fa-regular fa-calendar-plus"></i> Reserve Sunday Slot
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-        // --- 6. EVENT BINDINGS ---
-        function startTimer() {
-            totalSeconds = 0;
-            timerInterval = setInterval(() => {
-                totalSeconds++;
-                let mins = String(Math.floor(totalSeconds / 60)).padStart(2, '0');
-                let secs = String(totalSeconds % 60).padStart(2, '0');
-                timerDisplay.innerText = `${mins}:${secs}`;
-            }, 1000);
-        }
+    <!-- Schedule & City Availability Section -->
+    <section id="schedule" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16 space-y-4">
+                <span class="text-xs uppercase tracking-widest text-roseGold font-bold bg-roseGold/10 px-3 py-1 rounded-full">Weekly Schedule</span>
+                <h2 class="font-serif text-3xl sm:text-4xl font-bold text-clinicGreen">City-Wise Availability</h2>
+                <p class="text-gray-600">Dr. Sherin practices in Nagpur from Monday through Saturday, and is exclusively available for patients in Bramhapuri every Sunday.</p>
+            </div>
 
-        playBtn.addEventListener('click', () => {
-            initAudio();
-            if (isPlaying) {
-                isPlaying = false;
-                clearTimeout(timerId);
-                clearInterval(timerInterval);
-                playBtn.innerHTML = `<svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg><span>DROP THE BEAT</span>`;
-                playBtn.className = "w-full py-4 bg-gradient-to-r from-neonPurple to-purple-700 text-white font-bold rounded-xl transition-all shadow-lg tracking-wider text-sm flex items-center justify-center space-x-2";
-                countInOverlay.classList.add('hidden');
-                document.querySelectorAll('[id^="beat-"]').forEach(el => el.className = 'py-1 rounded bg-black/20 border border-white/5 text-white/20');
-            } else {
-                isPlaying = true;
-                currentBeatInBar = 0;
-                absoluteBarsCompleted = -2; 
-                nextBeatTime = audioCtx.currentTime + 0.05;
-                scheduler();
-                startTimer();
-                handleBarCycleUpdate();
-                playBtn.innerHTML = `<svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg><span>PAUSE SESSION</span>`;
-                playBtn.className = "w-full py-4 bg-gradient-to-r from-red-600 to-amber-700 text-white font-bold rounded-xl transition-all shadow-lg tracking-wider text-sm flex items-center justify-center space-x-2";
-            }
-        });
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+                <!-- Nagpur Card -->
+                <div class="bg-softNeutral rounded-3xl p-8 border border-gray-200/80 shadow-sm relative overflow-hidden flex flex-col justify-between">
+                    <div class="absolute top-0 right-0 bg-gray-200 text-gray-700 text-xs font-bold px-4 py-1.5 rounded-bl-2xl uppercase tracking-wider">
+                        Mon – Sat
+                    </div>
+                    <div class="space-y-6">
+                        <div class="w-14 h-14 rounded-2xl bg-gray-200 text-gray-700 flex items-center justify-center text-2xl font-bold">
+                            <i class="fa-solid fa-city"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-serif text-2xl font-bold text-gray-900">Nagpur Practice</h3>
+                            <p class="text-xs text-roseGold font-semibold uppercase tracking-wider mt-1">Primary Consultation Hub</p>
+                        </div>
+                        <p class="text-gray-600 text-sm leading-relaxed">
+                            Dr. Sherin operates her primary advanced aesthetic and clinical dermatology center in Nagpur from Monday to Saturday for comprehensive surgeries and procedures.
+                        </p>
+                        <ul class="space-y-2 text-sm text-gray-700">
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-roseGold"></i> Advanced Laser Treatments</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-roseGold"></i> Dermatological Surgeries</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-roseGold"></i> Full Aesthetics Suite</li>
+                        </ul>
+                    </div>
+                    <div class="mt-8 pt-6 border-t border-gray-200 text-xs text-gray-500 font-medium">
+                        * Please contact Nagpur clinic for weekday appointments.
+                    </div>
+                </div>
 
-        // Update BPM when the genre dropdown changes
-        beatSelect.addEventListener('change', (e) => {
-            let selectedBeat = e.target.value;
-            let newBpm = genreBpmDefaults[selectedBeat] || 90;
-            
-            bpm = newBpm;
-            bpmSlider.value = newBpm;
-            bpmVal.innerText = `${newBpm} BPM`;
-        });
-
-        // Allow manual override via slider
-        bpmSlider.addEventListener('input', (e) => {
-            bpm = parseInt(e.target.value);
-            bpmVal.innerText = `${bpm} BPM`;
-        });
-
-        schemeSelect.addEventListener('change', (e) => {
-            activeScheme = e.target.value;
-            document.getElementById('schemeBadge').innerText = `Scheme: ${activeScheme}`;
-            if (isPlaying) generateNewPhrases();
-        });
-
-        const micBtn = document.getElementById('micBtn');
-        const micIcon = document.getElementById('micIcon');
-        const waveVisualizer = document.getElementById('waveVisualizer');
-        let micActive = false;
-
-        micBtn.addEventListener('click', () => {
-            micActive = !micActive;
-            if (micActive) {
-                micIcon.classList.add('hidden');
-                waveVisualizer.className = 'flex h-5 items-center space-x-0.5 px-0.5';
-                micBtn.classList.add('border-neonOrange/40', 'bg-neonOrange/10');
-            } else {
-                micIcon.classList.remove('hidden');
-                waveVisualizer.className = 'hidden h-5 items-center space-x-0.5 px-0.5';
-                micBtn.classList.remove('border-neonOrange/40', 'bg-neonOrange/10');
-            }
-        });
-
-        requestAnimationFrame(drawMetronome);
-    </script>
-</body>
-</html>
+                <!-- Bramhapuri Card (Highlighted) -->
+                <div class="bg-gradient-to-br from-clinicGreen to-clinicGreen-light text-white rounded-3xl p-8 shadow-xl relative overflow-hidden flex flex-col justify-between border-2 border-roseGold">
+                    <div class="absolute top-0 right-0 bg-roseGold text-white text-xs font-bold px-4 py-1.5 rounded-bl-2xl uppercase tracking-wider shadow-sm">
+                        Sunday Special
+                    </div>
+                    <div class="space-y-6">
+                        <div class="w-14 h-14 rounded-2xl bg-roseGold text-white flex items-center justify-center text-2xl font-bold shadow-md">
+                            <i class="fa-solid fa-hospital-user"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-serif text-2xl font-bold text-white">Bramhapuri Clinic</h3>
+                            <p class="text-xs text-roseGold-light font-semibold uppercase tracking-wider mt-1">Opposite Hutatma Smarak</p>
+                        </div>
+                        <p class="text-gray-100 text-sm leading-relaxed">
+                            Dedicated Sunday clinic established to bring top-tier skin, hair, and nail treatments directly to the people of Bramhapuri and nearby regions.
+                        </p>
+                        
+                        <div class="bg-white/10 backdrop-blur-md rounded-2xl p-4 border border-white/20 space-y-2">
+                            <div class="text-xs uppercase font-bold tracking-wider text-roseGold-light">Sunday Timings</div>
+                            <div class="flex items-center justify-between text-sm font-semibold">
+                                <span><i class="fa-regular fa-clock mr
