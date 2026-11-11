@@ -56,8 +56,8 @@
     /* Spring arch (canvas) */
     .spring-container {
       width: 100%;
-      max-width: 340px;
-      height: clamp(190px, 28vw, 270px);
+      max-width: 380px;
+      height: clamp(210px, 30vw, 290px);
       margin: 0 auto clamp(12px, 2.5vw, 24px);
       position: relative;
     }
@@ -471,7 +471,7 @@
     </div>
   </footer>
 
-  <!-- SPRING ARCH: iridescent coil with spring physics -->
+  <!-- SPRING LOGO: brand slinky arch with spring physics + scroll slide -->
   <script>
   (() => {
     const cv = document.getElementById('springCanvas');
@@ -488,24 +488,60 @@
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     }
     resize();
-    window.addEventListener('resize', resize);
 
-    // coil of rings along an arch; each ring slides along the arch on springs
-    const N = 36;
+    // ---- arch geometry (units: arch centre-line radius = 1; y grows downward)
+    const RC = 1, LEG = 0.95, A = 0.52, B = 0.11;       // radius, leg length, loop half-length, loop half-thickness
+    const PL = Math.PI * RC, L = 2 * LEG + PL;
+    function pathPt(t) {                                  // left leg (bottom->up), semicircle, right leg (down)
+      const u = t * L;
+      if (u < LEG) return [-RC, LEG - u, -1, 0];
+      if (u < LEG + PL) { const th = Math.PI - (u - LEG) / RC; return [RC * Math.cos(th), -RC * Math.sin(th), Math.cos(th), -Math.sin(th)]; }
+      return [RC, u - LEG - PL, 1, 0];
+    }
+
+    // ---- brand colours along the coil: pink/red -> purple -> blue -> coral -> teal
+    const STOPS = [[0,[245,82,127]],[.2,[240,69,107]],[.32,[179,74,156]],[.43,[47,111,224]],[.52,[58,123,213]],
+                   [.6,[138,143,200]],[.68,[238,106,82]],[.78,[79,196,204]],[1,[111,211,214]]];
+    function col(t) {
+      for (let i = 1; i < STOPS.length; i++) if (t <= STOPS[i][0]) {
+        const [t0, c0] = STOPS[i - 1], [t1, c1] = STOPS[i], k = (t - t0) / (t1 - t0);
+        return [c0[0] + (c1[0] - c0[0]) * k, c0[1] + (c1[1] - c0[1]) * k, c0[2] + (c1[2] - c0[2]) * k];
+      }
+      return STOPS[STOPS.length - 1][1];
+    }
+    const mix = (a, b, k) => [a[0] + (b[0] - a[0]) * k, a[1] + (b[1] - a[1]) * k, a[2] + (b[2] - a[2]) * k];
+    const rgb = (c) => `rgb(${c[0] | 0},${c[1] | 0},${c[2] | 0})`;
+
+    // ---- spring state: each loop slides along the arch
+    const N = 32;
     const pos = new Float32Array(N), vel = new Float32Array(N), rest = new Float32Array(N);
     for (let i = 0; i < N; i++) rest[i] = pos[i] = i / (N - 1);
 
-    let sy = reduce ? 1 : 0.12, vy = 0;      // arch squash & stretch
-    let tilt = 0, vt = 0, tiltTarget = 0;     // arch sway
-    let ptr = null;
-    let time = 0, nextHop = 1.4;
+    let sy = reduce ? 1 : 0.12, vy = 0;      // squash & stretch
+    let tilt = 0, vt = 0, tiltTarget = 0;    // sway
+    let ptr = null, time = 0, nextHop = 1.4;
+
+    // scroll: down -> slides right, up -> back to centre
+    const holder = cv.parentElement;
+    let xp = 0, xv = 0, xt = 0, maxShift = 0, lastY = window.scrollY;
+    function measure() { maxShift = Math.max(0, (window.innerWidth - holder.offsetWidth) / 2 - 12); }
+    function onScroll() {
+      const y = window.scrollY;
+      const p = Math.min(Math.max(y / (window.innerHeight * 0.7), 0), 1);
+      xt = p * maxShift;
+      if (!reduce) vy += Math.min(Math.abs(y - lastY) * 0.004, 1.2);
+      lastY = y;
+      if (reduce) { xp = xt; xv = 0; }
+    }
+    measure(); onScroll();
+    window.addEventListener('resize', () => { resize(); measure(); onScroll(); });
+    window.addEventListener('scroll', onScroll, { passive: true });
 
     const K = 420, KR = 70, C = 5.5, DT = 1 / 120;
 
     function boing(strength, dir) {
       if (reduce) return;
-      vy += strength;
-      vt += (dir || 0) * 2.5;
+      vy += strength; vt += (dir || 0) * 2.5;
       for (let i = 1; i < N - 1; i++) vel[i] += (dir || 1) * 0.55 * Math.sin(Math.PI * rest[i]);
     }
 
@@ -513,71 +549,79 @@
       time += DT;
       vy += (-140 * (sy - 1) - 5.5 * vy) * DT; sy += vy * DT;
       vt += (-90 * (tilt - tiltTarget) - 5 * vt) * DT; tilt += vt * DT;
+      if (!reduce) { xv += (-55 * (xp - xt) - 8 * xv) * DT; xp += xv * DT; }
 
       for (let i = 1; i < N - 1; i++) {
         let f = K * (pos[i - 1] + pos[i + 1] - 2 * pos[i]) - KR * (pos[i] - rest[i]) - C * vel[i];
-        if (!reduce) f += 1.1 * Math.sin(time * 2.4 - i * 0.38) * Math.sin(Math.PI * rest[i]); // idle slinky wave
-        if (ptr) { const d = (rest[i] - ptr.p) / 0.16; f += 220 * (ptr.p - pos[i]) * Math.exp(-d * d); }
+        f -= xv * 0.003 * Math.sin(Math.PI * rest[i]);
+        if (!reduce) f += 1.1 * Math.sin(time * 2.4 - i * 0.38) * Math.sin(Math.PI * rest[i]);
+        if (ptr) { const d = (rest[i] - ptr.p) / 0.12; f += 220 * (ptr.p - pos[i]) * Math.exp(-d * d); }
         vel[i] += f * DT; pos[i] += vel[i] * DT;
         pos[i] = Math.max(pos[i], pos[i - 1] + 0.004);
         pos[i] = Math.min(pos[i], 1 - 0.004 * (N - 1 - i));
       }
-
       if (!reduce && time > nextHop) { boing(2.6, 0); nextHop = time + 3.2 + Math.random() * 1.6; }
     }
 
+    let G = { s: 1, cx: 0, base: 0, sxf: 1 };
     function draw() {
+      holder.style.transform = `translate3d(${xp.toFixed(1)}px,0,0)`;
       ctx.clearRect(0, 0, W, H);
-      const cx = W / 2, base = H * 0.9;
-      const sx = 1 / Math.sqrt(Math.max(sy, 0.3));
-      const Rx = W * 0.30 * sx, Ry = H * 0.62 * sy;
-      const rr = H * 0.13, minor = rr * 0.28;
+
+      const sxf = (1 / Math.sqrt(Math.max(sy, 0.3))) * (1 + Math.min(Math.abs(xv) / 1500, 0.25));
+      const s = Math.min(W * 0.86 / (2 * (RC + A)), H * 0.92 / (RC + A + LEG + B));
+      const cx = W / 2, base = H - B * s - 6;
+      G = { s, cx, base, sxf };
 
       ctx.save();
-      ctx.translate(cx, base); ctx.rotate(tilt * 0.12); ctx.translate(-cx, -base);
+      ctx.translate(cx, base); ctx.rotate(tilt * 0.12 + xv * 0.0004); ctx.translate(-cx, -base);
 
-      const order = [];
-      for (let k = 0; k < N / 2; k++) { order.push(k); order.push(N - 1 - k); }
-
-      for (const i of order) {
+      for (let i = 0; i < N; i++) {
         const t = rest[i];
-        const th = Math.PI * (1 - pos[i]);
-        const x = cx + Rx * Math.cos(th), y = base - Ry * Math.sin(th);
-        const nx = Math.cos(th) / Rx, ny = -Math.sin(th) / Ry;
-        const rot = Math.atan2(-nx, ny);
+        const [x, y, nx, ny] = pathPt(pos[i]);
+        const X = cx + x * s * sxf, Y = base + (y - LEG) * s * sy;
+        const mx = nx / sxf, my = ny / sy, ml = Math.hypot(mx, my) || 1;
+        const rot = Math.atan2(-mx / ml, my / ml);
+        const a = A * s, b = B * s;
+
+        const c = col(t), c2 = col(Math.min(t + 0.06, 1));
+        const cream = mix(c, [255, 247, 222], 0.78);
 
         ctx.save();
-        ctx.translate(x, y); ctx.rotate(rot);
+        ctx.translate(X, Y); ctx.rotate(rot);
 
-        const hA = 205 + 35 * Math.sin(t * 5.5 + time * 0.6);
-        const hB = 345 + 40 * Math.sin(t * 4 + 1 + time * 0.5);
-        const g = ctx.createLinearGradient(0, -rr, 0, rr);
-        g.addColorStop(0, `hsl(${hA},85%,60%)`);
-        g.addColorStop(0.5, `hsl(${hA + 70},90%,84%)`);
-        g.addColorStop(1, `hsl(${hB},92%,64%)`);
-
-        ctx.beginPath(); ctx.ellipse(0, 0, minor, rr, 0, 0, Math.PI * 2);
-        ctx.lineWidth = 5; ctx.strokeStyle = g;
-        ctx.shadowColor = 'rgba(40,20,90,.28)'; ctx.shadowBlur = 8;
-        ctx.stroke();
-
+        const g = ctx.createLinearGradient(0, -a, 0, a);
+        g.addColorStop(0, rgb(c)); g.addColorStop(0.5, rgb(cream)); g.addColorStop(1, rgb(c2));
+        ctx.beginPath(); ctx.ellipse(0, 0, b, a, 0, 0, Math.PI * 2);
+        ctx.fillStyle = g; ctx.shadowColor = 'rgba(30,10,60,.3)'; ctx.shadowBlur = 6;
+        ctx.fill();
         ctx.shadowBlur = 0; ctx.shadowColor = 'transparent';
-        ctx.beginPath(); ctx.ellipse(-0.8, 0, minor * 0.8, rr * 0.96, 0, 0, Math.PI * 2);
-        ctx.lineWidth = 1.3; ctx.strokeStyle = 'rgba(255,255,255,.55)';
+        ctx.lineWidth = Math.max(2, s * 0.05); ctx.strokeStyle = rgb(mix(c, [40, 20, 70], 0.12));
         ctx.stroke();
+
+        ctx.beginPath(); ctx.ellipse(0, 0, b * 0.5, a * 0.8, 0, 0, Math.PI * 2);
+        ctx.lineWidth = 1.4; ctx.strokeStyle = 'rgba(255,255,255,.6)'; ctx.stroke();
+
+        ctx.beginPath(); ctx.ellipse(-b * 0.35, -a * 0.25, b * 0.16, a * 0.4, 0, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(255,255,255,.4)'; ctx.fill();
         ctx.restore();
       }
       ctx.restore();
     }
 
-    // interaction: hover/drag pulls the coils, click/tap makes it boing
+    // ---- interaction: hover/drag pulls loops, click/tap boings
     function setPointer(e) {
       const r = cv.getBoundingClientRect();
-      const x = e.clientX - r.left, y = e.clientY - r.top;
-      const cx = r.width / 2, base = r.height * 0.9;
-      const a = Math.atan2(Math.max(base - y, 0) / (r.height * 0.62), (x - cx) / (r.width * 0.30));
-      ptr = { p: 1 - Math.min(Math.max(a, 0), Math.PI) / Math.PI };
-      tiltTarget = ((x - cx) / r.width) * 2;
+      const px = e.clientX - r.left, py = e.clientY - r.top;
+      let best = 0.5, bd = 1e9;
+      for (let k = 0; k <= 60; k++) {
+        const t = k / 60, [x, y] = pathPt(t);
+        const X = G.cx + x * G.s * G.sxf, Y = G.base + (y - LEG) * G.s * sy;
+        const d = (X - px) * (X - px) + (Y - py) * (Y - py);
+        if (d < bd) { bd = d; best = t; }
+      }
+      ptr = { p: best };
+      tiltTarget = ((px - W / 2) / W) * 2;
     }
     cv.addEventListener('pointerenter', (e) => { setPointer(e); boing(2, 0); });
     cv.addEventListener('pointermove', setPointer);
@@ -589,7 +633,7 @@
     cv.addEventListener('pointerup', (e) => { if (e.pointerType === 'touch') { ptr = null; tiltTarget = 0; } });
     cv.addEventListener('pointercancel', () => { ptr = null; tiltTarget = 0; });
 
-    // loop (paused when offscreen)
+    // ---- loop (paused when offscreen)
     let last = performance.now(), acc = 0, visible = true, raf = 0;
     function frame(now) {
       acc += Math.min((now - last) / 1000, 0.05); last = now;
