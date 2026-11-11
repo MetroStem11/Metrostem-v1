@@ -53,73 +53,17 @@
     /* intro */
     .intro { text-align: center; padding-block: clamp(34px, 6vw, 64px) 6px; }
 
-    /* Spring Logo Container & Animation */
-    .spring-logo-container {
+    /* Spring arch (canvas) */
+    .spring-container {
       width: 100%;
-      max-width: 280px;
-      margin: 0 auto clamp(16px, 3vw, 28px);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      perspective: 800px;
+      max-width: 340px;
+      height: clamp(190px, 28vw, 270px);
+      margin: 0 auto clamp(12px, 2.5vw, 24px);
+      position: relative;
     }
-
-    .spring-logo {
-      width: clamp(140px, 18vw, 210px);
-      height: auto;
-      cursor: pointer;
-      user-select: none;
-      -webkit-user-drag: none;
-      transform-origin: 50% 95%; /* Compress and stretch relative to base */
-      animation: springIdle 3.2s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
-      transition: filter 0.3s ease;
-    }
-
-    /* Idle breathing / gentle compression */
-    @keyframes springIdle {
-      0%, 100% {
-        transform: translateY(0) scale(1, 1);
-      }
-      25% {
-        transform: translateY(6px) scale(1.08, 0.88);
-      }
-      50% {
-        transform: translateY(-12px) scale(0.94, 1.12);
-      }
-      75% {
-        transform: translateY(3px) scale(1.03, 0.96);
-      }
-    }
-
-    /* Spring Boing on hover or click */
-    .spring-logo:hover,
-    .spring-logo.spring-active {
-      animation: springBoing 0.9s cubic-bezier(0.34, 1.56, 0.64, 1) both;
-      filter: drop-shadow(0 14px 22px rgba(79, 147, 214, 0.35));
-    }
-
-    @keyframes springBoing {
-      0% {
-        transform: translateY(0) scale(1, 1);
-      }
-      20% {
-        /* Compression */
-        transform: translateY(16px) scale(1.28, 0.65) rotate(-3deg);
-      }
-      45% {
-        /* High stretch rebound */
-        transform: translateY(-28px) scale(0.82, 1.34) rotate(3deg);
-      }
-      65% {
-        /* Secondary bounce */
-        transform: translateY(8px) scale(1.12, 0.9) rotate(-1.5deg);
-      }
-      82% {
-        transform: translateY(-8px) scale(0.95, 1.08) rotate(0.8deg);
-      }
-      100% {
-        transform: translateY(0) scale(1, 1) rotate(0deg);
-      }
+    .spring-container canvas {
+      width: 100%; height: 100%; display: block;
+      touch-action: manipulation; cursor: pointer;
     }
 
     .intro p {
@@ -142,15 +86,16 @@
       .wm-letter:hover { transform: translateY(-15px) rotate(-3deg) scale(1.04); }
     }
 
-    /* sky hero (torn paper) */
+    /* sky hero (torn paper) with cloud background */
     .sky {
-      position: relative; margin-top: -2px;
-      background:
-        radial-gradient(60% 40% at 20% 18%, rgba(255,255,255,.65), transparent 60%),
-        radial-gradient(50% 36% at 78% 30%, rgba(255,255,255,.55), transparent 60%),
-        radial-gradient(55% 40% at 60% 80%, rgba(255,255,255,.5), transparent 60%),
-        linear-gradient(170deg, var(--sky1), var(--sky2) 72%, #eaf4fb);
+      position: relative; margin-top: -2px; overflow: hidden;
+      background: linear-gradient(170deg, var(--sky1), var(--sky2) 72%, #eaf4fb); /* fallback */
+      /* To use a real photo instead of generated clouds, uncomment and set your image:
+         --sky-photo: url('images/sky-clouds.jpg'); */
     }
+    .sky-bg, .sky-grain, .sky-photo { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
+    .sky-photo { background: var(--sky-photo, none) center / cover no-repeat; }
+    .sky-grain { z-index: 1; opacity: .38; mix-blend-mode: overlay; }
     .tear { position: absolute; left: 0; width: 100%; height: 34px; line-height: 0; z-index: 2; }
     .tear svg { width: 100%; height: 100%; display: block; }
     .tear.top { top: -1px; }
@@ -161,7 +106,7 @@
     }
     .sky-head {
       font-family: var(--disp); color: var(--yellow); font-size: clamp(52px, 11vw, 132px);
-      line-height:.92; text-shadow: 0 2px 0 rgba(20,30,60,.12); max-width: 12ch; cursor: default;
+      line-height: .92; text-shadow: 0 2px 0 rgba(20,30,60,.12); max-width: 12ch; cursor: default;
     }
     .sky-head .ch { display: inline-block; will-change: transform; }
     @media (prefers-reduced-motion: no-preference) {
@@ -343,7 +288,321 @@
   </header>
 
   <main id="top">
-    <!-- LANDING WITH ANIMATED BOUNCING SPRING LOGO -->
+    <!-- LANDING WITH ANIMATED SPRING -->
     <section class="wrap intro">
-      <div class="spring-logo-container">
-        <img class="spring-logo" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAWgAAAEaCAIAAACzbVpIAAAAIGNIUk0AAHomAACAhAAA+gAAAIDoAAB1MAAA6mAAADqYAAAXcJy6UTwAAAAGYktHRAD/AP8A/6C9p5MAAAAJcEhZcwAAJOgAACToAYJjBRwAAAAHdElNRQfqChALFDvyUgzqAAAULklEQVR42u3dyW9dWX7Y8d85545vIB9JkZSooTRUd41ddnfbRsV24kXDi2yC2DCCANl6lVX+xgAZYASwY3R6qrFLEimRfHzjfXc4UxYcJVVVU5UECMDvBwIkQG91Fl/8zh3OVTFGAYC3oVkCAIQDAOEAQDgAEA4AhAMACAcAwgGAcAAgHAAIBwAQDgCEAwDhAEA4ABAOACAcAAgHAMIBgHAAIBwACAcAEA4AhAMA4QBAOAAQDgAgHAAIBwDCAYBwACAcAEA4ABAOAIQDAOEAQDgAgHAAIBwACAcAwgGAcAAgHABAOAAQDgCEAwDhAEA4AIBwACAcAAgHAMIBgHAAAOEAQDgAEA4AhAMA4QAAwgGAcAAgHAAIBwDCAYBwAADhAEA4ABAOAIQDAOEAAMIBgHAAIBwACAcAwgEAhAMA4QBAOAAQDgCEAwAIBwDCAYBwACAcAAgHAMIBAIQDAOEAQDgAEA4AhAMACAcAwgGAcAAgHAAIBwAQDgCEAwDhAEA4ABAOAIQDAAgHAMIB4P83iUg8/7diOQBcc+KIrAKAt504mDkAvO3EES9qwegB4LpbFcYMAG8dDvYpAH5YOKgGgGtLRJENAD94qwIA1504RIQbsgD+TyYObskC+MMTRwhelFKiRDFtALjexNF0nXOehQDwFuEYz+uqtSwEgLcIx0ll69YLl0UBXD8cLmofFRdFAVxfslZmRWZO5w2GDgDXCsfOWp4lhoUAcH3KOqeU0kqUUswcAK4VjhijyOkfwg
+      <div class="spring-container">
+        <canvas id="springCanvas" role="img" aria-label="Interactive iridescent spring. Hover or tap to make it bounce."></canvas>
+      </div>
+      <p>We are all about making serious magic. TWOFOLD is a creative studio specialized in brand strategy and creative direction.</p>
+      <div class="soc">
+        <a href="https://www.behance.net" target="_blank" rel="noopener">Behance</a>
+        <a href="https://www.instagram.com/thisistwofold" target="_blank" rel="noopener">Instagram</a>
+        <a href="https://www.linkedin.com" target="_blank" rel="noopener">LinkedIn</a>
+      </div>
+    </section>
+
+    <!-- WORDMARK SECTION -->
+    <div class="wrap">
+      <div class="wm" aria-label="TWOFOLD">
+        <div class="wm-letter" style="width:14.5%">
+          <svg viewBox="0 0 100 120" width="100%"><text x="10" y="90" font-family="Anton" font-size="100" fill="#141310">T</text></svg>
+        </div>
+        <div class="wm-letter" style="width:16.3%">
+          <svg viewBox="0 0 120 120" width="100%"><text x="10" y="90" font-family="Anton" font-size="100" fill="#141310">W</text></svg>
+        </div>
+        <div class="wm-letter" style="width:26.1%">
+          <svg viewBox="0 0 160 120" width="100%"><text x="10" y="90" font-family="Anton" font-size="100" fill="#141310">OF</text></svg>
+        </div>
+        <div class="wm-letter" style="width:29.9%">
+          <svg viewBox="0 0 180 120" width="100%"><text x="10" y="90" font-family="Anton" font-size="100" fill="#141310">OLD</text></svg>
+        </div>
+      </div>
+      <p class="wm-hint">Hover the letters · interactive animation enabled</p>
+    </div>
+
+    <!-- SKY HERO (TORN PAPER) -->
+    <section class="sky" id="work">
+
+      <!-- Layer 0: optional real photo (set --sky-photo in .sky) -->
+      <div class="sky-photo" aria-hidden="true"></div>
+
+      <!-- Layer 0: generated sky + clouds -->
+      <svg class="sky-bg" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+        <defs>
+          <linearGradient id="skyGrad" x1="0" y1="0" x2="0.35" y2="1">
+            <stop offset="0" stop-color="#3f86cf"/>
+            <stop offset="0.55" stop-color="#5a9fdc"/>
+            <stop offset="1" stop-color="#8dc0ea"/>
+          </linearGradient>
+          <!-- big soft clouds -->
+          <filter id="cloudsBig" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB">
+            <feTurbulence type="fractalNoise" baseFrequency="0.0045 0.009" numOctaves="5" seed="11" result="n"/>
+            <feColorMatrix in="n" type="matrix"
+              values="0 0 0 0 1
+                      0 0 0 0 1
+                      0 0 0 0 1
+                      3.1 0 0 0 -1.25"/>
+            <feGaussianBlur stdDeviation="3"/>
+          </filter>
+          <!-- smaller wispy detail -->
+          <filter id="cloudsSmall" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB">
+            <feTurbulence type="fractalNoise" baseFrequency="0.011 0.02" numOctaves="4" seed="3" result="n"/>
+            <feColorMatrix in="n" type="matrix"
+              values="0 0 0 0 1
+                      0 0 0 0 1
+                      0 0 0 0 1
+                      2.6 0 0 0 -1.15"/>
+          </filter>
+        </defs>
+        <rect width="1440" height="900" fill="url(#skyGrad)"/>
+        <rect width="1440" height="900" filter="url(#cloudsBig)" opacity=".95"/>
+        <rect width="1440" height="900" filter="url(#cloudsSmall)" opacity=".5"/>
+      </svg>
+
+      <!-- Layer 1: film grain texture -->
+      <svg class="sky-grain" aria-hidden="true">
+        <filter id="grain" x="0" y="0" width="100%" height="100%">
+          <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" stitchTiles="stitch"/>
+          <feColorMatrix type="saturate" values="0"/>
+        </filter>
+        <rect width="100%" height="100%" filter="url(#grain)"/>
+      </svg>
+
+      <div class="tear top" aria-hidden="true">
+        <svg viewBox="0 0 1440 34" preserveAspectRatio="none">
+          <path d="M0 0H1440V20L1400 28 1360 16 1320 30 1280 18 1240 31 1200 20 1160 32 1120 19 1080 29 1040 16 1000 31 960 20 920 32 880 18 840 29 800 16 760 31 720 20 680 32 640 18 600 29 560 16 520 31 480 20 440 32 400 18 360 29 320 16 280 31 240 20 200 32 160 18 120 29 80 16 40 31 0 20Z" fill="#fff"/>
+        </svg>
+      </div>
+      <div class="wrap sky-in">
+        <div>
+          <h1 class="sky-head" id="slinky">WE MAKE BRANDS FEEL LIKE SOMETHING</h1>
+        </div>
+        <div class="sky-media">
+          <div style="background: rgba(255,255,255,0.4); border-radius: 18px; padding: 24px; text-align: center; backdrop-filter: blur(6px);">
+            <p style="font-family: var(--disp); font-size: 28px; color: #1d3a52;">STRATEGY & CREATIVE DIRECTION</p>
+            <p style="font-family: var(--disp); font-size: 22px; color: #2d5a86; margin-top: 10px;">GRAPHICS · PHOTO · VIDEO · BRANDING</p>
+          </div>
+        </div>
+      </div>
+      <div class="tear bot" aria-hidden="true">
+        <svg viewBox="0 0 1440 34" preserveAspectRatio="none">
+          <path d="M0 0H1440V20L1400 28 1360 16 1320 30 1280 18 1240 31 1200 20 1160 32 1120 19 1080 29 1040 16 1000 31 960 20 920 32 880 18 840 29 800 16 760 31 720 20 680 32 640 18 600 29 560 16 520 31 480 20 440 32 400 18 360 29 320 16 280 31 240 20 200 32 160 18 120 29 80 16 40 31 0 20Z" fill="#fff"/>
+        </svg>
+      </div>
+    </section>
+
+    <!-- CASE STUDY SECTION -->
+    <section class="cases band">
+      <div class="wrap">
+        <div class="case">
+          <div class="blob b1"></div>
+          <div class="blob b2"></div>
+          <div class="case-head">
+            <span class="who">Featured Project</span>
+            <h3>Growing a Local Brand to Become International</h3>
+          </div>
+          <div class="case-over" style="margin-top: 18px;">
+            <p><strong>THE CHALLENGE:</strong> Establishing clear brand identity, high-conversion visual design, and strategic content direction for growing brands.</p>
+          </div>
+          <div class="nums">
+            <div class="num"><span class="n">2M+</span><div class="k">Reach</div></div>
+            <div class="num"><span class="n">5K</span><div class="k">Conversion</div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CLIENT LOGOS BANNER -->
+    <section class="clients">
+      <div class="wrap clients-in">
+        <span class="label">We Work With</span>
+        <div class="clients-row">
+          <span>LOCO OTRO</span>
+          <span>LE PLAISIR</span>
+          <span>COMO AGUA</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- STUDIO / ABOUT -->
+    <section class="studio band" id="studio">
+      <div class="wrap studio-grid">
+        <div>
+          <div class="band-head">
+            <h2>Strategy that thinks. Creative that lands.</h2>
+            <p>A boutique creative studio specialized in brand strategy, 3D design, and creative direction.</p>
+          </div>
+          <div class="founder">
+            <span class="role">Creative Direction</span>
+            <h4>Direct Impact</h4>
+            <p>We work closely with founders to scale visual experiences without agency bloat.</p>
+          </div>
+        </div>
+        <div class="how">
+          <h3>The Approach</h3>
+          <p>We combine bold interactive 3D, typography, and focused brand systems built to command attention.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section class="contact" id="contact">
+      <div class="wrap contact-in">
+        <h2>Let's make serious magic together.</h2>
+        <p>Ready to level up your brand's presence? Get in touch with us.</p>
+        <div class="crow">
+          <a class="pill copy" href="mailto:hello@thisistwofold.com">
+            <span class="lbl">hello@thisistwofold.com</span>
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap foot-in">
+      <span class="b">TWOFOLD</span>
+      <div>
+        <a href="#studio">About</a> &nbsp;·&nbsp;
+        <a href="#work">Work</a> &nbsp;·&nbsp;
+        <a href="#contact">Contact</a>
+      </div>
+      <div class="cr">© 2026 Twofold Studio. All rights reserved.</div>
+    </div>
+  </footer>
+
+  <!-- SPRING ARCH: iridescent coil with spring physics -->
+  <script>
+  (() => {
+    const cv = document.getElementById('springCanvas');
+    if (!cv) return;
+    const ctx = cv.getContext('2d');
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    let W = 0, H = 0;
+    function resize() {
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const r = cv.getBoundingClientRect();
+      W = r.width; H = r.height;
+      cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+    resize();
+    window.addEventListener('resize', resize);
+
+    // coil of rings along an arch; each ring slides along the arch on springs
+    const N = 36;
+    const pos = new Float32Array(N), vel = new Float32Array(N), rest = new Float32Array(N);
+    for (let i = 0; i < N; i++) rest[i] = pos[i] = i / (N - 1);
+
+    let sy = reduce ? 1 : 0.12, vy = 0;      // arch squash & stretch
+    let tilt = 0, vt = 0, tiltTarget = 0;     // arch sway
+    let ptr = null;
+    let time = 0, nextHop = 1.4;
+
+    const K = 420, KR = 70, C = 5.5, DT = 1 / 120;
+
+    function boing(strength, dir) {
+      if (reduce) return;
+      vy += strength;
+      vt += (dir || 0) * 2.5;
+      for (let i = 1; i < N - 1; i++) vel[i] += (dir || 1) * 0.55 * Math.sin(Math.PI * rest[i]);
+    }
+
+    function step() {
+      time += DT;
+      vy += (-140 * (sy - 1) - 5.5 * vy) * DT; sy += vy * DT;
+      vt += (-90 * (tilt - tiltTarget) - 5 * vt) * DT; tilt += vt * DT;
+
+      for (let i = 1; i < N - 1; i++) {
+        let f = K * (pos[i - 1] + pos[i + 1] - 2 * pos[i]) - KR * (pos[i] - rest[i]) - C * vel[i];
+        if (!reduce) f += 1.1 * Math.sin(time * 2.4 - i * 0.38) * Math.sin(Math.PI * rest[i]); // idle slinky wave
+        if (ptr) { const d = (rest[i] - ptr.p) / 0.16; f += 220 * (ptr.p - pos[i]) * Math.exp(-d * d); }
+        vel[i] += f * DT; pos[i] += vel[i] * DT;
+        pos[i] = Math.max(pos[i], pos[i - 1] + 0.004);
+        pos[i] = Math.min(pos[i], 1 - 0.004 * (N - 1 - i));
+      }
+
+      if (!reduce && time > nextHop) { boing(2.6, 0); nextHop = time + 3.2 + Math.random() * 1.6; }
+    }
+
+    function draw() {
+      ctx.clearRect(0, 0, W, H);
+      const cx = W / 2, base = H * 0.9;
+      const sx = 1 / Math.sqrt(Math.max(sy, 0.3));
+      const Rx = W * 0.30 * sx, Ry = H * 0.62 * sy;
+      const rr = H * 0.13, minor = rr * 0.28;
+
+      ctx.save();
+      ctx.translate(cx, base); ctx.rotate(tilt * 0.12); ctx.translate(-cx, -base);
+
+      const order = [];
+      for (let k = 0; k < N / 2; k++) { order.push(k); order.push(N - 1 - k); }
+
+      for (const i of order) {
+        const t = rest[i];
+        const th = Math.PI * (1 - pos[i]);
+        const x = cx + Rx * Math.cos(th), y = base - Ry * Math.sin(th);
+        const nx = Math.cos(th) / Rx, ny = -Math.sin(th) / Ry;
+        const rot = Math.atan2(-nx, ny);
+
+        ctx.save();
+        ctx.translate(x, y); ctx.rotate(rot);
+
+        const hA = 205 + 35 * Math.sin(t * 5.5 + time * 0.6);
+        const hB = 345 + 40 * Math.sin(t * 4 + 1 + time * 0.5);
+        const g = ctx.createLinearGradient(0, -rr, 0, rr);
+        g.addColorStop(0, `hsl(${hA},85%,60%)`);
+        g.addColorStop(0.5, `hsl(${hA + 70},90%,84%)`);
+        g.addColorStop(1, `hsl(${hB},92%,64%)`);
+
+        ctx.beginPath(); ctx.ellipse(0, 0, minor, rr, 0, 0, Math.PI * 2);
+        ctx.lineWidth = 5; ctx.strokeStyle = g;
+        ctx.shadowColor = 'rgba(40,20,90,.28)'; ctx.shadowBlur = 8;
+        ctx.stroke();
+
+        ctx.shadowBlur = 0; ctx.shadowColor = 'transparent';
+        ctx.beginPath(); ctx.ellipse(-0.8, 0, minor * 0.8, rr * 0.96, 0, 0, Math.PI * 2);
+        ctx.lineWidth = 1.3; ctx.strokeStyle = 'rgba(255,255,255,.55)';
+        ctx.stroke();
+        ctx.restore();
+      }
+      ctx.restore();
+    }
+
+    // interaction: hover/drag pulls the coils, click/tap makes it boing
+    function setPointer(e) {
+      const r = cv.getBoundingClientRect();
+      const x = e.clientX - r.left, y = e.clientY - r.top;
+      const cx = r.width / 2, base = r.height * 0.9;
+      const a = Math.atan2(Math.max(base - y, 0) / (r.height * 0.62), (x - cx) / (r.width * 0.30));
+      ptr = { p: 1 - Math.min(Math.max(a, 0), Math.PI) / Math.PI };
+      tiltTarget = ((x - cx) / r.width) * 2;
+    }
+    cv.addEventListener('pointerenter', (e) => { setPointer(e); boing(2, 0); });
+    cv.addEventListener('pointermove', setPointer);
+    cv.addEventListener('pointerleave', () => { ptr = null; tiltTarget = 0; boing(1.2, 0); });
+    cv.addEventListener('pointerdown', (e) => {
+      setPointer(e);
+      boing(4.5, e.clientX > cv.getBoundingClientRect().left + W / 2 ? 1 : -1);
+    });
+    cv.addEventListener('pointerup', (e) => { if (e.pointerType === 'touch') { ptr = null; tiltTarget = 0; } });
+    cv.addEventListener('pointercancel', () => { ptr = null; tiltTarget = 0; });
+
+    // loop (paused when offscreen)
+    let last = performance.now(), acc = 0, visible = true, raf = 0;
+    function frame(now) {
+      acc += Math.min((now - last) / 1000, 0.05); last = now;
+      while (acc >= DT) { step(); acc -= DT; }
+      draw();
+      raf = visible ? requestAnimationFrame(frame) : 0;
+    }
+    new IntersectionObserver((es) => {
+      visible = es[0].isIntersecting;
+      if (visible && !raf) { last = performance.now(); raf = requestAnimationFrame(frame); }
+    }).observe(cv);
+    raf = requestAnimationFrame(frame);
+  })();
+  </script>
+</body>
+</html>
